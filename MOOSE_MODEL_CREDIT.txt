@@ -1,0 +1,11 @@
+# Moose 3D model attribution / 麋鹿模型授權
+
+Low-poly Moose by Zafflex
+Source: https://sketchfab.com/3d-models/low-poly-moose-9ba6aeef039f458eb998cbdd672b3952
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+Modified for Volvo Driving Lab V9.15: glTF node transformations baked; mesh grounded,
+centered and rescaled; diffuse colours brightened for in-game visibility.
+Original shape and topology retained. Embedded as GPU-ready geometry within index.html.
+Vehicle GLB assets and original game logic are unchanged from V9.14.

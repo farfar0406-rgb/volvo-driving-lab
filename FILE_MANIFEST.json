@@ -1,0 +1,46 @@
+{
+  "en.html": {
+    "size_bytes": 38857,
+    "sha256": "7efe401bac1a5ae741d3d1264f177f0946f7a14318fe6226b34abf7e3632b38d"
+  },
+  "game.js": {
+    "size_bytes": 12859981,
+    "sha256": "3692620e02032eef3d6d2f193982bff11fe04e80d36382cd38c46cb5894d9bcf"
+  },
+  "DEPLOY_GUIDE_zh-TW.md": {
+    "size_bytes": 5495,
+    "sha256": "2f532a5737a78288e4a5a041e65c25c21bbbec1f85fcc85658052f4626587c12"
+  },
+  "index.html": {
+    "size_bytes": 38531,
+    "sha256": "783c7279988dcef5ca07018f203c4571ad35b9242355a460882d5986dc8d9343"
+  },
+  "ko.html": {
+    "size_bytes": 39606,
+    "sha256": "cd214fc2ffbbb8cef5af1aa9b5282f8097526d86b975714a7ab2626d2eb267c2"
+  },
+  "README.md": {
+    "size_bytes": 1104,
+    "sha256": "2d6fa0bd3e79fe21b4496d91c4e887da7dc34b250af1e53e3f53265add5b5069"
+  },
+  ".nojekyll": {
+    "size_bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "MOOSE_MODEL_CREDIT.txt": {
+    "size_bytes": 596,
+    "sha256": "14a4ce7626807de66646ccda31d62bd5968cdf17e433e682d1e4db051889000a"
+  },
+  "models/Low_Poly_Moose_Source.glb": {
+    "size_bytes": 99908,
+    "sha256": "362ab8f7f956d6a6ba29c1df9db279f44df783ce28abad59ca30604ea07c3857"
+  },
+  "models/ES90_original.glb.gz": {
+    "size_bytes": 23509423,
+    "sha256": "d48e30df5c51d7e32425b59e10cf2023c53b6da09ccf29f485bff10179fd6b62"
+  },
+  "models/EX60_uniform_rear_rims.glb.gz": {
+    "size_bytes": 13314267,
+    "sha256": "993b0114da2b82c2de78702e9373095c2f978535207db3d03e2e240a3aed93df"
+  }
+}
