@@ -429,23 +429,54 @@ function updateTrafficAI(dt){
      const front=tr.isRearOvertaker?36:24+tr.speed*.065;
      const rear=tr.isRearOvertaker?28:18+tr.speed*.04;
      if(safeForLane(tr,candidate,front,rear)){
-      tr.targetLane=candidate;tr.changing=true;break;
+      tr.targetLane=candidate;
+      tr.changing=true;
+      tr.changeFromZ=tr.z;
+      tr.changeElapsed=0;
+      tr.changeDuration=tr.type==='truck'||tr.type==='bus'?3.1:2.45;
+      tr.changeLead=.65; // Turn signal before steering.
+      tr.signalDir=Math.sign(candidate-tr.lane);
+      tr.signalSince=state.elapsed;
+      break;
      }
     }
    }
    tr.decision=Math.max(1.3,5.7-tier*.32)+hash(tr.id+state.elapsed)*2.8;
   }
+  // Follow a bounded S-curve: steering, heading and body roll derive from
+  // lateral velocity/acceleration rather than a linear sideways translation.
+  const previousZ=tr.z;
   if(tr.changing){
    const tz=(tr.targetLane-1)*LANE_WIDTH;
-   // Abort a lane change if a newly arrived car would intersect the path.
    const conflict=sorted.some(o=>o!==tr&&Math.abs(o.x-tr.x)<(o.length+tr.length)*.5+5&&Math.abs(o.z-tz)<1.9);
    const playerConflict=tr.isRearOvertaker&&tr.x>-13&&tr.x<17&&Math.abs(tz-state.lateral)<2.0;
-   if(conflict||playerConflict){tr.targetLane=tr.lane;}
-   const tzSafe=(tr.targetLane-1)*LANE_WIDTH;
-   const maxMove=dt*(1.6+.07*Math.min(7,tier));
-   tr.z+=Math.max(-maxMove,Math.min(maxMove,tzSafe-tr.z));
-   if(Math.abs(tr.z-tzSafe)<.04){tr.z=tzSafe;tr.lane=tr.targetLane;tr.changing=false;}
+   if((conflict||playerConflict)&&tr.targetLane!==tr.lane){
+    tr.targetLane=tr.lane; // Smoothly return to the starting lane, no teleport.
+    tr.changeFromZ=tr.z;tr.changeElapsed=0;tr.changeLead=0;
+    tr.changeDuration=1.85;
+    tr.signalDir=Math.sign((tr.targetLane-1)*LANE_WIDTH-tr.z);
+    tr.signalSince=state.elapsed;
+   }
+   if((tr.changeLead||0)>0){
+    tr.changeLead=Math.max(0,tr.changeLead-dt);
+   }else{
+    tr.changeElapsed=(tr.changeElapsed||0)+dt;
+    const targetZ=(tr.targetLane-1)*LANE_WIDTH;
+    const ratio=Math.min(1,tr.changeElapsed/(tr.changeDuration||2.45));
+    // Quintic smoothstep has zero lateral speed and acceleration at both ends.
+    const ease=ratio*ratio*ratio*(10+ratio*(-15+6*ratio));
+    tr.z=tr.changeFromZ+(targetZ-tr.changeFromZ)*ease;
+    if(ratio>=1){tr.z=targetZ;tr.lane=tr.targetLane;tr.changing=false;tr.signalDir=0;}
+   }
   }
+  const lateralVelocity=(tr.z-previousZ)/Math.max(dt,.001);
+  const lateralAcceleration=(lateralVelocity-(tr.lateralVelocity||0))/Math.max(dt,.01);
+  tr.lateralVelocity=lateralVelocity;
+  const headingTarget=-Math.atan2(lateralVelocity,Math.max(8,tr.speed/3.6));
+  const leanTarget=Math.max(-.082,Math.min(.082,-lateralAcceleration*.014));
+  tr.yaw=(tr.yaw||0)+(headingTarget-(tr.yaw||0))*(1-Math.exp(-dt*5.2));
+  tr.roll=(tr.roll||0)+(leanTarget-(tr.roll||0))*(1-Math.exp(-dt*4.3));
+  tr.steer=Math.max(-.24,Math.min(.24,headingTarget*1.25));
   let target=tr.cruise;
   if(closeAhead){
    const gap=closeAhead.x-tr.x-(closeAhead.length+tr.length)*.5;
@@ -500,7 +531,44 @@ function updateRearApproach(){
   safetyChime('blis');
  }
 }
-function spawnMoose(){const dir=hash(state.wave+state.elapsed)>.5?1:-1;state.moose={x:88,z:dir*7.3,dir,run:3.2,passed:false};state.mooseCountdown=32+32*hash(state.wave*7);textEvent(L("⚠ 前方麋鹿突發！"),L("請減速並安全避讓"),'alert mooseAlert',3.3);try{navigator.vibrate?.([90,40,110])}catch(e){}}
+function isLargeTraffic(t){return t.type==='truck'||t.type==='bus'||t.visualKind==='truck'||t.visualKind==='bus';}
+// Two heavy vehicles bracketing the player block the forward/side view.
+function playerBetweenLargeVehicles(){
+ let left=false,right=false;
+ for(const t of state.traffic){
+  if(!isLargeTraffic(t)||t.x< -13||t.x>34)continue;
+  if(t.z<state.lateral-1.85)left=true;
+  if(t.z>state.lateral+1.85)right=true;
+ }
+ return left&&right;
+}
+function mooseSightBlocked(m){
+ if(playerBetweenLargeVehicles())return true;
+ if(!m)return false;
+ let blockers=0;
+ for(const t of state.traffic){
+  if(!isLargeTraffic(t)||t.x<2||t.x>Math.min(m.x,115)+7)continue;
+  // Test approximate sightline from player to crossing animal (X-Z plane).
+  const fraction=Math.max(0,Math.min(1,t.x/Math.max(m.x,1)));
+  const sightZ=state.lateral+(m.z-state.lateral)*fraction;
+  if(Math.abs(t.z-sightZ)<(t.type==='bus'?1.65:1.52))blockers++;
+  if(blockers>=2)return true;
+ }
+ return false;
+}
+function spawnMoose(){
+ const dir=hash(state.wave+state.elapsed)>.5?1:-1;
+ const pending={x:85,z:dir*7.1,dir};
+ if(mooseSightBlocked(pending)){
+  state.mooseCountdown=7+5*hash(state.wave+state.elapsed);
+  return false; // Do not spawn a hazard hidden behind two heavy vehicles.
+ }
+ state.moose={...pending,run:4.6+hash(state.wave*.78)*.8,gaitPhase:0,age:0,passed:false};
+ state.mooseCountdown=32+32*hash(state.wave*7);
+ textEvent(L("⚠ 前方麋鹿突發！"),L("請減速並安全避讓"),'alert mooseAlert',3.3);
+ try{navigator.vibrate?.([90,40,110])}catch(e){}
+ return true;
+}
 function emergency(){state.endReason='moose';state.run='emergency';state.emergency=1.8;state.brake=false;state.throttle=false;textEvent(L("緊急煞停啟動"),L("本次挑戰即將結束"),'alert mooseAlert',4);try{navigator.vibrate?.([120,60,200])}catch(e){}}
 function finish(){
  if(state.run==='ended')return;
@@ -702,8 +770,22 @@ function advance(dt){state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000)
      state.rearSpawn=added?7+hash(state.wave+state.elapsed)*3.5:.45;
     }
    }
-   if(!state.aebEmergency&&state.moose){const m=state.moose;m.x-=state.speed*dt/3.6;m.z-=m.dir*m.run*dt;if(Math.abs(m.x)<2.4&&Math.abs(m.z-state.lateral)<1.0){emergency()}else if(m.x< -4.8){state.moose=null;state.score+=250;textEvent(L("成功避開麋鹿！"),L("+250 分"),'',2)}}
-   else if(!state.aebEmergency){state.mooseCountdown-=dt;if(state.mooseCountdown<=0)spawnMoose()}
+   if(!state.aebEmergency&&state.moose){
+    const m=state.moose;
+    // A moose must not cause an invisible collision while two heavy vehicles
+    // block the player's view or form a tight corridor around the player.
+    if(mooseSightBlocked(m)){
+     state.moose=null;state.mooseCountdown=Math.max(state.mooseCountdown,10);
+    }else{
+     m.age=(m.age||0)+dt;
+     m.gaitPhase=(m.gaitPhase||0)+dt*(11.0+m.run*.5);
+     m.x-=state.speed*dt/3.6;
+     const acceleration=Math.min(1,.50+m.age*1.1);
+     m.z-=m.dir*m.run*acceleration*dt;
+     if(Math.abs(m.x)<2.4&&Math.abs(m.z-state.lateral)<1.0){emergency()}
+     else if(m.x< -4.8){state.moose=null;state.score+=250;textEvent(L("成功避開麋鹿！"),L("+250 分"),'',2)}
+    }
+   }else if(!state.aebEmergency){state.mooseCountdown-=dt;if(state.mooseCountdown<=0)spawnMoose()}
   }
   if((state.left||state.right||state.touchSteer)&&state.run==='running'){state.dir=Math.sign((state.right?1:0)-(state.left?1:0)+state.touchSteer);state.signalHold=.8}else{state.signalHold=Math.max(0,state.signalHold-dt);if(!state.signalHold)state.dir=0}
  }
@@ -754,6 +836,7 @@ if(!gl){return null}
 const vs=`#version 300 es
 layout(location=0) in vec3 p;layout(location=1) in vec3 n;layout(location=2) in vec2 texUV;
 uniform mat4 vp,m;uniform vec3 pivot;uniform float spin,frontSteer;
+uniform float moosePhase,mooseMotion;
 out vec3 N,W,L;out vec2 UV;
 void main(){float c=cos(spin),s=sin(spin);vec3 q=p-pivot;
 q=vec3(q.x*c-q.y*s,q.x*s+q.y*c,q.z);
@@ -763,6 +846,18 @@ float cs=cos(frontSteer),ss=sin(frontSteer);
 q=vec3(q.x*cs+q.z*ss,q.y,-q.x*ss+q.z*cs);
 nn=vec3(nn.x*cs+nn.z*ss,nn.y,-nn.x*ss+nn.z*cs);
 q+=pivot;
+// Rigless gallop for the supplied low-poly source mesh: legs are sculpted
+// into one body mesh, so deform only lower front/rear limbs, not head or torso.
+if(mooseMotion>0.5){
+ float frontLeg=1.0-smoothstep(-0.42,-0.04,p.x);
+ float backLeg=smoothstep(0.61,0.79,p.x);
+ float limb=max(frontLeg,backLeg);
+ float toe=1.0-smoothstep(0.43,0.91,p.y);
+ float side=(p.z>=0.0)?0.0:1.57;
+ float stride=moosePhase+(frontLeg>backLeg?0.0:3.14159)+side;
+ q.x+=0.22*sin(stride)*limb*toe;
+ q.y+=0.12*max(0.0,cos(stride))*limb*toe;
+}
 vec4 w=m*vec4(q,1.0);W=w.xyz;N=normalize(mat3(m)*nn);L=q;UV=texUV;
 gl_Position=vp*w;}`;
 const fs=`#version 300 es
@@ -827,7 +922,7 @@ frag=vec4(pow(max(rgb,0.0),vec3(.93)),alpha);
 function shader(type,source){const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){throw Error(gl.getShaderInfoLog(s))}return s}
 let program;try{program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vs));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program))}catch(err){$('errorBanner').innerText=L("無法啟動 3D 畫面，請更新瀏覽器後再試。");$('errorBanner').style.display='block';return}
 gl.useProgram(program);
-const u={vp:gl.getUniformLocation(program,'vp'),m:gl.getUniformLocation(program,'m'),pivot:gl.getUniformLocation(program,'pivot'),spin:gl.getUniformLocation(program,'spin'),frontSteer:gl.getUniformLocation(program,'frontSteer'),color:gl.getUniformLocation(program,'color'),emission:gl.getUniformLocation(program,'emission'),eye:gl.getUniformLocation(program,'eye'),metal:gl.getUniformLocation(program,'metal'),alpha:gl.getUniformLocation(program,'alpha'),shadow:gl.getUniformLocation(program,'shadow'),hasAtlas:gl.getUniformLocation(program,'hasAtlas'),carAtlas:gl.getUniformLocation(program,'carAtlas'),modelPaint:gl.getUniformLocation(program,'modelPaint')};
+const u={vp:gl.getUniformLocation(program,'vp'),m:gl.getUniformLocation(program,'m'),pivot:gl.getUniformLocation(program,'pivot'),spin:gl.getUniformLocation(program,'spin'),frontSteer:gl.getUniformLocation(program,'frontSteer'),color:gl.getUniformLocation(program,'color'),emission:gl.getUniformLocation(program,'emission'),eye:gl.getUniformLocation(program,'eye'),metal:gl.getUniformLocation(program,'metal'),alpha:gl.getUniformLocation(program,'alpha'),shadow:gl.getUniformLocation(program,'shadow'),hasAtlas:gl.getUniformLocation(program,'hasAtlas'),carAtlas:gl.getUniformLocation(program,'carAtlas'),modelPaint:gl.getUniformLocation(program,'modelPaint'),moosePhase:gl.getUniformLocation(program,'moosePhase'),mooseMotion:gl.getUniformLocation(program,'mooseMotion')};
 function createGeometry(vertices,indices,textured=false){const vao=gl.createVertexArray();gl.bindVertexArray(vao);const vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,3,gl.FLOAT,false,textured?32:24,0);gl.enableVertexAttribArray(1);gl.vertexAttribPointer(1,3,gl.FLOAT,false,textured?32:24,12);if(textured){gl.enableVertexAttribArray(2);gl.vertexAttribPointer(2,2,gl.FLOAT,false,32,24);}const ib=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,indices,gl.STATIC_DRAW);gl.bindVertexArray(null);return {vao,count:indices.length}}
 function draw(g,m,col,metal=0,em=[0,0,0],a=1,shadow=false,spin=0,pivot=[0,0,0],hasAtlas=false,frontSteer=0){gl.uniformMatrix4fv(u.m,false,m);gl.uniform3fv(u.color,col);gl.uniform3fv(u.emission,em);gl.uniform1f(u.metal,metal);gl.uniform1f(u.alpha,a);gl.uniform1f(u.shadow,shadow?1:0);gl.uniform1f(u.hasAtlas,hasAtlas===4?4:hasAtlas===2?2:hasAtlas===3?3:hasAtlas?1:0);gl.uniform1f(u.spin,spin);gl.uniform1f(u.frontSteer,frontSteer);gl.uniform3fv(u.pivot,pivot);gl.bindVertexArray(g.vao);gl.drawElements(gl.TRIANGLES,g.count,gl.UNSIGNED_INT,0)}
 function geomFrom(arr,index){return createGeometry(new Float32Array(arr),new Uint32Array(index))}
@@ -1145,7 +1240,8 @@ function drawWheelOverlay(model,base,t){
 function drawAIMesh(model,x,z,t=null,paintKey=null,bodyYaw=0,bodyRoll=0){
  if(model==='es90'||model==='ex60'||model==='ex90')return drawDirectModel(model,x,z,t,bodyYaw,bodyRoll);
  const parts=aiGpuMeshes[model];if(!parts)return false;
- const base=(model==='sport2')?multiply(translation(x,0,z),rotationY(Math.PI)):translation(x,0,z);
+  const bodyPose=multiply(translation(x,0,z),multiply(rotationY(bodyYaw),rotationX(bodyRoll)));
+  const base=(model==='sport2')?multiply(bodyPose,rotationY(Math.PI)):bodyPose;
  const steer=aiSteeringAngle(t)*(model==='sport2'?-1:1);
  for(const part of parts){
   const rolling=part.wheel&&t?(t.wheelPhase??state.elapsed*(t.speed||70)/3.6/.36):0;
@@ -1155,19 +1251,36 @@ function drawAIMesh(model,x,z,t=null,paintKey=null,bodyYaw=0,bodyRoll=0){
  return true;
 }
 function drawTrafficAppearance(t){
+ const yaw=t.yaw||0,bank=t.roll||0;
  if(t.visualKind==='volvo'&&t.visualModel){
   if(t.visualModel==='es90'||t.visualModel==='ex60'||t.visualModel==='ex90'){
-   if(directModels[t.visualModel]?.ready&&drawAIMesh(t.visualModel,t.x,t.z,t))return;
+   if(directModels[t.visualModel]?.ready&&drawAIMesh(t.visualModel,t.x,t.z,t,null,yaw,bank))return;
   }else if(meshes[t.visualModel]?.length){
    const prev=wheelSpin;wheelSpin=(state.elapsed||0)*(t.speed||70)/3.6/.36;
-   drawCar(t.visualModel,t.x,t.z,0,0,0,aiSteeringAngle(t));
+   drawCar(t.visualModel,t.x,t.z,0,yaw,bank,aiSteeringAngle(t));
    wheelSpin=prev;return;
   }
  }
- if((t.visualKind==='sport'||t.visualKind==='truck'||t.visualKind==='bus')&&drawAIMesh(t.visualModel,t.x,t.z,t))return;
- // The only emergency render fallback is an existing verified Volvo source model.
+ if((t.visualKind==='sport'||t.visualKind==='truck'||t.visualKind==='bus')&&drawAIMesh(t.visualModel,t.x,t.z,t,null,yaw,bank))return;
  const prev=wheelSpin;wheelSpin=(state.elapsed||0)*(t.speed||70)/3.6/.36;
- drawCar('xc40',t.x,t.z,0,0,0,aiSteeringAngle(t));wheelSpin=prev;
+ drawCar('xc40',t.x,t.z,0,yaw,bank,aiSteeringAngle(t));wheelSpin=prev;
+}
+// Model-space amber lamps stay fixed to each AI vehicle; no free-floating road lights.
+function drawAITurnSignals(t){
+ if(!t.changing||!t.signalDir)return;
+ const flash=((state.elapsed-(t.signalSince||0))%0.78+0.78)%0.78<0.40;
+ if(!flash)return;
+ const heavy=t.type==='truck'||t.type==='bus';
+ const length=t.length||4.6;
+ const side=t.signalDir;
+ const sideZ=side*(heavy?1.00:.79);
+ const bodyPose=multiply(translation(t.x,0,t.z),multiply(rotationY(t.yaw||0),rotationX(t.roll||0)));
+ const amber=[1.0,.42,.045],glow=[.88,.34,.025];
+ for(const xx of [-.42*length,.42*length]){
+  const yy=heavy?(xx>0?1.00:.91):.69;
+  const marker=multiply(bodyPose,modelM(xx,yy,sideZ,.22,.075,.12));
+  draw(boxGeo,marker,amber,.08,glow);
+ }
 }
 
 // Original XC40 UV atlas is restored instead of replacing every surface with flat paint.
@@ -1256,13 +1369,18 @@ try{
   color:p.color
  }));
 }catch(err){console.error('Moose geometry setup failed:',err);mooseMeshes=[];}
-function mooseFigure(x,z,dir){
+function mooseFigure(x,z,dir,m=null){
  if(mooseMeshes.length){
-  // This GLB's head points toward -X. A positive spawn dir arrives from +Z,
-  // so rotate toward -Z; negative dir approaches from the opposite roadside.
   const facing=-(dir>=0?1:-1)*Math.PI/2;
-  const pose=multiply(translation(x,0,z),rotationY(facing));
-  for(const p of mooseMeshes)draw(p.g,pose,p.color,.035,[0,0,0]);
+  const gait=m?.gaitPhase||0;
+  const bob=.035+.067*Math.max(0,Math.sin(gait*2));
+  const pose=multiply(translation(x,bob,z),multiply(rotationY(facing),rotationX(.023*Math.sin(gait))));
+  gl.uniform1f(u.moosePhase,gait);
+  for(const p of mooseMeshes){
+   gl.uniform1f(u.mooseMotion,p.name==='Plane_0'?1:0);
+   draw(p.g,pose,p.color,.035,[0,0,0]);
+  }
+  gl.uniform1f(u.mooseMotion,0);
   return;
  }
  // Safe visual fallback only; never changes the original collision/AEB logic.
@@ -1340,8 +1458,8 @@ function drawWorld(ts,spin){wheelSpin=spin;resize();const w=canvas.clientWidth,h
   if(state.car==='es90'||state.car==='ex60'||state.car==='ex90'){if(!drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:(state.visualSteer||0)},state.yaw,state.roll))drawCar('ex30',0,state.lateral,0,state.yaw,state.roll,state.visualSteer||0);}
   else drawCar(state.car,0,state.lateral,state.brake||state.run==='emergency'?2.1:(state.immune>0?.15:0),state.yaw,state.roll,state.visualSteer||0);
   if(state.dir&&state.signalHold>0&&Math.floor(state.blink/.36)%2===0){const z=state.lateral+state.dir*.88;for(const x of [-2.1,1.87])B(x,.91,z,.16,.11,.17,[1,.55,.07],.08,[.80,.28,.02])}
-  for(const t of state.traffic){if(t.x>140||t.x<-46)continue;shadow(t.x,t.z,t.type==='truck'||t.type==='bus'?1.65:1);drawTrafficAppearance(t)}
-  if(state.moose){shadow(state.moose.x,state.moose.z,.42);mooseFigure(state.moose.x,state.moose.z,state.moose.dir)}
+  for(const t of state.traffic){if(t.x>140||t.x<-46)continue;shadow(t.x,t.z,t.type==='truck'||t.type==='bus'?1.65:1);drawTrafficAppearance(t);drawAITurnSignals(t)}
+  if(state.moose){shadow(state.moose.x,state.moose.z,.42);mooseFigure(state.moose.x,state.moose.z,state.moose.dir,state.moose)}
  }else{shadow(0,0);if(state.driveCar==='es90'||state.driveCar==='ex60'||state.driveCar==='ex90'){if(!drawDirectModel(state.driveCar,0,0,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:0}))drawCar('ex30');}else drawCar(state.driveCar,0,0,state.throttle?.18:0)}
 }
 return {drawWorld};
