@@ -243,7 +243,22 @@ body.mode-highway .rules{margin-top:2px}
 @media(max-width:700px){#drivePowers .choice{font-size:11px;min-height:42px;padding:8px 5px}#driveCars .choice,#showCars .choice{font-size:11px;padding:7px 3px;min-height:36px}#paintButtons{gap:4px}}
 
 .langLinks{display:flex;align-items:center;justify-content:flex-end;gap:3px;flex-wrap:wrap}.langLinks .langSwitch{font-size:10px;padding:4px 5px;margin-left:0}.langLinks .langSwitch.active{background:#c8f4e8;color:#173440;border-color:#c8f4e8}
-</style></head><body class="mode-highway"><main class="shell">
+</style>
+<style id="volvo-traffic-preload-style">
+#trafficPreloadOverlay[hidden]{display:none!important}
+#trafficPreloadOverlay{position:absolute;inset:0;z-index:31;display:grid;place-items:center;background:rgba(5,24,32,.82);backdrop-filter:blur(5px);padding:14px;box-sizing:border-box}
+.trafficLoadCard{width:min(440px,100%);background:#0e2f3c;color:#eefdf9;border:1px solid #6b979c;border-radius:16px;padding:24px 20px;box-sizing:border-box;text-align:center;box-shadow:0 14px 42px #001b2488}
+.trafficLoadHeading{font-size:19px;font-weight:800;letter-spacing:.015em;line-height:1.45;margin-bottom:9px}
+.trafficLoadPercent{font-size:48px;font-weight:850;font-variant-numeric:tabular-nums;line-height:1.12;margin:12px 0}
+#trafficPreloadProgress{display:block;appearance:none;width:100%;height:15px;border:0;border-radius:12px;overflow:hidden;background:#32535e}
+#trafficPreloadProgress::-webkit-progress-bar{background:#32535e;border-radius:12px}
+#trafficPreloadProgress::-webkit-progress-value{background:#b3e9df;border-radius:12px;transition:width .12s}
+#trafficPreloadProgress::-moz-progress-bar{background:#b3e9df;border-radius:12px}
+#trafficPreloadDetail{min-height:44px;margin:14px 0 6px;line-height:1.5;font-size:14px;overflow-wrap:anywhere}
+#trafficPreloadRetry{margin:10px auto 0;min-height:43px;border-radius:9px;padding:10px 18px;background:#c4efe5;color:#17333b;font-weight:800;border:0}
+.trafficLoadHint{font-size:12px;color:#b4d0d1;line-height:1.45;margin-top:12px}
+</style>
+</head><body class="mode-highway"><main class="shell">
 <header class="top"><div><div class="mark">VOLVO <span style="font-weight:300">/</span> DRIVING LAB</div><div class="brandSmall">INTERACTIVE DRIVING GAME</div></div><div class="name"><div class="dealer">內湖新凱汽車</div><div class="advisor">張志遠 Miro Chang</div><div class="langLinks" aria-label="語言切換"><a class="langSwitch active" lang="zh-Hant" aria-current="page" href="index.html">繁中</a><a class="langSwitch" lang="en" href="en.html">EN</a><a class="langSwitch" lang="ko" href="ko.html">한국어</a></div></div></header>
 <div class="heading"><div><h1>Volvo <em>Highway Challenge</em></h1><p>0–100 加速 · 無限高速閃避 · 360° 立體賞車</p></div><div class="version">DRIVE · DISCOVER · EXPLORE</div></div>
 <nav class="tabs"><button class="tab" data-mode="drive">01 · 加速體驗</button><button class="tab selected" data-mode="highway">02 · 無限閃避</button><button class="tab" data-mode="showroom">03 · 3D 賞車</button></nav>
@@ -259,7 +274,16 @@ body.mode-highway .rules{margin-top:2px}
       <div class="v9Trips"><span>距離 <b id="distStat">0 m</b></span><span>超車 <b id="passStat">0</b></span><span class="v9Level" id="v9Level">LV 1</span></div>
      </div>
      <div class="v9LkaNotice" id="v9LkaNotice" role="status" aria-live="off">▧ LKA 車道偏移 <strong id="v9LkaTime">2.0 s</strong></div>
-<canvas id="view"></canvas><div id="glbLoadStatus" role="status" aria-live="polite" style="display:none;position:absolute;top:65px;left:50%;transform:translateX(-50%);z-index:14;max-width:85%;padding:8px 14px;border-radius:9px;background:#102f3be6;color:#effffe;font-size:12px;font-weight:700;pointer-events:none;text-align:center;box-shadow:0 2px 12px #1238"></div><div class="hud"><div class="hudTop"><div><div class="eyebrow">VOLVO DRIVING LAB</div><div class="hudTitle" id="hudTitle">ENDLESS HIGHWAY</div></div><div class="pill" id="hudChip"><b>EX30</b>高速閃避挑戰</div></div><div class="signals" id="signals"><span id="signalL">◀</span><span id="signalR">▶</span></div><div class="rearRadar" id="rearRadar" role="status" aria-live="off" aria-label="Rear overtaking alerts"><div class="rearRadarSide left" id="rearWarnL"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextL">左側盲點來車</span></div><div class="rearRadarSide right" id="rearWarnR"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextR">右側盲點來車</span></div></div><div class="brakeNote" id="brakeNote">BRAKE · 減速</div><div class="hudBottom" id="hudBottom"><div><div class="speed" id="speed">090</div><div class="units">km/h · 遊戲模擬</div></div><div class="counter"><small id="countTitle">SCORE / 分數</small><strong id="countValue">0</strong></div></div></div><div id="event" class="event"></div><div id="fallbackNote" class="fallbackNote"></div>
+<div id="trafficPreloadOverlay" role="dialog" aria-modal="true" aria-label="Volvo AI vehicle loading" hidden>
+ <div class="trafficLoadCard">
+  <div class="trafficLoadHeading" id="trafficPreloadTitle">正在載入 Volvo AI 車流</div>
+  <div class="trafficLoadPercent" id="trafficPreloadPercent">0%</div>
+  <progress id="trafficPreloadProgress" max="100" value="0" aria-valuemin="0" aria-valuemax="100"></progress>
+  <div id="trafficPreloadDetail" role="status" aria-live="polite">準備六款 Volvo 車模</div>
+  <div class="trafficLoadHint">繁中：六款 Volvo AI 模型必須完成準備才能進入無限閃避。<span class="trafficLoadLang" style="display:block">EN: All six Volvo traffic models load before driving.</span><span style="display:block">한국어: 6종 Volvo AI 차량 준비 후 게임 시작</span></div>
+  <button type="button" id="trafficPreloadRetry" hidden>重新載入 · Retry · 다시 시도</button>
+ </div>
+</div><canvas id="view"></canvas><div id="glbLoadStatus" role="status" aria-live="polite" style="display:none;position:absolute;top:65px;left:50%;transform:translateX(-50%);z-index:14;max-width:85%;padding:8px 14px;border-radius:9px;background:#102f3be6;color:#effffe;font-size:12px;font-weight:700;pointer-events:none;text-align:center;box-shadow:0 2px 12px #1238"></div><div class="hud"><div class="hudTop"><div><div class="eyebrow">VOLVO DRIVING LAB</div><div class="hudTitle" id="hudTitle">ENDLESS HIGHWAY</div></div><div class="pill" id="hudChip"><b>EX30</b>高速閃避挑戰</div></div><div class="signals" id="signals"><span id="signalL">◀</span><span id="signalR">▶</span></div><div class="rearRadar" id="rearRadar" role="status" aria-live="off" aria-label="Rear overtaking alerts"><div class="rearRadarSide left" id="rearWarnL"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextL">左側盲點來車</span></div><div class="rearRadarSide right" id="rearWarnR"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextR">右側盲點來車</span></div></div><div class="brakeNote" id="brakeNote">BRAKE · 減速</div><div class="hudBottom" id="hudBottom"><div><div class="speed" id="speed">090</div><div class="units">km/h · 遊戲模擬</div></div><div class="counter"><small id="countTitle">SCORE / 分數</small><strong id="countValue">0</strong></div></div></div><div id="event" class="event"></div><div id="fallbackNote" class="fallbackNote"></div>
 <div id="mooseDialog" class="mooseDialog" role="dialog" aria-modal="true" aria-labelledby="mooseTitle" aria-describedby="mooseMessage" aria-hidden="true">
  <div class="mooseCard">
   <span class="mooseEyebrow">VOLVO · FOR LIFE</span>
@@ -308,4 +332,4 @@ body.mode-highway .rules{margin-top:2px}
 </section>
 <section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>EX30 / XC40 / XC60 / ES90 / EX60 / EX90　360° 賞車</h2><p>拖曳旋轉車輛，使用雙指或滑鼠滾輪縮放，探索車輛外觀。</p></div><button class="smallButton" id="viewReset">重設視角 ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>純電 SUV</small></button><button class="choice" data-car="xc40">XC40<small>都會 SUV</small></button><button class="choice" data-car="xc60">XC60<small>中型 SUV</small></button><button class="choice" data-car="es90">ES90<small>純電旗艦房車</small></button><button class="choice" data-car="ex60">EX60<small>純電 SUV</small></button><button class="choice" data-car="ex90">EX90<small>純電旗艦 SUV</small></button></div><p class="help">選擇車型後，即可從不同角度欣賞車輛外觀。</p></section>
 </div></section><div class="bottom">本遊戲為獨立非官方互動模擬，所有加速數據、路況、車流及安全輔助效果僅供體驗，不代表實車性能、實際安全系統介入條件或事故結果。<p class="help" style="font-size:11px;margin-top:10px">麋鹿模型來源：<a href="https://sketchfab.com/3d-models/low-poly-moose-9ba6aeef039f458eb998cbdd672b3952" target="_blank" rel="noopener noreferrer">Low-poly Moose — Zafflex</a>，採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> 授權。</p>請遵守交通法規，勿在真實道路模仿高速駕駛或閃避行為。</div></main>
-<script src="game.js?v=20261116-fast3-models-v1"></script></body></html>
+<script src="game.js?v=20261116-preload-volvo-ai-v2"></script></body></html>

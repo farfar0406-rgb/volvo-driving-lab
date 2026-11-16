@@ -72,7 +72,7 @@ function fmt(m){return m>=1000?(m/1000).toFixed(2)+' km':Math.round(m)+' m'}
 function textEvent(title,desc='',type='',seconds=2){state.eventText=title;state.eventDetails=desc;state.eventType=type;state.eventTime=seconds;updateEvent()}
 function updateEvent(){const e=$('event');e.className='event'+(state.eventTime>0?' on':'')+(state.eventType?' '+state.eventType:'');e.innerHTML=state.eventTime>0?(state.eventText+(state.eventDetails?'<small>'+state.eventDetails+'</small>':'')):''}
 function hideEvent(){state.eventTime=0;updateEvent()}
-function setMode(mode){document.body.className='mode-'+mode;state.mode=mode;state.brake=false;state.throttle=false;state.left=false;state.right=false;state.hAccel=false;hideEvent();resetHighway();resetDrive();if(mode==='highway')state.speed=90;document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('selected',e.dataset.mode===mode));document.querySelectorAll('.panel').forEach(e=>e.classList.toggle('selected',e.id==='panel-'+mode));$('hudBottom').classList.toggle('hidden',mode==='showroom');$('hudTitle').textContent={drive:'0–100 ACCELERATION',highway:'ENDLESS HIGHWAY',showroom:'360° VOLVO SHOWROOM'}[mode];if(mode==='showroom'){state.orbit=.55;state.elev=.22;state.zoom=7.5}prepareDirectSelection(mode==='drive'?state.driveCar:mode==='showroom'?state.showCar:state.car);updateUI()}
+function setMode(mode){document.body.className='mode-'+mode;state.mode=mode;state.brake=false;state.throttle=false;state.left=false;state.right=false;state.hAccel=false;hideEvent();resetHighway();resetDrive();if(mode==='highway')state.speed=90;document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('selected',e.dataset.mode===mode));document.querySelectorAll('.panel').forEach(e=>e.classList.toggle('selected',e.id==='panel-'+mode));$('hudBottom').classList.toggle('hidden',mode==='showroom');$('hudTitle').textContent={drive:'0–100 ACCELERATION',highway:'ENDLESS HIGHWAY',showroom:'360° VOLVO SHOWROOM'}[mode];if(mode==='showroom'){state.orbit=.55;state.elev=.22;state.zoom=7.5}if(mode!=='highway')prepareDirectSelection(mode==='drive'?state.driveCar:state.showCar);updateUI()}
 function resetDrive(){state.speed=0;state.driveStarted=false;state.driveComplete=false;state.driveTime=0;state.distance=0;state.throttle=false;$('throttle').classList.remove('pressed')}
 function showMooseDialog(){
  const dialog=$('mooseDialog');
@@ -119,20 +119,66 @@ $('aebToggle').onclick=()=>{
  textEvent(state.aeb?L("主動煞車模擬已開啟"):L("主動煞車模擬已關閉"),state.aeb?L("與前車距離約一個車身時啟動，煞停後可繼續挑戰"):L("保留手動煞車控制"),'',1.6);
 };
 $('driveReset').onclick=()=>{resetDrive();hideEvent()};$('reset').onclick=()=>resetHighway();$('viewReset').onclick=()=>{state.orbit=.6;state.elev=.25;state.zoom=7.6};
-$('start').onclick=()=>{if(!directPlayerReady(state.car)){prepareDirectSelection(state.car);return}if(state.run==='running'){state.run='paused';$('start').textContent=L("▶ 繼續");textEvent(L("已暫停"),'','',2);return}if(state.run==='paused'){state.run='running';$('start').textContent=L("Ⅱ 暫停");hideEvent();return}resetHighway();state.run='countdown';state.countdown=3;$('start').textContent=L("準備起跑…");audioOn()};
+// Six original source Volvo HD GLBs preload before highway; these are the same assets as showroom.
+const TRAFFIC_PRELOAD_MODELS=['ex30','xc40','xc60','es90','ex60','ex90'];
+let highwayPreloading=false;
+function highwayAssetsReadyFor(car){
+ const api=window.__VOLVO_TRAFFIC_PRELOAD__;
+ return !!api&&TRAFFIC_PRELOAD_MODELS.every(name=>api.readyTraffic(name))&&api.readyPlayer(car);
+}
+function showTrafficPreload(pct,title,detail,isError=false){
+ const overlay=$('trafficPreloadOverlay'),bar=$('trafficPreloadProgress'),number=$('trafficPreloadPercent'),name=$('trafficPreloadTitle'),description=$('trafficPreloadDetail'),retry=$('trafficPreloadRetry');
+ overlay.hidden=false;name.textContent=title;description.textContent=detail;bar.value=Math.max(0,Math.min(100,Math.floor(pct)));number.textContent=Math.floor(bar.value)+'%';
+ bar.setAttribute('aria-valuenow',String(bar.value));retry.hidden=!isError;
+}
+function hideTrafficPreload(){$('trafficPreloadOverlay').hidden=true;}
+async function beginHighwayPreload(){
+ if(highwayPreloading)return;
+ const api=window.__VOLVO_TRAFFIC_PRELOAD__;
+ if(!api){showTrafficPreload(0,fastLabel('車輛載入失敗','Vehicle loading unavailable','차량 불러오기 실패'),fastLabel('請重新整理後再試。','Refresh and try again.','새로고침한 뒤 다시 시도하세요.'),true);return}
+ highwayPreloading=true;$('start').disabled=true;
+ showTrafficPreload(0,fastLabel('正在載入六款 Volvo 車型','Loading six Volvo models','Volvo 차량 6종 불러오는 중'),fastLabel('正在連線並準備原始高清車模…','Connecting and preparing original HD models…','원본 고해상도 모델을 준비하는 중…'));
+ const targetCar=state.car,total=TRAFFIC_PRELOAD_MODELS.length;
+ try{
+  for(let i=0;i<TRAFFIC_PRELOAD_MODELS.length;i++){
+   const model=TRAFFIC_PRELOAD_MODELS[i];
+   const phaseDescription=(p)=> p.stage==='download'?fastLabel('下載中','Downloading','다운로드 중'):p.stage==='build'?fastLabel('建立 3D 模型','Preparing 3D','3D 모델 구성 중'):fastLabel('載入材質','Loading texture','텍스처 불러오는 중');
+   await api.requestTraffic(model,p=>{
+    const part=(p.stage==='download'?.78*p.fraction:p.stage==='build'?.78+.20*p.fraction:.98);
+    const pct=100*(i+Math.min(.99,part))/total;
+    showTrafficPreload(pct,fastLabel('正在載入 Volvo AI 車流','Loading Volvo AI traffic','Volvo AI 차량 불러오는 중'),
+      `${model.toUpperCase()} · ${i+1}/${TRAFFIC_PRELOAD_MODELS.length} · ${phaseDescription(p)}${p.stage==='download'?' '+Math.floor(p.fraction*100)+'%':''}`);
+   });
+   if(!api.readyTraffic(model))throw Error(model.toUpperCase()+': '+fastLabel('模型尚未準備完成','Model not ready','모델 준비 미완료'));
+   showTrafficPreload(100*(i+1)/total,fastLabel('正在載入 Volvo AI 車流','Loading Volvo AI traffic','Volvo AI 차량 불러오는 중'),model.toUpperCase()+fastLabel(' 已完成',' ready',' 준비 완료'));
+  }
+  // The selected player model is one of the same six fully loaded original GLBs.
+  if(!highwayAssetsReadyFor(targetCar))throw Error(targetCar.toUpperCase()+fastLabel(' 高清車模尚未完成',' HD model not ready',' HD 모델 준비 미완료'));
+  showTrafficPreload(100,fastLabel('六款 Volvo AI 車型載入完成','All six Volvo AI models ready','Volvo AI 차량 6종 준비 완료'),
+   fastLabel('模型與貼圖準備完成，即將開始','Models and textures ready. Starting…','모델과 텍스처 준비 완료. 시작합니다…'));
+  await new Promise(r=>setTimeout(r,260));hideTrafficPreload();
+  if(state.mode==='highway'&&state.run==='ready'){$('start').disabled=false;$('start').click()}
+ }catch(e){
+  console.error('AI traffic preload failed',e);
+  showTrafficPreload(Number($('trafficPreloadProgress').value)||0,fastLabel('車型載入未完成','Vehicle loading incomplete','차량 불러오기 미완료'),
+    String(e.message||e)+fastLabel('。請確認 models 資料夾並重試。','. Check models files and retry.',' · models 파일 확인 후 재시도하세요.'),true);
+ }finally{highwayPreloading=false;$('start').disabled=false}
+}
+$('trafficPreloadRetry').onclick=()=>beginHighwayPreload();
+$('start').onclick=()=>{if(state.run==='ready'&&!highwayAssetsReadyFor(state.car)){beginHighwayPreload();return}if(!directPlayerReady(state.car)){prepareDirectSelection(state.car);return}if(state.run==='running'){state.run='paused';$('start').textContent=L("▶ 繼續");textEvent(L("已暫停"),'','',2);return}if(state.run==='paused'){state.run='running';$('start').textContent=L("Ⅱ 暫停");hideEvent();return}resetHighway();state.run='countdown';state.countdown=3;$('start').textContent=L("準備起跑…");audioOn()};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 document.querySelectorAll('[data-car]').forEach(b=>b.onclick=()=>{const car=b.dataset.car;
 const inShowroom=!!b.closest('#showCars');
 if(inShowroom){state.showCar=car;state.zoom=car==='es90'||car==='ex60'?8.8:car==='xc60'?8.5:7.4;}
 else{state.car=car;resetHighway();}
-prepareDirectSelection(car);
+if(inShowroom)prepareDirectSelection(car);
 const id=inShowroom?'showCars':'highwayCars';
 document.querySelectorAll('#'+id+' [data-car]').forEach(el=>el.classList.toggle('selected',el===b));
 refreshV98Selectors();updateUI()});
 function requiresDirectModel(car){return ['ex30','xc40','xc60','es90','ex60','ex90'].includes(car)}
 function prepareDirectSelection(car){
  if(!requiresDirectModel(car))return;
- window.__VOLVO_V914_ASSETS__?.request(car);
+ window.__VOLVO_V914_ASSETS__?.request(car)?.catch(()=>{});
 }
 function directPlayerReady(car){return true} // Always playable with the lightweight fallback.
 function syncPlayerLoadingState(){
@@ -990,7 +1036,11 @@ const DIRECT_MODEL_FILES={
   ex60:'models/EX60_uniform_rear_rims.glb.gz',
   ex90:'models/EX90_Clean_5Parts_Approved.glb.gz'
 };
+const HQ_MODEL_SIZES={"ex30":9497374,"xc40":24198463,"xc60":14711188,"es90":23509423,"ex60":13314267,"ex90":13099586};
 const directModels={},directPromises={},directErrors={};
+const trafficModels=directModels; // Shared original HD GLBs: traffic and showroom use the SAME GPU models.
+const trafficErrors={};
+
 const mobileBudget=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 let directLoadSeq=0;
 function disposeDirectModel(name){
@@ -1000,6 +1050,9 @@ function disposeDirectModel(name){
  delete directModels[name];delete directPromises[name];
 }
 function enforceModelBudget(){
+ // During highway, all six Volvo models are explicitly required for authentic AI traffic.
+ // Do not silently evict or replace them with boxes.
+ if(highwayPreloading||state.mode==='highway')return;
  const limit=mobileBudget?1750000:5000000;
  const current=selectedDirectModel();
  let total=Object.values(directModels).filter(m=>m.ready).reduce((sum,m)=>sum+m.triangles,0);
@@ -1065,7 +1118,7 @@ function calcVertexNormals(pos,idx){
  for(let j=0;j<n.length;j+=3){const r=Math.hypot(n[j],n[j+1],n[j+2])||1;n[j]/=r;n[j+1]/=r;n[j+2]/=r}
  return n;
 }
-async function buildDirectModel(doc,raw,name){
+async function buildDirectModel(doc,raw,name,opts={}){
  const specs=[];
  for(let meshIndex=0;meshIndex<doc.meshes.length;meshIndex++){
   for(const primitive of doc.meshes[meshIndex].primitives){
@@ -1110,7 +1163,8 @@ async function buildDirectModel(doc,raw,name){
    const meshName=(doc.meshes[meshIndex]?.name||'');
    const front=wheel&&(meshName.startsWith('Wheel_Front_')||(!meshName.startsWith('Wheel_Rear_')&&center[0]<0));
    parts.push({g:geom,wheel,front,pivot:center,hasOriginalUV:true,triangles:I.length/3,meshName});
-   if(selectedDirectModel()===name)glbStatus(name.toUpperCase()+fastLabel(' 建立模型 ',' Building model ',' 모델 구성 ') +parts.length+'/'+specs.length);
+   if(opts.onProgress)opts.onProgress({stage:'build',fraction:parts.length/specs.length});
+    else if(selectedDirectModel()===name)glbStatus(name.toUpperCase()+fastLabel(' 建立模型 ',' Building model ',' 모델 구성 ') +parts.length+'/'+specs.length);
    await new Promise(resolve=>setTimeout(resolve,0));
  }
  if(name==='xc40'){const main=parts.find(x=>x.meshName==='Wheel_Front_Right');const detail=parts.find(x=>x.meshName==='Wheel_Front_Right_Detail');if(main&&detail){detail.pivot=main.pivot.slice();detail.front=true;}}
@@ -1128,64 +1182,70 @@ async function buildDirectModel(doc,raw,name){
  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
  const img=new Image(),url=URL.createObjectURL(imgBlob);
  const model={parts,texture:tex,ready:false,triangles:parts.reduce((n,p)=>n+p.triangles,0)};
- img.onload=()=>{try{
-  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false); // glTF texture coordinates use the original image orientation.
-  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
-  if(!['ex90','ex30','xc40','xc60'].includes(name))gl.generateMipmap(gl.TEXTURE_2D);model.ready=true;model.lastUsed=++directLoadSeq;
-  setTimeout(enforceModelBudget,100);
-  if(selectedDirectModel()===name)glbStatus('');
-  window.__VOLVO_V914_MODEL_READY__?.(name);
- }catch(e){directErrors[name]=L("貼圖 GPU 上傳失敗: ")+e.message;glbStatus(name.toUpperCase()+L(" 貼圖載入失敗"),true)}
- URL.revokeObjectURL(url);
- };
- img.onerror=()=>{directErrors[name]=L("PNG 解碼失敗");URL.revokeObjectURL(url);glbStatus(name.toUpperCase()+L(" 圖片解碼失敗"),true)};
- img.src=url;
- return model;
+  await new Promise((resolve,reject)=>{
+   img.onload=()=>{try{
+    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
+    if(!['ex90','ex30','xc40','xc60'].includes(name))gl.generateMipmap(gl.TEXTURE_2D);
+    model.ready=true;model.lastUsed=++directLoadSeq;
+    if(opts.onProgress)opts.onProgress({stage:'texture',fraction:1});
+    if(!opts.traffic){setTimeout(enforceModelBudget,100);if(selectedDirectModel()===name)glbStatus('');window.__VOLVO_V914_MODEL_READY__?.(name)}
+    resolve();
+   }catch(e){reject(e)}finally{URL.revokeObjectURL(url)}};
+   img.onerror=()=>{URL.revokeObjectURL(url);reject(Error(name+L(" 圖片解碼失敗")))};
+   img.src=url;
+  });
+  return model;
 }
-function ensureDirectModel(name){
- if(!DIRECT_MODEL_FILES[name])return;
- if(directPromises[name])return;
+async function fetchGzipGLB(url,expectedBytes,onProgress){
+ const r=await fetch(url,{cache:'default'});if(!r.ok)throw Error('HTTP '+r.status+' · '+url);
+ if(typeof DecompressionStream!=='function')throw Error(L("瀏覽器不支援 gzip 解壓縮，請更新 Chrome / Edge"));
+ const expected=Number(r.headers.get('content-length'))||expectedBytes||0;
+ let received=0;
+ const source=r.body||new Blob([await r.arrayBuffer()]).stream();
+ const monitored=source.pipeThrough(new TransformStream({transform(chunk,controller){
+  received+=chunk.byteLength;onProgress?.({stage:'download',fraction:expected?Math.min(.99,received/expected):.20});controller.enqueue(chunk);
+ }}));
+ const decompressed=monitored.pipeThrough(new DecompressionStream('gzip'));
+ const buffer=await new Response(decompressed).arrayBuffer();
+ onProgress?.({stage:'download',fraction:1});return buffer;
+}
+async function ensureTrafficModel(name,onProgress){
+ // Use the already deployed, inspected original Volvo high-definition files.
+ // No quadric simplification, resampled UVs, or additional AI-specific assets.
+ try{const model=await ensureDirectModel(name,onProgress);if(!model?.ready)throw Error(name+' source model not ready');return model}
+ catch(e){trafficErrors[name]=String(e.message||e);throw e}
+}
+function ensureDirectModel(name,onProgress=null){
+ if(!DIRECT_MODEL_FILES[name])return Promise.reject(Error("Unknown Volvo model: "+name));
+  if(directModels[name]?.ready)return Promise.resolve(directModels[name]);
+  if(directPromises[name])return directPromises[name];
  const modelPath=DIRECT_MODEL_FILES[name];
  if(location.protocol==='file:'){
   directErrors[name]=L("本版本使用 GitHub Pages 的靜態路徑載入模型。");
   if(selectedDirectModel()===name)glbStatus(L("請使用遊戲網站網址開啟，或重新整理頁面。"),true);
-  directPromises[name]=Promise.resolve(null);
-  return;
+   directPromises[name]=Promise.reject(Error(directErrors[name]));
+   directPromises[name].catch(()=>{});return directPromises[name];
  }
  if(selectedDirectModel()===name)glbStatus(name.toUpperCase()+L(" 車型載入中…"));
- directPromises[name]=fetch(modelPath,{cache:'default'})
-  .then(async r=>{
-   if(!r.ok)throw Error('HTTP '+r.status+'：'+modelPath);
-   if(typeof DecompressionStream!=='function')throw Error(L("瀏覽器不支援 gzip 解壓縮，請更新 Chrome / Edge"));
-   const expected=Number(r.headers.get('content-length'))||0;
-   let received=0,lastShown=0;
-   let stream=r.body;
-   if(stream&&typeof TransformStream==='function'){
-    stream=stream.pipeThrough(new TransformStream({transform(chunk,controller){
-     received+=chunk.byteLength;
-     if(expected&&selectedDirectModel()===name){
-      const pct=Math.min(100,Math.floor(received*100/expected));
-      if(pct>=lastShown+8){lastShown=pct;glbStatus(name.toUpperCase()+fastLabel(' 下載 ',' Download ',' 다운로드 ')+pct+'%')}
-     }
-     controller.enqueue(chunk);
-    }}));
-   }
-   if(!stream)stream=new Blob([await r.arrayBuffer()]).stream();
-   const decoded=stream.pipeThrough(new DecompressionStream('gzip'));
-   return await new Response(decoded).arrayBuffer();
+ directPromises[name]=fetchGzipGLB(modelPath,HQ_MODEL_SIZES[name],p=>{
+   onProgress?.(p);
+   if(p.stage==='download'&&selectedDirectModel()===name&&Math.floor(p.fraction*100)%12===0)
+     glbStatus(name.toUpperCase()+fastLabel(' 下載 ',' Download ',' 다운로드 ')+Math.floor(p.fraction*100)+'%');
   })
   .then(async buffer=>{
    // Do not upload an abandoned car asset to the GPU.
-   if(selectedDirectModel()!==name){delete directPromises[name];return null}
+   if(!highwayPreloading&&selectedDirectModel()!==name){delete directPromises[name];return null}
    // On phones avoid creating huge vertex buffers in the middle of a challenge.
    while(mobileBudget && ((state.mode==='highway'&&['running','countdown'].includes(state.run)) ||
           (state.mode==='drive'&&state.driveStarted&&!state.driveComplete))){
      await new Promise(resolve=>setTimeout(resolve,250));
-     if(selectedDirectModel()!==name){delete directPromises[name];return null}
+     if(!highwayPreloading&&selectedDirectModel()!==name){delete directPromises[name];return null}
    }
    if(selectedDirectModel()===name)glbStatus(name.toUpperCase()+fastLabel(' 正在解析模型…',' Parsing model…',' 모델 분석 중…'));
-   const {doc,raw}=readGLBChunks(buffer);return buildDirectModel(doc,raw,name)
+   const {doc,raw}=readGLBChunks(buffer);
+   return buildDirectModel(doc,raw,name,{onProgress});
   })
   .then(model=>{if(model)directModels[name]=model;return model})
   .catch(e=>{
@@ -1197,16 +1257,32 @@ function ensureDirectModel(name){
    else if(/memory|allocation|buffer/i.test(detail))hint=L("模型解析或記憶體可能不足；建議桌面版 Chrome 測試。");
    if(selectedDirectModel()===name)glbStatus(name.toUpperCase()+L(" 車型暫時無法載入，請重新整理或稍後再試。"),true);
    console.error('GLB load error '+name,detail,e);
+   delete directPromises[name];throw e;
   });
+  return directPromises[name];
 }
+window.__VOLVO_TRAFFIC_PRELOAD__={
+ requestTraffic:ensureTrafficModel,
+ readyTraffic:name=>!!trafficModels[name]?.ready,
+ requestPlayer:async(name,onProgress)=>{
+  if(directModels[name]?.ready){onProgress?.({stage:'texture',fraction:1});return directModels[name]}
+  // HQ model is loaded for the chosen player; AI traffic keeps its own tiny LOD atlas.
+  const result=await ensureDirectModel(name,onProgress);
+  onProgress?.({stage:'texture',fraction:1});return result;
+ },
+ readyPlayer:name=>!!directModels[name]?.ready,
+ diagnostics:()=>({traffic:Object.fromEntries(Object.entries(trafficModels).map(([k,v])=>[k,{ready:v.ready,triangles:v.triangles}])),errors:trafficErrors})
+};
 window.__VOLVO_V914_ASSETS__={
  request:ensureDirectModel,
  ready:name=>!!directModels[name]?.ready,
  failed:name=>!!directErrors[name],
  status:name=>directErrors[name]||null
 };
-function drawDirectModel(name,x,z,t=null,bodyYaw=0,bodyRoll=0){
- const model=directModels[name];if(!model||!model.ready){ensureDirectModel(name);return false}model.lastUsed=++directLoadSeq;
+function drawDirectModel(name,x,z,t=null,bodyYaw=0,bodyRoll=0,modelPool=null){
+  const model=(modelPool||directModels)[name];
+  if(!model||!model.ready){if(!modelPool && (state.mode!=='highway'||state.run!=='ready'))ensureDirectModel(name)?.catch(()=>{});return false}
+  if(!modelPool)model.lastUsed=++directLoadSeq;
  const base=multiply(multiply(translation(x,0,z),multiply(rotationY(bodyYaw),rotationX(bodyRoll))),rotationY(Math.PI));
  const steer=aiSteeringAngle(t)*-1;
  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,model.texture);
@@ -1273,15 +1349,13 @@ function drawAIMesh(model,x,z,t=null,paintKey=null,bodyYaw=0,bodyRoll=0){
 function drawTrafficAppearance(t){
  const yaw=t.yaw||0,bank=t.roll||0;
  if(t.visualKind==='volvo'&&t.visualModel){
-  // Render the full source model only near the camera and only when already cached.
-  // Distant AI vehicles use a lightweight model; never download an entire car for AI traffic.
-  if(Math.abs(t.x)<30 && directModels[t.visualModel]?.ready){
-    if(drawAIMesh(t.visualModel,t.x,t.z,t,null,yaw,bank))return;
+   // All six textured AI LODs are loaded and validated BEFORE starting this challenge.
+   // Never substitute a generic block for an authentic Volvo AI model.
+   drawDirectModel(t.visualModel,t.x,t.z,t,yaw,bank,trafficModels);return;
   }
- }
- if((t.visualKind==='sport'||t.visualKind==='truck'||t.visualKind==='bus')&&drawAIMesh(t.visualModel,t.x,t.z,t,null,yaw,bank))return;
- const prev=wheelSpin;wheelSpin=(state.elapsed||0)*(t.speed||70)/3.6/.36;
- drawCar(t.visualKind==='volvo'&&t.visualModel?t.visualModel:'xc40',t.x,t.z,0,yaw,bank,aiSteeringAngle(t));wheelSpin=prev;
+  if((t.visualKind==='sport'||t.visualKind==='truck'||t.visualKind==='bus')&&drawAIMesh(t.visualModel,t.x,t.z,t,null,yaw,bank))return;
+  // Other permitted traffic only (not Volvo): dedicated non-box registered models.
+  if(aiGpuMeshes.sport1)drawAIMesh('sport1',t.x,t.z,t,null,yaw,bank);
 }
 // Model-space amber lamps stay fixed to each AI vehicle; no free-floating road lights.
 function drawAITurnSignals(t){
@@ -1461,7 +1535,7 @@ function drawWorld(ts,spin){wheelSpin=spin;resize();const w=canvas.clientWidth,h
  drawRoad(state.worldDist);
  if(state.mode==='highway'){
   shadow(0,state.lateral,(state.car==='xc60'||state.car==='ex60'||state.car==='es90'||state.car==='ex90')?1.1:1);
-  if(requiresDirectModel(state.car)){if(!drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:(state.visualSteer||0)},state.yaw,state.roll))drawCar(state.car,0,state.lateral,0,state.yaw,state.roll,state.visualSteer||0);}
+  if(requiresDirectModel(state.car)){if(!drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:(state.visualSteer||0)},state.yaw,state.roll)){if(trafficModels[state.car]?.ready)drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,steer:state.visualSteer||0},state.yaw,state.roll,trafficModels);}}
   else drawCar(state.car,0,state.lateral,state.brake||state.run==='emergency'?2.1:(state.immune>0?.15:0),state.yaw,state.roll,state.visualSteer||0);
   if(state.dir&&state.signalHold>0&&Math.floor(state.blink/.36)%2===0){const z=state.lateral+state.dir*.88;for(const x of [-2.1,1.87])B(x,.91,z,.16,.11,.17,[1,.55,.07],.08,[.80,.28,.02])}
   for(const t of state.traffic){if(t.x>140||t.x<-46)continue;shadow(t.x,t.z,t.type==='truck'||t.type==='bus'?1.65:1);drawTrafficAppearance(t);drawAITurnSignals(t)}
@@ -1471,6 +1545,7 @@ function drawWorld(ts,spin){wheelSpin=spin;resize();const w=canvas.clientWidth,h
 return {drawWorld};
 
 }
+window.__VOLVO_AI_TRAFFIC_DIAGNOSTICS__=()=>window.__VOLVO_TRAFFIC_PRELOAD__?.diagnostics();
 window.__AI_MODEL_TEST__={weights:{volvo:45,truck:20,bus:15,sport:20,ordinary:0},choose:aiVisualFromSeed,models:['ex30','xc40','xc60','es90','ex60','ex90','truck','bus','sport1','sport2'],fixed:{noGenericAI:true,rearOvertakerModel:true,paint:false,showroomES90EX60:true,driveES90EX60:true,highwayES90EX60:true,nordicMountains:true,xc40WheelArtifactsFixed:true}};
 window.__V913_PREVIOUS_AUDIT__={
  sourcedGLBTextures:['ES90 original Meshy atlas','EX60 original Meshy atlas'],
