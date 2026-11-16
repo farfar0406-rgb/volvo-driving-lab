@@ -27,7 +27,7 @@
  body.mode-highway .bottom{display:none}
  body.mode-highway #panel-highway .panelHead{display:none}
  body.mode-highway #highwayCars{margin:0 0 5px;gap:5px}
- body.mode-highway #highwayCars .choice{padding:6px 4px;text-align:center;font-size:12px;min-height:33px;border-radius:8px}
+ body.mode-highway #highwayCars .choice{padding:6px 2px;text-align:center;font-size:12px;min-height:33px;border-radius:8px}
  body.mode-highway #highwayCars .choice small{display:none}
  body.mode-highway .statsGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 2px}
  body.mode-highway .stat{display:flex;justify-content:center;align-items:center;gap:4px;min-height:28px;padding:3px 2px;border-radius:7px}
@@ -184,7 +184,7 @@
 /* V9.1 LOCAL: place the car picker + trip meters at the TOP of the gameplay stage. */
 body.mode-highway .hudTop{display:none}
 .v9TopBar{position:absolute;top:8px;left:10px;right:10px;z-index:7;pointer-events:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
-.v9TopBar .choiceGrid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px!important;margin:0!important;min-width:0}
+.v9TopBar .choiceGrid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px!important;margin:0!important;min-width:0}
 .v9TopBar .choice{padding:6px 5px!important;min-height:31px!important;border-radius:8px!important;font-size:11px!important;white-space:nowrap;text-align:center}
 .v9Trips{display:flex;gap:7px;align-items:center;white-space:nowrap;color:#10313c;font-weight:900;font-size:11px}
 .v9Trips span{border:1px solid #99d6d0;background:#d9f2ead9;border-radius:8px;padding:8px 10px;box-shadow:0 1px 0 #ffffff40 inset}
@@ -254,7 +254,7 @@ body.mode-highway .rules{margin-top:2px}
        <button class="choice" data-car="xc40" type="button">XC40</button>
        <button class="choice" data-car="xc60" type="button">XC60</button>
        <button class="choice" data-car="es90" type="button">ES90</button>
-       <button class="choice" data-car="ex60" type="button">EX60</button>
+       <button class="choice" data-car="ex60" type="button">EX60</button><button class="choice" data-car="ex90" type="button">EX90</button>
       </div>
       <div class="v9Trips"><span>距離 <b id="distStat">0 m</b></span><span>超車 <b id="passStat">0</b></span><span class="v9Level" id="v9Level">LV 1</span></div>
      </div>
@@ -282,7 +282,7 @@ body.mode-highway .rules{margin-top:2px}
  </div>
 </div></div>
 <div class="controls">
-<section class="panel" id="panel-drive"><div class="panelHead"><div><h2 id="driveModelTitle">EX30 0–100 km/h 加速</h2><p>選車及動力後長按油門開始加速；這是按照規格時間建立的模擬。</p></div><button class="smallButton" id="sound1">◌ 音效關</button></div><div class="choiceGrid" id="driveCars"><button class="choice selected" data-drive-car="ex30">EX30</button><button class="choice" data-drive-car="xc40">XC40</button><button class="choice" data-drive-car="xc60">XC60</button><button class="choice" data-drive-car="es90">ES90</button><button class="choice" data-drive-car="ex60">EX60</button></div><div class="choiceGrid" id="drivePowers"><button class="choice" data-power="single">單馬達 <small>5.3 秒</small></button><button class="choice selected" data-power="twin">雙馬達 <small>3.6 秒</small></button><button class="choice" data-power="performance">雙馬達 Performance <small>4.0 秒</small></button></div><div class="driveRow"><button class="primary" id="throttle">按住油門 ◉</button><button class="brake" id="driveBrake">按住煞車<small>B</small></button><button class="secondary" id="driveReset">重來 ↺</button></div><p class="help">依車型設定的秒數模擬速度曲線；各市場動力編成可能不同，並非實車測試。</p></section>
+<section class="panel" id="panel-drive"><div class="panelHead"><div><h2 id="driveModelTitle">EX30 0–100 km/h 加速</h2><p>選車及動力後長按油門開始加速；這是按照規格時間建立的模擬。</p></div><button class="smallButton" id="sound1">◌ 音效關</button></div><div class="choiceGrid" id="driveCars"><button class="choice selected" data-drive-car="ex30">EX30</button><button class="choice" data-drive-car="xc40">XC40</button><button class="choice" data-drive-car="xc60">XC60</button><button class="choice" data-drive-car="es90">ES90</button><button class="choice" data-drive-car="ex60">EX60</button><button class="choice" data-drive-car="ex90">EX90</button></div><div class="choiceGrid" id="drivePowers"><button class="choice" data-power="single">單馬達 <small>5.3 秒</small></button><button class="choice selected" data-power="twin">雙馬達 <small>3.6 秒</small></button><button class="choice" data-power="performance">雙馬達 Performance <small>4.0 秒</small></button><button class="choice" data-power="b3">B3 高效輕油電 <small>0.0 秒</small></button><button class="choice" data-power="b4">B4 高效輕油電 <small>0.0 秒</small></button><button class="choice" data-power="b5">B5 AWD 輕油電 <small>0.0 秒</small></button><button class="choice" data-power="t8">T8 AWD 雙能電動 <small>0.0 秒</small></button></div><div class="driveRow"><button class="primary" id="throttle">按住油門 ◉</button><button class="brake" id="driveBrake">按住煞車<small>B</small></button><button class="secondary" id="driveReset">重來 ↺</button></div><p class="help">依車型設定的秒數模擬速度曲線；各市場動力編成可能不同，並非實車測試。</p></section>
 <section class="panel selected" id="panel-highway">
 <div class="panelHead"><div><h2>無限高速閃避</h2><p>不限時 · 撞擊即結束 · 4,000 分開啟後方超車</p></div><button class="smallButton" id="sound2">◌ 音效關</button></div>
 <div class="assistLine">
@@ -306,6 +306,6 @@ body.mode-highway .rules{margin-top:2px}
  <p>手機按住左右箭頭轉向，放開後逐步回正；中央按鍵可煞車與加速。電腦可使用 A / D 或左右方向鍵轉向，S / ↓ / 空白鍵煞車。遊戲內音效可自行開關。請勿在真實道路模仿遊戲操作。</p>
 </details>
 </section>
-<section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>EX30 / XC40 / XC60 / ES90 / EX60　360° 賞車</h2><p>拖曳旋轉車輛，使用雙指或滑鼠滾輪縮放，探索車輛外觀。</p></div><button class="smallButton" id="viewReset">重設視角 ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>純電 SUV</small></button><button class="choice" data-car="xc40">XC40<small>都會 SUV</small></button><button class="choice" data-car="xc60">XC60<small>中型 SUV</small></button><button class="choice" data-car="es90">ES90<small>純電旗艦房車</small></button><button class="choice" data-car="ex60">EX60<small>純電 SUV</small></button></div><p class="help">選擇車型後，即可從不同角度欣賞車輛外觀。</p></section>
+<section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>EX30 / XC40 / XC60 / ES90 / EX60 / EX90　360° 賞車</h2><p>拖曳旋轉車輛，使用雙指或滑鼠滾輪縮放，探索車輛外觀。</p></div><button class="smallButton" id="viewReset">重設視角 ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>純電 SUV</small></button><button class="choice" data-car="xc40">XC40<small>都會 SUV</small></button><button class="choice" data-car="xc60">XC60<small>中型 SUV</small></button><button class="choice" data-car="es90">ES90<small>純電旗艦房車</small></button><button class="choice" data-car="ex60">EX60<small>純電 SUV</small></button><button class="choice" data-car="ex90">EX90<small>純電旗艦 SUV</small></button></div><p class="help">選擇車型後，即可從不同角度欣賞車輛外觀。</p></section>
 </div></section><div class="bottom">本遊戲為獨立非官方互動模擬，所有加速數據、路況、車流及安全輔助效果僅供體驗，不代表實車性能、實際安全系統介入條件或事故結果。<p class="help" style="font-size:11px;margin-top:10px">麋鹿模型來源：<a href="https://sketchfab.com/3d-models/low-poly-moose-9ba6aeef039f458eb998cbdd672b3952" target="_blank" rel="noopener noreferrer">Low-poly Moose — Zafflex</a>，採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> 授權。</p>請遵守交通法規，勿在真實道路模仿高速駕駛或閃避行為。</div></main>
-<script src="game.js?v=9152"></script></body></html>
+<script src="game.js?v=916-ex90"></script></body></html>

@@ -27,7 +27,7 @@
  body.mode-highway .bottom{display:none}
  body.mode-highway #panel-highway .panelHead{display:none}
  body.mode-highway #highwayCars{margin:0 0 5px;gap:5px}
- body.mode-highway #highwayCars .choice{padding:6px 4px;text-align:center;font-size:12px;min-height:33px;border-radius:8px}
+ body.mode-highway #highwayCars .choice{padding:6px 2px;text-align:center;font-size:12px;min-height:33px;border-radius:8px}
  body.mode-highway #highwayCars .choice small{display:none}
  body.mode-highway .statsGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 2px}
  body.mode-highway .stat{display:flex;justify-content:center;align-items:center;gap:4px;min-height:28px;padding:3px 2px;border-radius:7px}
@@ -184,7 +184,7 @@
 /* V9.1 LOCAL: place the car picker + trip meters at the TOP of the gameplay stage. */
 body.mode-highway .hudTop{display:none}
 .v9TopBar{position:absolute;top:8px;left:10px;right:10px;z-index:7;pointer-events:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
-.v9TopBar .choiceGrid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px!important;margin:0!important;min-width:0}
+.v9TopBar .choiceGrid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px!important;margin:0!important;min-width:0}
 .v9TopBar .choice{padding:6px 5px!important;min-height:31px!important;border-radius:8px!important;font-size:11px!important;white-space:nowrap;text-align:center}
 .v9Trips{display:flex;gap:7px;align-items:center;white-space:nowrap;color:#10313c;font-weight:900;font-size:11px}
 .v9Trips span{border:1px solid #99d6d0;background:#d9f2ead9;border-radius:8px;padding:8px 10px;box-shadow:0 1px 0 #ffffff40 inset}
@@ -254,7 +254,7 @@ body.mode-highway .rules{margin-top:2px}
        <button class="choice" data-car="xc40" type="button">XC40</button>
        <button class="choice" data-car="xc60" type="button">XC60</button>
        <button class="choice" data-car="es90" type="button">ES90</button>
-       <button class="choice" data-car="ex60" type="button">EX60</button>
+       <button class="choice" data-car="ex60" type="button">EX60</button><button class="choice" data-car="ex90" type="button">EX90</button>
       </div>
       <div class="v9Trips"><span>Distance <b id="distStat">0 m</b></span><span>Overtakes <b id="passStat">0</b></span><span class="v9Level" id="v9Level">LV 1</span></div>
      </div>
@@ -282,7 +282,7 @@ body.mode-highway .rules{margin-top:2px}
  </div>
 </div></div>
 <div class="controls">
-<section class="panel" id="panel-drive"><div class="panelHead"><div><h2 id="driveModelTitle">EX30 0–100 km/h Acceleration</h2><p>Choose a vehicle and powertrain, then hold the accelerator. This is a simulation based on published acceleration times.</p></div><button class="smallButton" id="sound1">◌ Sound Off</button></div><div class="choiceGrid" id="driveCars"><button class="choice selected" data-drive-car="ex30">EX30</button><button class="choice" data-drive-car="xc40">XC40</button><button class="choice" data-drive-car="xc60">XC60</button><button class="choice" data-drive-car="es90">ES90</button><button class="choice" data-drive-car="ex60">EX60</button></div><div class="choiceGrid" id="drivePowers"><button class="choice" data-power="single">Single Motor <small>5.3 s</small></button><button class="choice selected" data-power="twin">Twin Motor <small>3.6 s</small></button><button class="choice" data-power="performance">Twin Motor Performance <small>4.0 s</small></button></div><div class="driveRow"><button class="primary" id="throttle">Hold Accelerator ◉</button><button class="brake" id="driveBrake">Hold Brake<small>B</small></button><button class="secondary" id="driveReset">Reset ↺</button></div><p class="help">The speed curve follows the selected model’s simulated acceleration time. Powertrain specifications vary by market; this is not a real-world test.</p></section>
+<section class="panel" id="panel-drive"><div class="panelHead"><div><h2 id="driveModelTitle">EX30 0–100 km/h Acceleration</h2><p>Choose a vehicle and powertrain, then hold the accelerator. This is a simulation based on published acceleration times.</p></div><button class="smallButton" id="sound1">◌ Sound Off</button></div><div class="choiceGrid" id="driveCars"><button class="choice selected" data-drive-car="ex30">EX30</button><button class="choice" data-drive-car="xc40">XC40</button><button class="choice" data-drive-car="xc60">XC60</button><button class="choice" data-drive-car="es90">ES90</button><button class="choice" data-drive-car="ex60">EX60</button><button class="choice" data-drive-car="ex90">EX90</button></div><div class="choiceGrid" id="drivePowers"><button class="choice" data-power="single">Single Motor <small>5.3 s</small></button><button class="choice selected" data-power="twin">Twin Motor <small>3.6 s</small></button><button class="choice" data-power="performance">Twin Motor Performance <small>4.0 s</small></button><button class="choice" data-power="b3">B3 Mild Hybrid <small>0.0 s</small></button><button class="choice" data-power="b4">B4 Mild Hybrid <small>0.0 s</small></button><button class="choice" data-power="b5">B5 AWD Mild Hybrid <small>0.0 s</small></button><button class="choice" data-power="t8">T8 AWD Plug-in Hybrid <small>0.0 s</small></button></div><div class="driveRow"><button class="primary" id="throttle">Hold Accelerator ◉</button><button class="brake" id="driveBrake">Hold Brake<small>B</small></button><button class="secondary" id="driveReset">Reset ↺</button></div><p class="help">The speed curve follows the selected model’s simulated acceleration time. Powertrain specifications vary by market; this is not a real-world test.</p></section>
 <section class="panel selected" id="panel-highway">
 <div class="panelHead"><div><h2>Endless Highway Evasion</h2><p>No time limit · Collision ends the run · Rear overtakes after 4,000 points</p></div><button class="smallButton" id="sound2">◌ Sound Off</button></div>
 <div class="assistLine">
@@ -306,6 +306,6 @@ body.mode-highway .rules{margin-top:2px}
  <p>On mobile, hold the left/right arrows to steer and release to straighten. Use the center controls to brake and accelerate. On desktop, use A / D or arrow keys to steer; S / Down / Space to brake. Sound is optional. Never imitate this game on real roads.</p>
 </details>
 </section>
-<section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>EX30 / XC40 / XC60 / ES90 / EX60 · 360° Showroom</h2><p>Drag to rotate the vehicle. Pinch or scroll to zoom in and out.</p></div><button class="smallButton" id="viewReset">Reset View ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>Electric SUV</small></button><button class="choice" data-car="xc40">XC40<small>Urban SUV</small></button><button class="choice" data-car="xc60">XC60<small>Midsize SUV</small></button><button class="choice" data-car="es90">ES90<small>Flagship Electric Sedan</small></button><button class="choice" data-car="ex60">EX60<small>Electric SUV</small></button></div><p class="help">Select a vehicle to explore its exterior from every angle.</p></section>
+<section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>EX30 / XC40 / XC60 / ES90 / EX60 / EX90 · 360° Showroom</h2><p>Drag to rotate the vehicle. Pinch or scroll to zoom in and out.</p></div><button class="smallButton" id="viewReset">Reset View ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>Electric SUV</small></button><button class="choice" data-car="xc40">XC40<small>Urban SUV</small></button><button class="choice" data-car="xc60">XC60<small>Midsize SUV</small></button><button class="choice" data-car="es90">ES90<small>Flagship Electric Sedan</small></button><button class="choice" data-car="ex60">EX60<small>Electric SUV</small></button><button class="choice" data-car="ex90">EX90<small>Electric flagship SUV</small></button></div><p class="help">Select a vehicle to explore its exterior from every angle.</p></section>
 </div></section><div class="bottom">This independent, unofficial interactive simulation is for entertainment only. Acceleration, road conditions, traffic and driver-assistance behavior do not represent actual vehicle performance, activation conditions or crash outcomes.<p class="help" style="font-size:11px;margin-top:10px">Moose model credit: <a href="https://sketchfab.com/3d-models/low-poly-moose-9ba6aeef039f458eb998cbdd672b3952" target="_blank" rel="noopener noreferrer">Low-poly Moose — Zafflex</a> · licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> license.</p>Follow all traffic laws. Never attempt high-speed driving or evasive maneuvers from this game on real roads.</div></main>
-<script src="game.js?v=9152"></script></body></html>
+<script src="game.js?v=916-ex90"></script></body></html>

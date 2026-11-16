@@ -21,12 +21,19 @@ const $=id=>document.getElementById(id),canvas=$('view'),stage=$('stage');
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const smooth=(a,b,t)=>a+(b-a)*t;
 const hash=n=>{let v=Math.sin(n*134.7+24.63)*45783.78;return v-Math.floor(v)};
-const CARS={ex30:{label:'EX30',accel:3.6},xc40:{label:'XC40',accel:7.4},xc60:{label:'XC60',accel:6.9},es90:{label:'ES90',accel:4.0},ex60:{label:'EX60',accel:3.9}};
+const CARS={ex30:{label:'EX30',accel:3.6},xc40:{label:'XC40',accel:8.6},xc60:{label:'XC60',accel:6.9},es90:{label:'ES90',accel:4.0},ex60:{label:'EX60',accel:3.9},ex90:{label:'EX90',accel:4.2}};
 // Acceleration times are simulation targets, not measured performance in-game.
-const ACCEL_SPECS={ex30:{single:5.3,twin:3.6},xc40:{single:7.4},xc60:{single:6.9},es90:{single:6.6,twin:5.4,performance:4.0},ex60:{single:5.9,twin:4.4,performance:3.9}};
+// Taiwan Volvo Cars MY2027 powertrain-specific 0–100 km/h factory specification targets.
+// XC40 B3/B4: 48V mild hybrids. XC60 B5: 48V mild hybrid; T8: plug-in hybrid.
+const ACCEL_SPECS={ex30:{single:5.3,twin:3.6},xc40:{b3:8.6,b4:7.6},xc60:{b5:6.9,t8:4.9},es90:{single:6.6,twin:5.4,performance:4.0},ex60:{single:5.9,twin:4.4,performance:3.9},ex90:{single:6.8,twin:5.5,performance:4.2}};
 const PAINT_COLORS={forest:{label:L("森湖綠"),rgb:[.24,.37,.34]},silver:{label:L("流光銀"),rgb:[.70,.75,.77]},pearl:{label:L("珍珠白"),rgb:[.86,.89,.88]},polar:{label:L("極地白"),rgb:[.95,.96,.94]}};
 const PAINT_KEYS=Object.keys(PAINT_COLORS);
-function accelTarget(){return ACCEL_SPECS[state.driveCar]?.[state.power]||ACCEL_SPECS[state.driveCar]?.single||3.6}
+function accelTarget(){const spec=ACCEL_SPECS[state.driveCar];return spec?.[state.power]??Object.values(spec||{})[0]??3.6}
+function drivePowerLabel(){
+ if(state.driveCar==='xc40')return state.power==='b4'?'B4 48V':'B3 48V';
+ if(state.driveCar==='xc60')return state.power==='t8'?'T8 AWD PHEV':'B5 AWD 48V';
+ return state.power==='single'?L('單馬達'):state.power==='performance'?L('雙馬達 Performance'):L('雙馬達');
+}
 
 const state={blis:true,blisWarn:0,blisReturnLane:null,lastSafeLane:1,assistNotice:0,aeb:false,aebCooldown:0,aebPulse:0,aebSeen:new Set(),aebEmergency:false,aebTargetId:null,aebStopDistance:0,aebHold:false,aebStoppedOnce:false,blisHazardLane:null,rearSpawn:9,rearWave:0,rearPassed:0,rearPlan:null,rearSpawnAttempts:0,rearSpawnSuccess:0,rearApproach:null,rearCamera:0,rearCameraSide:0,placed:0,
  lka:false,lkaAnchorLane:1,lkaIdle:0,lkaWarnTimer:0,lkaVibrated:false,lkaAssist:false,lkaNotice:0,
@@ -122,7 +129,7 @@ prepareDirectSelection(car);
 const id=inShowroom?'showCars':'highwayCars';
 document.querySelectorAll('#'+id+' [data-car]').forEach(el=>el.classList.toggle('selected',el===b));
 refreshV98Selectors();updateUI()});
-function requiresDirectModel(car){return car==='es90'||car==='ex60'}
+function requiresDirectModel(car){return car==='es90'||car==='ex60'||car==='ex90'}
 function prepareDirectSelection(car){
  if(car==='xc60'){window.__VOLVO_LOAD_XC60__?.();return;}
  if(!requiresDirectModel(car))return;
@@ -151,8 +158,10 @@ function refreshV98Selectors(){
  const car=state.driveCar,spec=ACCEL_SPECS[car];
  $('driveModelTitle').textContent=CARS[car].label+L(" 0–100 km/h 加速");
  document.querySelectorAll('#driveCars [data-drive-car]').forEach(el=>el.classList.toggle('selected',el.dataset.driveCar===car));
- if(!Object.prototype.hasOwnProperty.call(spec,state.power))state.power=Object.hasOwn(spec,'twin')?'twin':'single';
- document.querySelectorAll('#drivePowers [data-power]').forEach(el=>{const val=spec[el.dataset.power];el.style.display=val===undefined?'none':'';el.classList.toggle('selected',el.dataset.power===state.power);if(val!==undefined)el.querySelector('small').textContent=val.toFixed(1)+L(" 秒");});
+ if(!Object.prototype.hasOwnProperty.call(spec,state.power))state.power=Object.hasOwn(spec,'twin')?'twin':Object.keys(spec)[0];
+ const powerGrid=$('drivePowers');
+ powerGrid.style.gridTemplateColumns='repeat('+Math.min(3,Object.keys(spec).length)+',minmax(0,1fr))';
+ document.querySelectorAll('#drivePowers [data-power]').forEach(el=>{const val=spec[el.dataset.power];el.style.display=val===undefined?'none':'';el.classList.toggle('selected',el.dataset.power===state.power);if(val!==undefined)el.querySelector('small').textContent=val.toFixed(1)+L(' 秒');});
  const paintChooser=$('paintChooser');if(paintChooser)paintChooser.style.display='none';
  document.querySelectorAll('[data-paint]').forEach(el=>el.classList.toggle('selected',el.dataset.paint===state.paint));
 }
@@ -297,10 +306,10 @@ const LANE_WIDTH=3.43;
 // Temporary distribution, explicitly approved until a regular sedan model passes inspection.
 // Volvo 45%, truck 20%, bus 15%, sport 20%: all AI objects have a real registered model.
 const AI_VISUAL_WEIGHTS=Object.freeze({volvo:45,truck:20,bus:15,sport:20,ordinary:0});
-const VERIFIED_VOLVO_MODELS=['ex30','xc40','xc60','es90','ex60'];
+const VERIFIED_VOLVO_MODELS=['ex30','xc40','xc60','es90','ex60','ex90'];
 function aiVisualFromSeed(seed){
  const r=hash(seed+41.731);
- if(r<.45)return {kind:'volvo',model:VERIFIED_VOLVO_MODELS[Math.min(4,Math.floor(hash(seed+87.11)*5))]};
+ if(r<.45)return {kind:'volvo',model:VERIFIED_VOLVO_MODELS[Math.min(5,Math.floor(hash(seed+87.11)*6))]};
  if(r<.65)return {kind:'truck',model:'truck'};
  if(r<.80)return {kind:'bus',model:'bus'};
  return {kind:'sport',model:hash(seed+98.17)<.5?'sport1':'sport2'};
@@ -363,7 +372,7 @@ function spawnRearOvertaker(preferredLane=null,forced=false){
   const closing=(cruise-Math.max(state.speed,165))/3.6;
   if(closing<6)return false;
   const x=-Math.min(38,Math.max(22,closing*2.75)); // Warning begins ~3 seconds before passing.
-  const type='sedan';const specialModel=VERIFIED_VOLVO_MODELS[Math.min(4,Math.floor(hash(seed+4)*5))];
+  const type='sedan';const specialModel=VERIFIED_VOLVO_MODELS[Math.min(5,Math.floor(hash(seed+4)*6))];
   const id=100000+state.rearWave++;
   const tr={x,z,lane,targetLane:lane,changing:false,type,visualKind:'volvo',visualModel:specialModel,
    speed:cruise,cruise,color:carColors[Math.floor(hash(seed+2)*carColors.length)],
@@ -380,7 +389,7 @@ function spawnTraffic(){
  const count=Math.min(3,1+(tier>=3&&state.wave%3===0?1:0)+(tier>=6&&state.wave%6===0?1:0));
  for(let j=0;j<count;j++){
   const seed=state.wave*17.4+j*31.1,initialLane=Math.floor(hash(seed)*3),visual=aiVisualFromSeed(seed),type=visual.kind==='truck'?'truck':visual.kind==='bus'?'bus':visual.kind==='sport'?'sedan':visual.model==='es90'?'sedan':visual.kind==='volvo'?'suv':'sedan';
-  const length=visual.kind==='truck'?7.7:visual.kind==='bus'?11.0:visual.kind==='sport'?4.4:visual.model==='es90'?5.0:visual.model==='ex60'?4.8:type==='suv'?4.65:4.2;
+  const length=visual.kind==='truck'?7.7:visual.kind==='bus'?11.0:visual.kind==='sport'?4.4:visual.model==='es90'?5.0:visual.model==='ex90'?5.03:visual.model==='ex60'?4.8:type==='suv'?4.65:4.2;
   const tr={x:102+j*26+hash(seed+4)*20,z:0,lane:initialLane,targetLane:initialLane,changing:false,
    type,visualKind:visual.kind,visualModel:visual.model,speed:57+58*hash(seed+5),cruise:65+55*hash(seed+6),
    color:carColors[Math.floor(hash(seed+1)*carColors.length)],length,hit:false,passed:false,
@@ -701,14 +710,16 @@ function advance(dt){state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000)
  const v=state.speed;
  if(state.sound&&gain&&osc&&audioCtx){
   const active=state.mode==='drive'&&state.throttle||state.mode==='highway'&&state.run==='running';
-  const combustion=state.mode==='highway'&&(state.car==='xc40'||state.car==='xc60');
+  const powertrainCar=state.mode==='drive'?state.driveCar:state.car;
+  const combustion=(state.mode==='drive'||state.mode==='highway')&&(powertrainCar==='xc40'||powertrainCar==='xc60');
+  const plugInHybrid=state.mode==='drive'&&powertrainCar==='xc60'&&state.power==='t8';
   const now=audioCtx.currentTime;
   try{
-   gain.gain.setTargetAtTime(active&&!combustion?.0105:0,now,.12);
+   gain.gain.setTargetAtTime(active&&(!combustion||plugInHybrid)?(plugInHybrid?.005:.0105):0,now,.12);
    osc.frequency.setTargetAtTime(65+v*.95,now,.22);
-   engineGain.gain.setTargetAtTime(active&&combustion?.0135:0,now,.15);
+   engineGain.gain.setTargetAtTime(active&&combustion?(plugInHybrid?.008:.0135):0,now,.15);
    const fakeRPM=920+v*24+(state.brake?-200:0);
-   engineOsc.frequency.setTargetAtTime(fakeRPM/(state.car==='xc60'?41:48),now,.18);
+   engineOsc.frequency.setTargetAtTime(fakeRPM/(powertrainCar==='xc60'?41:48),now,.18);
    engineFilter.frequency.setTargetAtTime(115+v*.74,now,.24);
   }catch(e){}
   const phase=(Math.floor(state.blink/.36)%2);
@@ -722,7 +733,7 @@ function updateUI(){
  $('v9LkaNotice').classList.toggle('active',state.mode==='highway'&&state.run==='running'&&state.lka&&state.lkaWarnTimer>0);$('v9LkaNotice').classList.toggle('assisting',state.lkaAssist);$('v9LkaTime').textContent=state.lkaAssist?L("輔助回正"):Math.max(0,2-state.lkaWarnTimer).toFixed(1)+' s';
   $('rearWarnL').classList.toggle('active',state.blis&&!!state.rearApproach&&state.rearApproach.side==='left');
  $('rearWarnR').classList.toggle('active',state.blis&&!!state.rearApproach&&state.rearApproach.side==='right');
-let car=state.mode==='showroom'?state.showCar:state.mode==='highway'?state.car:state.driveCar;$('hudChip').innerHTML='<b>'+CARS[car].label+'</b>'+(state.mode==='highway'?L("難度 LV ")+state.difficulty+' · '+state.score.toLocaleString()+L(" 分")+(state.blis?' · BLIS':'')+(state.aeb?' · AEB':''):state.mode==='showroom'?L("360° 立體賞車"):(state.power==='single'?L("單馬達"):state.power==='performance'?L("雙馬達 Performance"):L("雙馬達"))+' · '+accelTarget().toFixed(1)+L(" 秒"));
+let car=state.mode==='showroom'?state.showCar:state.mode==='highway'?state.car:state.driveCar;$('hudChip').innerHTML='<b>'+CARS[car].label+'</b>'+(state.mode==='highway'?L("難度 LV ")+state.difficulty+' · '+state.score.toLocaleString()+L(" 分")+(state.blis?' · BLIS':'')+(state.aeb?' · AEB':''):state.mode==='showroom'?L("360° 立體賞車"):drivePowerLabel()+' · '+accelTarget().toFixed(1)+L(" 秒"));
  $('speed').textContent=String(Math.round(state.speed)).padStart(3,'0');$('countTitle').textContent=state.mode==='highway'?L("SCORE / 分數"):'ELAPSED';$('countValue').textContent=state.mode==='highway'?state.score.toLocaleString():state.driveTime.toFixed(2)+' s';
  $('distStat').textContent=fmt(state.dist);$('passStat').textContent=String(state.passed);$('v9Level').textContent='LV '+state.difficulty;
  const lit=state.dir&&state.signalHold>0&&Math.floor(state.blink/.36)%2===0;$('signals').classList.toggle('active',state.mode==='highway'&&state.signalHold>0);$('signalL').classList.toggle('lit',lit&&state.dir<0);$('signalR').classList.toggle('lit',lit&&state.dir>0);$('brakeNote').classList.toggle('on',state.brake||state.run==='emergency'||state.aebEmergency);
@@ -883,7 +894,8 @@ loadAIMeshes();
 // The glTF accessors and PNG image are kept as authored in the source GLB.
 const DIRECT_MODEL_FILES={
   es90:'models/ES90_original.glb.gz',
-  ex60:'models/EX60_uniform_rear_rims.glb.gz'
+  ex60:'models/EX60_uniform_rear_rims.glb.gz',
+  ex90:'models/EX90_Five_Parts.glb.gz'
 };
 const directModels={},directPromises={},directErrors={};
 function glbStatus(message,alert=false){const n=document.getElementById('glbLoadStatus');if(!n)return;n.style.display=message?'block':'none';if(message)n.textContent=message;n.style.background=alert?'#542d30ee':'#102f3be6';n.style.whiteSpace='normal';n.style.lineHeight='1.5'}
@@ -951,17 +963,18 @@ async function buildDirectModel(doc,raw,name){
    const attrs=primitive.attributes;
    if(attrs.POSITION===undefined||attrs.TEXCOORD_0===undefined)throw Error(L("GLB 缺少車身座標或原始 UV"));
    const P=extractGLTFAccessor(doc,raw,attrs.POSITION),UV=extractGLTFAccessor(doc,raw,attrs.TEXCOORD_0);
+   const N=attrs.NORMAL===undefined?null:extractGLTFAccessor(doc,raw,attrs.NORMAL);
    const indices=primitive.indices===undefined?null:extractGLTFAccessor(doc,raw,primitive.indices);
    const I=indices===null?Uint32Array.from({length:P.length/3},(_,i)=>i):indices instanceof Uint32Array?indices:Uint32Array.from(indices);
    const wheel=meshIndex>0,front=wheel&&((P[0]||0)<0);
    let yLowest=Infinity;
    for(let i=1;i<P.length;i+=3)yLowest=Math.min(yLowest,P[i]);
-   specs.push({P,UV,I,wheel,meshIndex,yLowest});
+   specs.push({P,UV,I,N,wheel,meshIndex,yLowest});
   }
  }
  if(specs.length<5)throw Error(name+L(" GLB 分件數少於五組"));
  const wheels=specs.filter(p=>p.wheel),ground=Math.min(...wheels.map(x=>x.yLowest));
- const scale=2.55;
+ const scale=name==='ex90'?2.65:2.55;
  const parts=[];
  for(const sp of specs){
    const {P,UV,I,wheel,meshIndex}=sp;
@@ -975,7 +988,7 @@ async function buildDirectModel(doc,raw,name){
     miny=Math.min(miny,y);maxy=Math.max(maxy,y);
     minz=Math.min(minz,z);maxz=Math.max(maxz,z);
    }
-   const N=calcVertexNormals(XYZ,I),packed=new Float32Array(P.length/3*8);
+   const N=sp.N||calcVertexNormals(XYZ,I),packed=new Float32Array(P.length/3*8);
    for(let i=0,j=0;i<XYZ.length;i+=3,j+=8){packed[j]=XYZ[i];packed[j+1]=XYZ[i+1];packed[j+2]=XYZ[i+2];
     packed[j+3]=N[i];packed[j+4]=N[i+1];packed[j+5]=N[i+2];
     packed[j+6]=UV[i/3*2];packed[j+7]=UV[i/3*2+1];}
@@ -1113,7 +1126,7 @@ function drawWheelOverlay(model,base,t){
 
 /* Original Meshy textures now loaded from the approved glTF files. */
 function drawAIMesh(model,x,z,t=null,paintKey=null,bodyYaw=0,bodyRoll=0){
- if(model==='es90'||model==='ex60')return drawDirectModel(model,x,z,t,bodyYaw,bodyRoll);
+ if(model==='es90'||model==='ex60'||model==='ex90')return drawDirectModel(model,x,z,t,bodyYaw,bodyRoll);
  const parts=aiGpuMeshes[model];if(!parts)return false;
  const base=(model==='sport2')?multiply(translation(x,0,z),rotationY(Math.PI)):translation(x,0,z);
  const steer=aiSteeringAngle(t)*(model==='sport2'?-1:1);
@@ -1126,7 +1139,7 @@ function drawAIMesh(model,x,z,t=null,paintKey=null,bodyYaw=0,bodyRoll=0){
 }
 function drawTrafficAppearance(t){
  if(t.visualKind==='volvo'&&t.visualModel){
-  if(t.visualModel==='es90'||t.visualModel==='ex60'){
+  if(t.visualModel==='es90'||t.visualModel==='ex60'||t.visualModel==='ex90'){
    if(directModels[t.visualModel]?.ready&&drawAIMesh(t.visualModel,t.x,t.z,t))return;
   }else if(meshes[t.visualModel]?.length){
    const prev=wheelSpin;wheelSpin=(state.elapsed||0)*(t.speed||70)/3.6/.36;
@@ -1303,21 +1316,21 @@ function drawWorld(ts,spin){wheelSpin=spin;resize();const w=canvas.clientWidth,h
  }
  else {const v=clamp(state.speed/100,0,1);eye=[-8.6-v*.75,2.4-v*.12,3.5];to=[2,.86,0];fov=(w<650?53:39)+v*9}
  const vp=multiply(perspective(fov*Math.PI/180,w/Math.max(1,h),.1,450),lookAt(eye,to));gl.uniformMatrix4fv(u.vp,false,vp);gl.uniform3fv(u.eye,eye);
- if(state.mode==='showroom'){draw(planeGeo,modelM(0,-.025,0,19,1,19),[.66,.74,.75],.13);for(let i=-5;i<=5;i++)B(i*1.5,-.012,5,.65,.012,.018,[.87,.92,.89]);shadow(0,0,(state.showCar==='xc60'||state.showCar==='es90'||state.showCar==='ex60')?1.15:1);if(state.showCar==='es90'||state.showCar==='ex60')drawDirectModel(state.showCar,0,0);else drawCar(state.showCar);return}
+ if(state.mode==='showroom'){draw(planeGeo,modelM(0,-.025,0,19,1,19),[.66,.74,.75],.13);for(let i=-5;i<=5;i++)B(i*1.5,-.012,5,.65,.012,.018,[.87,.92,.89]);shadow(0,0,(state.showCar==='xc60'||state.showCar==='es90'||state.showCar==='ex60'||state.showCar==='ex90')?1.15:1);if(state.showCar==='es90'||state.showCar==='ex60'||state.showCar==='ex90')drawDirectModel(state.showCar,0,0);else drawCar(state.showCar);return}
  drawRoad(state.worldDist);
  if(state.mode==='highway'){
-  shadow(0,state.lateral,(state.car==='xc60'||state.car==='ex60'||state.car==='es90')?1.1:1);
-  if(state.car==='es90'||state.car==='ex60'){if(!drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:(state.visualSteer||0)},state.yaw,state.roll))drawCar('ex30',0,state.lateral,0,state.yaw,state.roll,state.visualSteer||0);}
+  shadow(0,state.lateral,(state.car==='xc60'||state.car==='ex60'||state.car==='es90'||state.car==='ex90')?1.1:1);
+  if(state.car==='es90'||state.car==='ex60'||state.car==='ex90'){if(!drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:(state.visualSteer||0)},state.yaw,state.roll))drawCar('ex30',0,state.lateral,0,state.yaw,state.roll,state.visualSteer||0);}
   else drawCar(state.car,0,state.lateral,state.brake||state.run==='emergency'?2.1:(state.immune>0?.15:0),state.yaw,state.roll,state.visualSteer||0);
   if(state.dir&&state.signalHold>0&&Math.floor(state.blink/.36)%2===0){const z=state.lateral+state.dir*.88;for(const x of [-2.1,1.87])B(x,.91,z,.16,.11,.17,[1,.55,.07],.08,[.80,.28,.02])}
   for(const t of state.traffic){if(t.x>140||t.x<-46)continue;shadow(t.x,t.z,t.type==='truck'||t.type==='bus'?1.65:1);drawTrafficAppearance(t)}
   if(state.moose){shadow(state.moose.x,state.moose.z,.42);mooseFigure(state.moose.x,state.moose.z,state.moose.dir)}
- }else{shadow(0,0);if(state.driveCar==='es90'||state.driveCar==='ex60'){if(!drawDirectModel(state.driveCar,0,0,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:0}))drawCar('ex30');}else drawCar(state.driveCar,0,0,state.throttle?.18:0)}
+ }else{shadow(0,0);if(state.driveCar==='es90'||state.driveCar==='ex60'||state.driveCar==='ex90'){if(!drawDirectModel(state.driveCar,0,0,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:0}))drawCar('ex30');}else drawCar(state.driveCar,0,0,state.throttle?.18:0)}
 }
 return {drawWorld};
 
 }
-window.__AI_MODEL_TEST__={weights:{volvo:45,truck:20,bus:15,sport:20,ordinary:0},choose:aiVisualFromSeed,models:['ex30','xc40','xc60','es90','ex60','truck','bus','sport1','sport2'],fixed:{noGenericAI:true,rearOvertakerModel:true,paint:false,showroomES90EX60:true,driveES90EX60:true,highwayES90EX60:true,nordicMountains:true,xc40WheelArtifactsFixed:true}};
+window.__AI_MODEL_TEST__={weights:{volvo:45,truck:20,bus:15,sport:20,ordinary:0},choose:aiVisualFromSeed,models:['ex30','xc40','xc60','es90','ex60','ex90','truck','bus','sport1','sport2'],fixed:{noGenericAI:true,rearOvertakerModel:true,paint:false,showroomES90EX60:true,driveES90EX60:true,highwayES90EX60:true,nordicMountains:true,xc40WheelArtifactsFixed:true}};
 window.__V913_PREVIOUS_AUDIT__={
  sourcedGLBTextures:['ES90 original Meshy atlas','EX60 original Meshy atlas'],
  lights:'source-UV pixels only; floating geometric lights removed',
