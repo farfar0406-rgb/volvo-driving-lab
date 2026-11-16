@@ -772,6 +772,14 @@ uniform vec3 color,emission,eye,modelPaint;
 uniform float metal,alpha,shadow,hasAtlas;uniform sampler2D carAtlas;
 void main(){
 if(shadow>0.5){float rr=length(L.xz);float a=pow(max(0.0,1.0-rr),2.5)*0.36;frag=vec4(vec3(0.035,0.11,0.12),a);return;}
+// EX90 approved five-part original texture: no synthetic normal lighting,
+// no generated specular glints on disconnected Meshy surface patches.
+if(hasAtlas>3.5){
+ vec3 source=texture(carAtlas, UV).rgb;
+ vec3 sourceLit=pow(max(source,vec3(0.0)),vec3(0.80));
+ frag=vec4(min(sourceLit*1.015,vec3(1.0)),alpha);
+ return;
+}
 vec3 n=normalize(N); vec3 light=normalize(vec3(-0.35,0.9,0.6));
 float d=max(dot(n,light),0.0);float hemi=0.45+0.27*max(n.y,0.0);
 vec3 view=normalize(eye-W);vec3 halfv=normalize(light+view);
@@ -821,7 +829,7 @@ let program;try{program=gl.createProgram();gl.attachShader(program,shader(gl.VER
 gl.useProgram(program);
 const u={vp:gl.getUniformLocation(program,'vp'),m:gl.getUniformLocation(program,'m'),pivot:gl.getUniformLocation(program,'pivot'),spin:gl.getUniformLocation(program,'spin'),frontSteer:gl.getUniformLocation(program,'frontSteer'),color:gl.getUniformLocation(program,'color'),emission:gl.getUniformLocation(program,'emission'),eye:gl.getUniformLocation(program,'eye'),metal:gl.getUniformLocation(program,'metal'),alpha:gl.getUniformLocation(program,'alpha'),shadow:gl.getUniformLocation(program,'shadow'),hasAtlas:gl.getUniformLocation(program,'hasAtlas'),carAtlas:gl.getUniformLocation(program,'carAtlas'),modelPaint:gl.getUniformLocation(program,'modelPaint')};
 function createGeometry(vertices,indices,textured=false){const vao=gl.createVertexArray();gl.bindVertexArray(vao);const vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,3,gl.FLOAT,false,textured?32:24,0);gl.enableVertexAttribArray(1);gl.vertexAttribPointer(1,3,gl.FLOAT,false,textured?32:24,12);if(textured){gl.enableVertexAttribArray(2);gl.vertexAttribPointer(2,2,gl.FLOAT,false,32,24);}const ib=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,indices,gl.STATIC_DRAW);gl.bindVertexArray(null);return {vao,count:indices.length}}
-function draw(g,m,col,metal=0,em=[0,0,0],a=1,shadow=false,spin=0,pivot=[0,0,0],hasAtlas=false,frontSteer=0){gl.uniformMatrix4fv(u.m,false,m);gl.uniform3fv(u.color,col);gl.uniform3fv(u.emission,em);gl.uniform1f(u.metal,metal);gl.uniform1f(u.alpha,a);gl.uniform1f(u.shadow,shadow?1:0);gl.uniform1f(u.hasAtlas,hasAtlas===2?2:hasAtlas===3?3:hasAtlas?1:0);gl.uniform1f(u.spin,spin);gl.uniform1f(u.frontSteer,frontSteer);gl.uniform3fv(u.pivot,pivot);gl.bindVertexArray(g.vao);gl.drawElements(gl.TRIANGLES,g.count,gl.UNSIGNED_INT,0)}
+function draw(g,m,col,metal=0,em=[0,0,0],a=1,shadow=false,spin=0,pivot=[0,0,0],hasAtlas=false,frontSteer=0){gl.uniformMatrix4fv(u.m,false,m);gl.uniform3fv(u.color,col);gl.uniform3fv(u.emission,em);gl.uniform1f(u.metal,metal);gl.uniform1f(u.alpha,a);gl.uniform1f(u.shadow,shadow?1:0);gl.uniform1f(u.hasAtlas,hasAtlas===4?4:hasAtlas===2?2:hasAtlas===3?3:hasAtlas?1:0);gl.uniform1f(u.spin,spin);gl.uniform1f(u.frontSteer,frontSteer);gl.uniform3fv(u.pivot,pivot);gl.bindVertexArray(g.vao);gl.drawElements(gl.TRIANGLES,g.count,gl.UNSIGNED_INT,0)}
 function geomFrom(arr,index){return createGeometry(new Float32Array(arr),new Uint32Array(index))}
 function makeBox(){const v=[],ind=[];const faces=[ [[1,0,0],[1,0,0],[[.5,-.5,-.5],[.5,-.5,.5],[.5,.5,.5],[.5,.5,-.5]]], [[-1,0,0],[-1,0,0],[[-.5,-.5,.5],[-.5,-.5,-.5],[-.5,.5,-.5],[-.5,.5,.5]]], [[0,1,0],[0,1,0],[[-.5,.5,-.5],[.5,.5,-.5],[.5,.5,.5],[-.5,.5,.5]]], [[0,-1,0],[0,-1,0],[[-.5,-.5,.5],[.5,-.5,.5],[.5,-.5,-.5],[-.5,-.5,-.5]]], [[0,0,1],[0,0,1],[[.5,-.5,.5],[-.5,-.5,.5],[-.5,.5,.5],[.5,.5,.5]]], [[0,0,-1],[0,0,-1],[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,.5,-.5],[-.5,.5,-.5]]] ];faces.forEach((f,i)=>{f[2].forEach(p=>v.push(...p,...f[0]));let j=i*4;ind.push(j,j+1,j+2,j,j+2,j+3)});return geomFrom(v,ind)}
 function makePlane(){return geomFrom([-1,0,-1,0,1,0,1,0,-1,0,1,0,1,0,1,0,1,0,-1,0,1,0,1,0],[0,1,2,0,2,3])}
@@ -895,7 +903,7 @@ loadAIMeshes();
 const DIRECT_MODEL_FILES={
   es90:'models/ES90_original.glb.gz',
   ex60:'models/EX60_uniform_rear_rims.glb.gz',
-  ex90:'models/EX90_Wheel_Repair_v2.glb.gz'
+  ex90:'models/EX90_Clean_5Parts_Approved.glb.gz'
 };
 const directModels={},directPromises={},directErrors={};
 function glbStatus(message,alert=false){const n=document.getElementById('glbLoadStatus');if(!n)return;n.style.display=message?'block':'none';if(message)n.textContent=message;n.style.background=alert?'#542d30ee':'#102f3be6';n.style.whiteSpace='normal';n.style.lineHeight='1.5'}
@@ -966,7 +974,8 @@ async function buildDirectModel(doc,raw,name){
    const N=attrs.NORMAL===undefined?null:extractGLTFAccessor(doc,raw,attrs.NORMAL);
    const indices=primitive.indices===undefined?null:extractGLTFAccessor(doc,raw,primitive.indices);
    const I=indices===null?Uint32Array.from({length:P.length/3},(_,i)=>i):indices instanceof Uint32Array?indices:Uint32Array.from(indices);
-   const wheel=meshIndex>0,front=wheel&&((P[0]||0)<0);
+   const meshName=(doc.meshes[meshIndex].name||'');
+   const wheel=name==='ex90'?/^Wheel_(Front|Rear)_(Right|Left)$/.test(meshName):meshIndex>0;
    let yLowest=Infinity;
    for(let i=1;i<P.length;i+=3)yLowest=Math.min(yLowest,P[i]);
    specs.push({P,UV,I,N,wheel,meshIndex,yLowest});
@@ -988,13 +997,16 @@ async function buildDirectModel(doc,raw,name){
     miny=Math.min(miny,y);maxy=Math.max(maxy,y);
     minz=Math.min(minz,z);maxz=Math.max(maxz,z);
    }
-   const N=sp.N||calcVertexNormals(XYZ,I),packed=new Float32Array(P.length/3*8);
+   // EX90 uses its authored high-resolution colour texture directly.
+   // Its GLB has no NORMAL accessor; generated smoothing normals created harsh visual patches.
+   const N=sp.N||(name==='ex90'?null:calcVertexNormals(XYZ,I)),packed=new Float32Array(P.length/3*8);
    for(let i=0,j=0;i<XYZ.length;i+=3,j+=8){packed[j]=XYZ[i];packed[j+1]=XYZ[i+1];packed[j+2]=XYZ[i+2];
-    packed[j+3]=N[i];packed[j+4]=N[i+1];packed[j+5]=N[i+2];
+    packed[j+3]=N?N[i]:0;packed[j+4]=N?N[i+1]:1;packed[j+5]=N?N[i+2]:0;
     packed[j+6]=UV[i/3*2];packed[j+7]=UV[i/3*2+1];}
    const center=[(minx+maxx)/2,(miny+maxy)/2,(minz+maxz)/2];
    const geom=createGeometry(packed,I,true);
-   const front=wheel&&center[0]<0;
+   const meshName=(doc.meshes[meshIndex]?.name||'');
+   const front=wheel&&(name==='ex90'?meshName.startsWith('Wheel_Front_'):center[0]<0);
    parts.push({g:geom,wheel,front,pivot:center,hasOriginalUV:true,triangles:I.length/3});
    if(selectedDirectModel()===name)glbStatus(name.toUpperCase()+fastLabel(' 建立模型 ',' Building model ',' 모델 구성 ') +parts.length+'/'+specs.length);
    await new Promise(resolve=>setTimeout(resolve,0));
@@ -1005,9 +1017,11 @@ async function buildDirectModel(doc,raw,name){
  const imgBlob=new Blob([raw.slice(iv.byteOffset||0,(iv.byteOffset||0)+iv.byteLength)],{type:imageDef.mimeType||'image/png'});
  const tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([112,117,120,255]));
- gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
- gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);
- gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
+ // EX90 uses single-level source atlas at full quality: prevent UV-island
+ // colour bleeding introduced by automatic lower-resolution mipmaps.
+ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,name==='ex90'?gl.CLAMP_TO_EDGE:gl.REPEAT);
+ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,name==='ex90'?gl.CLAMP_TO_EDGE:gl.REPEAT);
+ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,name==='ex90'?gl.LINEAR:gl.LINEAR_MIPMAP_LINEAR);
  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
  const img=new Image(),url=URL.createObjectURL(imgBlob);
  const model={parts,texture:tex,ready:false,triangles:parts.reduce((n,p)=>n+p.triangles,0)};
@@ -1015,7 +1029,7 @@ async function buildDirectModel(doc,raw,name){
   gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false); // glTF texture coordinates use the original image orientation.
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
-  gl.generateMipmap(gl.TEXTURE_2D);model.ready=true;
+  if(name!=='ex90')gl.generateMipmap(gl.TEXTURE_2D);model.ready=true;
   if(selectedDirectModel()===name)glbStatus('');
   window.__VOLVO_V914_MODEL_READY__?.(name);
  }catch(e){directErrors[name]=L("貼圖 GPU 上傳失敗: ")+e.message;glbStatus(name.toUpperCase()+L(" 貼圖載入失敗"),true)}
@@ -1082,8 +1096,11 @@ function drawDirectModel(name,x,z,t=null,bodyYaw=0,bodyRoll=0){
  const steer=aiSteeringAngle(t)*-1;
  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,model.texture);
  for(const part of model.parts){
+  // The approved five-part EX90 model rolls forward at positive local wheel phase.
+  // Body stays completely static relative to the base pose; only wheel meshes animate.
   const rolling=part.wheel&&t?(t.wheelPhase??state.elapsed*(t.speed||70)/3.6/.36):0;
-  draw(part.g,base,[1,1,1],.18,[0,0,0],1,false,rolling,part.pivot,true,part.wheel&&part.front?steer:0);
+  const sourceBrightness=1;
+  draw(part.g,base,[sourceBrightness,sourceBrightness,sourceBrightness],.18,[0,0,0],1,false,rolling,part.pivot,name==='ex90'?4:true,part.wheel&&part.front?steer:0);
  }
  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,xc40Atlas);
  return true;
