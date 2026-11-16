@@ -895,7 +895,7 @@ loadAIMeshes();
 const DIRECT_MODEL_FILES={
   es90:'models/ES90_original.glb.gz',
   ex60:'models/EX60_uniform_rear_rims.glb.gz',
-  ex90:'models/EX90_Five_Parts.glb.gz'
+  ex90:'models/EX90_Wheel_Repair_v2.glb.gz'
 };
 const directModels={},directPromises={},directErrors={};
 function glbStatus(message,alert=false){const n=document.getElementById('glbLoadStatus');if(!n)return;n.style.display=message?'block':'none';if(message)n.textContent=message;n.style.background=alert?'#542d30ee':'#102f3be6';n.style.whiteSpace='normal';n.style.lineHeight='1.5'}
