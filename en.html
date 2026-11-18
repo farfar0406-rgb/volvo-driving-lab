@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b202b"><title>Volvo Driving Lab | Interactive Driving | Miro Chang</title>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b202b"><title>Volvo Driving Lab｜互動駕駛體驗｜張志遠</title>
 <style>
 :root{--bg:#071923;--panel:#102b37;--panel2:#183947;--line:#42626a;--ice:#c4f2e9;--txt:#f1f7f6;--sub:#9fbdc5;--warning:#ffb969}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif}button{font:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:2px solid #d1fff7;outline-offset:3px}.shell{max-width:1160px;margin:0 auto;padding:13px 18px 35px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0 13px;border-bottom:1px solid #45606c}.mark{font-size:18px;font-weight:900;letter-spacing:.18em}.brandSmall{font-size:11px;color:var(--sub);letter-spacing:.08em}.name{color:#d3e9e8;font-size:12px;text-align:right}.heading{display:flex;align-items:end;justify-content:space-between;gap:8px;margin:16px 0 13px}.heading h1{font-size:clamp(25px,4.7vw,46px);margin:0;letter-spacing:-.065em}.heading h1 em{font-style:normal;font-weight:350;color:var(--ice)}.heading p{color:var(--sub);font-size:12px;margin:5px 0 0}.version{font-size:11px;white-space:nowrap;color:var(--ice);letter-spacing:.08em}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 0 10px}.tab{background:#183541;border:1px solid #41606b;border-radius:11px;color:#e3efed;padding:11px;font-size:13px;font-weight:750}.tab.selected{background:#d1f8ef;color:#0d2833;border-color:#d1f8ef}.frame{background:#0e2835;border:1px solid #395a63;border-radius:17px;overflow:hidden;box-shadow:0 20px 54px #0007}.stage{height:clamp(390px,52vw,600px);position:relative;overflow:hidden;background:linear-gradient(#9dc2c2,#c7d9d2 58%,#42616b)}#view{display:block;width:100%;height:100%;touch-action:none}.hud{position:absolute;inset:0;z-index:3;pointer-events:none}.hudTop{display:flex;justify-content:space-between;align-items:start;gap:8px;padding:18px}.eyebrow{font-size:10px;letter-spacing:.14em;font-weight:800;color:#133742}.hudTitle{font-size:23px;letter-spacing:-.04em;font-weight:900;color:#102b36;text-shadow:0 1px #bde4e2}.pill{border:1px solid #c2e8e77a;background:#092735dc;border-radius:10px;padding:9px 12px;text-align:right;max-width:50%;font-size:12px;line-height:1.35}.pill b{display:block;font-size:13px}.hudBottom{position:absolute;left:17px;right:17px;bottom:14px;display:flex;align-items:end;justify-content:space-between;gap:12px}.speed{font-size:clamp(66px,9vw,103px);font-weight:850;letter-spacing:-.09em;line-height:.93;text-shadow:0 3px 17px #001a22c0;font-variant-numeric:tabular-nums}.units{font-size:11px;letter-spacing:.18em;margin-top:4px;font-weight:800;text-shadow:0 2px 8px #000b}.counter{background:#092936d9;border:1px solid #d1ffff70;border-radius:12px;padding:11px 12px;text-align:right;min-width:122px}.counter small{font-size:10px;color:#c2dfe0;letter-spacing:.13em}.counter strong{display:block;font-size:23px;font-variant-numeric:tabular-nums}.event{position:absolute;top:27%;left:50%;transform:translateX(-50%);background:#182f38e8;color:#fff;border:1px solid #fff8;border-radius:13px;min-width:min(82%,320px);padding:13px 19px;text-align:center;z-index:4;opacity:0;transition:opacity .15s;pointer-events:none;font-size:18px;font-weight:850;box-shadow:0 12px 24px #0005}.event.on{opacity:1}.event.alert{background:#69392bec;border-color:#ffc17c}.event.over{background:#0e2837f2;border-color:#a8f2e8}.event small{display:block;font-size:12px;font-weight:500;margin-top:6px}.signals{position:absolute;top:92px;left:50%;transform:translateX(-50%);z-index:4;background:#0b2732a8;border:1px solid #a3d4c75c;border-radius:18px;padding:3px 14px;display:flex;gap:36px;color:#607c7b;opacity:0;font-size:17px;pointer-events:none}.signals.active{opacity:1}.signals .lit{color:#ffb537;text-shadow:0 0 13px #ff9d18}.brakeNote{position:absolute;top:122px;right:19px;padding:7px 9px;background:#783f39de;border-radius:9px;font-weight:900;font-size:11px;opacity:0}.brakeNote.on{opacity:1}.fallbackNote{position:absolute;top:42%;left:5%;width:90%;background:#15313beb;border:1px solid #7797a0;border-radius:9px;color:#f5fffa;padding:9px;text-align:center;font-size:11px;display:none;z-index:4}.controls{padding:19px 20px 24px;background:linear-gradient(140deg,#14323f,#0a222d)}.panel{display:none}.panel.selected{display:block}.panelHead{display:flex;align-items:center;justify-content:space-between;gap:10px}.panelHead h2{font-size:20px;margin:0}.panelHead p,.help{margin:5px 0 0;color:var(--sub);font-size:12px;line-height:1.6}.smallButton{color:#dff9f5;border:1px solid #5e7c84;background:#254552;padding:9px 12px;border-radius:10px;font-size:12px;white-space:nowrap;font-weight:750}.choiceGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}.choice{border:1px solid #4d7078;background:#1d3e4c;padding:13px 10px;color:#e0eff0;border-radius:11px;text-align:left;font-size:14px;font-weight:850}.choice small{display:block;font-weight:500;color:#a5c6c9;font-size:10px;margin-top:5px}.choice.selected{background:#c7efe8;color:#102d36;border-color:#d6fff1}.choice.selected small{color:#3e626a}.statsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}.stat{border:1px solid #405f6e;border-radius:10px;background:#1c3b47;text-align:center;padding:9px 3px}.stat label{display:block;color:#b9ced0;font-size:10px}.stat strong{display:block;margin-top:5px;font-size:23px;white-space:nowrap;font-variant-numeric:tabular-nums}.driveRow{display:grid;grid-template-columns:1.5fr 1fr auto;gap:8px;margin-top:13px}.primary{color:#082f39;border:0;border-radius:12px;min-height:65px;background:linear-gradient(110deg,#c0f6e9,#85dfd5);font-weight:900;font-size:17px;padding:10px;touch-action:none;user-select:none;-webkit-user-select:none}.primary.pressed{filter:brightness(.9)}.brake{background:#3e5960;color:#fff;border:1px solid #a9c9c8;border-radius:12px;min-height:65px;padding:8px 10px;font-weight:900;touch-action:none;user-select:none}.brake.pressed{background:#a34e43}.brake small{display:block;font-size:10px;color:#dceaea;margin-top:4px}.secondary{border-radius:12px;border:1px solid #56717c;background:#284653;color:#ebf4f5;padding:10px 16px;font-weight:750;min-height:64px}.steer{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}.steerBtn{border:1px solid #9edcd6;border-radius:14px;background:#244854;color:#fff;min-height:76px;font-size:26px;font-weight:900;touch-action:none;user-select:none}.steerBtn small{display:block;font-size:10px;color:#bdd5d7;font-weight:500;margin-top:4px}.steerBtn.pressed{background:#42867f}.steerCenter{display:flex;align-items:center;justify-content:center;text-align:center;color:#abc8cb;background:#142f3b;border:1px solid #537077;border-radius:12px;font-size:11px;line-height:1.7}.sessionRow{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px;margin:9px 0}.sessionRow button{min-height:52px}.callout{color:#f8d5a6;font-size:11px;border-left:3px solid #ffa852;padding:6px 10px;background:#71533537;margin:14px 0 0;line-height:1.5}.bottom{font-size:10px;color:#96b7bd;line-height:1.7;padding:15px 2px}.hidden{display:none!important}.impact{animation:bump .35s linear}@keyframes bump{30%{filter:brightness(1.4) saturate(.6)}100%{filter:none}}@media(max-width:700px){.shell{padding:8px 0 25px}.top,.heading{margin-left:13px;margin-right:13px}.top{padding:8px 0 13px}.mark{font-size:16px}.name{font-size:10px}.heading{margin-top:15px}.heading h1{font-size:29px}.heading p{font-size:11px}.version{font-size:10px}.tabs{margin:0 9px 9px}.tab{font-size:12px;padding:10px 3px}.frame{border-left:0;border-right:0;border-radius:14px}.stage{height:52svh;min-height:355px;max-height:520px}.hudTop{padding:13px}.hudTitle{font-size:18px}.eyebrow{font-size:9px}.pill{padding:8px 10px;font-size:10px}.pill b{font-size:11px}.hudBottom{bottom:12px;left:13px;right:13px}.speed{font-size:70px}.counter{padding:8px 10px;min-width:92px}.counter strong{font-size:20px}.controls{padding:16px 13px 23px}.panelHead h2{font-size:18px}.choice{font-size:12px;padding:11px 8px}.choice small{font-size:9px}.stat strong{font-size:17px}.stat label{font-size:9px}.driveRow{grid-template-columns:1.2fr .85fr 75px;gap:6px}.primary{font-size:14px}.secondary{font-size:12px;padding:7px}.steerBtn{min-height:77px}.sessionRow{grid-template-columns:1.3fr .9fr .9fr}.sessionRow button{font-size:12px;padding:7px}.bottom{padding:11px 15px}.brakeNote{top:108px;right:12px}}
 
@@ -304,6 +304,23 @@ body.mode-highway .rules{margin-top:2px}
 .v9TopBar .choice{flex:0 0 auto;min-width:64px!important;max-width:none;font-size:10px!important}
 #driveCars,#showCars{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:700px){.v9TopBar{gap:5px;left:6px;right:6px}.v9TopBar .choice{min-width:48px!important;font-size:9px!important;padding:5px 3px!important}.v9Trips{font-size:9px;gap:3px}.v9Trips span{padding:6px 4px}.v9Trips b{font-size:10px}}
+
+/* V2.8.0: original-geometry bonnet / front camera, not a 2D cockpit photograph. */
+.hoodOverlay{position:absolute;inset:0;z-index:3;pointer-events:none;display:none;overflow:hidden}
+body.mode-highway.hood-active .hoodOverlay{display:block}
+body.mode-highway.hood-active .hoodLip,body.mode-highway.hood-active .hoodGloss,body.mode-highway.hood-active .hoodFenderL,body.mode-highway.hood-active .hoodFenderR{display:none!important}
+.hoodOverlay{background:linear-gradient(180deg,rgba(4,11,14,.005),transparent 70%,rgba(4,11,14,.035))}
+.hoodVignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 97%,rgba(0,0,0,.065) 0%,transparent 52%)}
+body.mode-highway.hood-active .camButton{background:linear-gradient(140deg,#1c3947,#255161);border-color:#9ccad1;color:#eefbfd}
+
+/* V2.7.1 EX30 hood + front view overlay */
+.frontOverlay{position:absolute;inset:0;z-index:3;pointer-events:none;display:none;overflow:hidden;background:linear-gradient(180deg,rgba(0,0,0,.018),rgba(0,0,0,.01) 10%,rgba(0,0,0,0) 28%,rgba(0,0,0,.015) 100%)}
+body.mode-highway.front-active .frontOverlay{display:block}
+body.mode-highway.front-active .camButton{background:linear-gradient(140deg,#1c3947,#255161);border-color:#9ccad1;color:#eefbfd}
+.frontVignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 58%,transparent 64%,rgba(0,0,0,.035) 88%,rgba(0,0,0,.06) 100%)}
+.frontNoseShadow{position:absolute;left:50%;bottom:-2.4%;transform:translateX(-50%);width:26%;height:4%;background:radial-gradient(ellipse at 50% 20%,rgba(13,18,23,.38) 0%,rgba(13,18,23,.14) 54%,rgba(13,18,23,0) 100%);filter:blur(3px)}
+@media(max-width:500px){.frontNoseShadow{width:34%;height:4.8%}}
+
 </style>
 <style id="volvo-traffic-preload-style">
 #trafficPreloadOverlay[hidden]{display:none!important}
@@ -400,11 +417,11 @@ body.mode-showroom .showZoom{display:flex}
 @media(max-width:700px) and (max-height:560px){body.mode-highway .drivePad button{min-height:51px!important}}
 </style>
 </head><body class="mode-highway"><main class="shell">
-<header class="top"><div class="brandGroup"><div class="mark">VOLVO <span style="font-weight:300">/</span> DRIVING LAB</div><div class="brandSmall">INTERACTIVE DRIVING GAME</div><div class="langLinks" aria-label="語言切換"><a class="langSwitch" lang="zh-Hant" href="index.html">繁中</a><a class="langSwitch active" lang="en" aria-current="page" href="en.html">EN</a><a class="langSwitch" lang="ko" href="ko.html">한국어</a></div></div><div class="name"><div class="dealer">Volvo Neihu · Hsin-Kai Motors</div><div class="advisor">張志遠 Miro Chang</div></div></header>
-<div class="heading"><div><h1>Volvo <em>Highway Challenge</em></h1><p>0–100 acceleration · Endless highway · 360° showroom</p></div><div class="version">V2.5.0 · DRIVE · DISCOVER · EXPLORE</div></div>
-<nav class="tabs"><button class="tab" data-mode="drive">01 · Acceleration</button><button class="tab selected" data-mode="highway">02 · Endless Dodge</button><button class="tab" data-mode="showroom">03 · 3D Showroom</button></nav>
-<div class="sceneTimeBar" role="group" aria-label="Driving conditions"><span>Driving conditions</span><button type="button" data-scene-time="day" class="selected" aria-pressed="true">☀ Day</button><button type="button" data-scene-time="night" aria-pressed="false">☾ Night</button><span class="sceneTimeNote" id="sceneTimeNote">Daylight</span></div>
-<div class="sceneWeatherBar" role="group" aria-label="天候條件"><span id="weatherCaption">Weather</span><button type="button" data-weather="clear" class="selected" aria-pressed="true">Clear</button><button type="button" data-weather="rain" aria-pressed="false">Rain</button><button type="button" data-weather="fog" aria-pressed="false">Fog</button><button type="button" data-weather="rainfog" aria-pressed="false">Rain &amp; Fog</button><span id="roadGripNote" class="roadGripNote" aria-live="polite"></span></div>
+<header class="top"><div class="brandGroup"><div class="mark">VOLVO <span style="font-weight:300">/</span> DRIVING LAB</div><div class="brandSmall">INTERACTIVE DRIVING GAME</div><div class="langLinks" aria-label="語言切換"><a class="langSwitch active" lang="zh-Hant" aria-current="page" href="index.html">繁中</a><a class="langSwitch" lang="en" href="en.html">EN</a><a class="langSwitch" lang="ko" href="ko.html">한국어</a></div></div><div class="name"><div class="dealer">內湖新凱汽車</div><div class="advisor">張志遠 Miro Chang</div></div></header>
+<div class="heading"><div><h1>Volvo <em>Highway Challenge</em></h1><p>0–100 加速 · 無限高速閃避 · 360° 立體賞車</p></div><div class="version">V2.5.0 · DRIVE · DISCOVER · EXPLORE</div></div>
+<nav class="tabs"><button class="tab" data-mode="drive">01 · 加速體驗</button><button class="tab selected" data-mode="highway">02 · 無限閃避</button><button class="tab" data-mode="showroom">03 · 3D 賞車</button></nav>
+<div class="sceneTimeBar" role="group" aria-label="駕駛環境"><span>駕駛環境</span><button type="button" data-scene-time="day" class="selected" aria-pressed="true">☀ 日間</button><button type="button" data-scene-time="night" aria-pressed="false">☾ 夜間</button><span class="sceneTimeNote" id="sceneTimeNote">自然日光</span></div>
+<div class="sceneWeatherBar" role="group" aria-label="天候條件"><span id="weatherCaption">天候</span><button type="button" data-weather="clear" class="selected" aria-pressed="true">晴天</button><button type="button" data-weather="rain" aria-pressed="false">雨天</button><button type="button" data-weather="fog" aria-pressed="false">霧天</button><button type="button" data-weather="rainfog" aria-pressed="false">雨霧</button><span id="roadGripNote" class="roadGripNote" aria-live="polite"></span></div>
 <section class="frame"><div class="stage" id="stage">
      <div class="v9TopBar" id="v9TopBar" aria-label="車型與行駛紀錄">
       <div class="choiceGrid" id="highwayCars">
@@ -414,66 +431,66 @@ body.mode-showroom .showZoom{display:flex}
        <button class="choice" data-car="es90" type="button">ES90</button>
        <button class="choice" data-car="ex60" type="button">EX60</button><button class="choice" data-car="ex90" type="button">EX90</button><button class="choice" data-car="ec40" type="button">EC40</button><button class="choice" data-car="concept401" type="button">Concept 40.1</button><button class="choice" data-car="v60" type="button">V60</button>
       </div>
-      <div class="v9Trips"><span>Distance <b id="distStat">0 m</b></span><span>Passes <b id="passStat">0</b></span><span class="v9Level" id="v9Level">LV 1</span></div>
+      <div class="v9Trips"><span>距離 <b id="distStat">0 m</b></span><span>超車 <b id="passStat">0</b></span><span class="v9Level" id="v9Level">LV 1</span></div>
      </div>
-     <div class="v9LkaNotice" id="v9LkaNotice" role="status" aria-live="off">▧ LKA Lane Departure <strong id="v9LkaTime">2.0 s</strong></div>
+     <div class="v9LkaNotice" id="v9LkaNotice" role="status" aria-live="off">▧ LKA 車道偏移 <strong id="v9LkaTime">2.0 s</strong></div>
 <div id="trafficPreloadOverlay" role="dialog" aria-modal="true" aria-label="Volvo AI vehicle loading" hidden>
  <div class="trafficLoadCard">
-  <div class="trafficLoadHeading" id="trafficPreloadTitle">Loading Volvo AI traffic</div>
+  <div class="trafficLoadHeading" id="trafficPreloadTitle">正在載入 Volvo AI 車流</div>
   <div class="trafficLoadPercent" id="trafficPreloadPercent">0%</div>
   <progress id="trafficPreloadProgress" max="100" value="0" aria-valuemin="0" aria-valuemax="100"></progress>
-  <div id="trafficPreloadDetail" role="status" aria-live="polite">Preparing your selected Volvo</div>
-  <div class="trafficLoadHint">ZH: 快速啟動：先載入所選車型與 EX30。<span class="trafficLoadLang" style="display:block">EN: Quick start loads your selected car and EX30; other cars load progressively.</span><span style="display:block">한국어: 선택 차량과 EX30을 먼저 불러온 뒤, 나머지 차량은 단계적으로 로드합니다.</span></div>
-  <button type="button" id="trafficPreloadRetry" hidden>Retry</button>
+  <div id="trafficPreloadDetail" role="status" aria-live="polite">準備所選 Volvo 車型</div>
+  <div class="trafficLoadHint">繁中：快速啟動先載入所選車款與 EX30，其他車型遊玩時逐步載入。<span class="trafficLoadLang" style="display:block">EN: Quick start loads your selected car and EX30; other cars load progressively.</span><span style="display:block">한국어: 선택 차량과 EX30을 먼저 불러온 뒤, 나머지 차량은 단계적으로 로드합니다.</span></div>
+  <button type="button" id="trafficPreloadRetry" hidden>重新載入 · Retry · 다시 시도</button>
  </div>
-</div><canvas id="view"></canvas><canvas id="weatherCanvas" aria-hidden="true"></canvas><div class="safetyHud" id="v24SafetyHud" aria-label="Driving assistance indicators">
+</div><canvas id="view"></canvas><canvas id="weatherCanvas" aria-hidden="true"></canvas><div class="hoodOverlay" id="hoodOverlay" aria-hidden="true"><div class="hoodVignette"></div><div class="hoodFenderL"></div><div class="hoodFenderR"></div><div class="hoodGloss"></div><div class="hoodLip"></div></div><div class="frontOverlay" id="frontOverlay" aria-hidden="true"><div class="frontVignette"></div><div class="frontNoseShadow"></div></div><div class="safetyHud" id="v24SafetyHud" aria-label="Driving assistance indicators">
  <span class="safetyIcon lka off" id="v24LkaIcon" role="img" aria-label="LKA disabled"><svg viewBox="0 0 50 44" aria-hidden="true"><path class="laneWhite" d="M17 4L6 39M33 4L44 39" stroke="#f7f9fc" stroke-width="5" stroke-linecap="square" fill="none"/><path d="M25 4V13M25 19V27M25 33V39" stroke="#f7f9fc" stroke-width="3.1" fill="none"/></svg></span>
  <span class="safetyIcon warning" id="v24WarningIcon" role="img" aria-label="Danger warning"><svg viewBox="0 0 50 44" aria-hidden="true"><path d="M25 4L47 40H3Z" fill="none" stroke="#fa353b" stroke-width="5" stroke-linejoin="round"/><path d="M25 16V27" stroke="#fa353b" stroke-width="5" stroke-linecap="round"/><circle cx="25" cy="34" r="2.7" fill="#fa353b"/></svg></span>
-</div><button class="camButton" id="v24CamSwitch" type="button" aria-label="切換視角">◈ CAM</button><div class="showZoom" id="v24ShowZoom" role="group" aria-label="賞車縮放"><button type="button" id="v24ZoomIn" aria-label="放大">+</button><button type="button" id="v24ZoomOut" aria-label="縮小">−</button></div><div id="glbLoadStatus" role="status" aria-live="polite" style="display:none;position:absolute;top:65px;left:50%;transform:translateX(-50%);z-index:14;max-width:85%;padding:8px 14px;border-radius:9px;background:#102f3be6;color:#effffe;font-size:12px;font-weight:700;pointer-events:none;text-align:center;box-shadow:0 2px 12px #1238"></div><div class="hud"><div class="hudTop"><div><div class="eyebrow">VOLVO DRIVING LAB</div><div class="hudTitle" id="hudTitle">ENDLESS HIGHWAY</div></div><div class="pill" id="hudChip"><b>EX30</b>高速閃避挑戰</div></div><div class="signals" id="signals"><span id="signalL">◀</span><span id="signalR">▶</span></div><div class="rearRadar" id="rearRadar" role="status" aria-live="off" aria-label="Rear overtaking alerts"><div class="rearRadarSide left" id="rearWarnL"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextL">Vehicle on left</span></div><div class="rearRadarSide right" id="rearWarnR"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextR">Vehicle on right</span></div></div><div class="brakeNote" id="brakeNote">BRAKE · Slow down</div><div class="hudBottom" id="hudBottom"><div><div class="speed" id="speed">090</div><div class="units">km/h · Game simulation</div></div><div class="counter"><small id="countTitle">SCORE / POINTS</small><strong id="countValue">0</strong></div></div></div><div id="event" class="event"></div><div id="fallbackNote" class="fallbackNote"></div>
+</div><button class="camButton" id="v24CamSwitch" type="button" aria-label="切換視角">◈ CAM</button><div class="showZoom" id="v24ShowZoom" role="group" aria-label="賞車縮放"><button type="button" id="v24ZoomIn" aria-label="放大">+</button><button type="button" id="v24ZoomOut" aria-label="縮小">−</button></div><div id="glbLoadStatus" role="status" aria-live="polite" style="display:none;position:absolute;top:65px;left:50%;transform:translateX(-50%);z-index:14;max-width:85%;padding:8px 14px;border-radius:9px;background:#102f3be6;color:#effffe;font-size:12px;font-weight:700;pointer-events:none;text-align:center;box-shadow:0 2px 12px #1238"></div><div class="hud"><div class="hudTop"><div><div class="eyebrow">VOLVO DRIVING LAB</div><div class="hudTitle" id="hudTitle">ENDLESS HIGHWAY</div></div><div class="pill" id="hudChip"><b>EX30</b>高速閃避挑戰</div></div><div class="signals" id="signals"><span id="signalL">◀</span><span id="signalR">▶</span></div><div class="rearRadar" id="rearRadar" role="status" aria-live="off" aria-label="Rear overtaking alerts"><div class="rearRadarSide left" id="rearWarnL"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextL">左側盲點來車</span></div><div class="rearRadarSide right" id="rearWarnR"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextR">右側盲點來車</span></div></div><div class="brakeNote" id="brakeNote">BRAKE · 減速</div><div class="hudBottom" id="hudBottom"><div><div class="speed" id="speed">090</div><div class="units">km/h · 遊戲模擬</div></div><div class="counter"><small id="countTitle">SCORE / 分數</small><strong id="countValue">0</strong></div></div></div><div id="event" class="event"></div><div id="fallbackNote" class="fallbackNote"></div>
 <div id="mooseDialog" class="mooseDialog" role="dialog" aria-modal="true" aria-labelledby="mooseTitle" aria-describedby="mooseMessage" aria-hidden="true">
  <div class="mooseCard">
   <span class="mooseEyebrow">VOLVO · FOR LIFE</span>
   <div class="mooseIcon" aria-hidden="true">◈</div>
-  <h2 id="mooseTitle">Safety for Every Journey</h2>
-  <p id="mooseMessage">Volvo puts occupant safety first.</p>
+  <h2 id="mooseTitle">安全守護 · 每一段旅程</h2>
+  <p id="mooseMessage">Volvo 始終把乘員安全放在首位。</p>
   <div class="mooseStats" id="mooseStats"></div><p id="rankResult" class="rankResult"></p>
-      <div class="v9FinalBoard" id="v9FinalBoard"><h3>🏆 Local Top 3</h3><ol class="rankList" id="v9FinalRanks"></ol></div>
-  <p class="mooseDisclaimer">This is a game, not a crash test. Safety design can reduce risk but cannot prevent all injuries.</p>
-  <div class="mooseActions"><button type="button" id="mooseRetry" class="primary">↻ Try Again</button><button type="button" id="mooseClose" class="secondary">Back to Results</button></div>
+      <div class="v9FinalBoard" id="v9FinalBoard"><h3>🏆 本機前三名</h3><ol class="rankList" id="v9FinalRanks"></ol></div>
+  <p class="mooseDisclaimer">此為遊戲模擬，並非真實撞擊測試。安全設計有助降低事故風險與傷害，但無法保證任何情境皆不會受傷。</p>
+  <div class="mooseActions"><button type="button" id="mooseRetry" class="primary">↻ 再次挑戰</button><button type="button" id="mooseClose" class="secondary">返回成績</button></div>
  </div>
 </div>
 <div id="rankDialog" class="mooseDialog" role="dialog" aria-modal="true" aria-labelledby="rankTitle" aria-hidden="true">
  <div class="mooseCard leaderboardCard">
   <span class="mooseEyebrow">VOLVO DRIVING LAB</span>
-  <h2 id="rankTitle">🏆 Leaderboard Top 3</h2>
-  <p id="rankStorageNote">Top scores may be saved in this browser.</p>
-  <ol id="rankList" class="rankList"><li>No scores yet. Start your challenge!</li></ol>
-  <button type="button" id="rankClose" class="secondary">Back to Game</button>
+  <h2 id="rankTitle">🏆 挑戰排行榜 TOP 3</h2>
+  <p id="rankStorageNote">依分數排序，成績會嘗試儲存在此瀏覽器。</p>
+  <ol id="rankList" class="rankList"><li>還沒有成績，開始挑戰吧！</li></ol>
+  <button type="button" id="rankClose" class="secondary">返回遊戲</button>
  </div>
 </div></div>
 <div class="controls">
-<section class="panel" id="panel-drive"><div class="panelHead"><div><h2 id="driveModelTitle">EX30 0–100 km/h Acceleration</h2><p>Choose a model and powertrain, then hold the accelerator. Times are simulated from specifications.</p></div><button class="smallButton" id="sound1">◌ Sound Off</button></div><div class="choiceGrid" id="driveCars"><button class="choice selected" data-drive-car="ex30">EX30</button><button class="choice" data-drive-car="xc40">XC40</button><button class="choice" data-drive-car="xc60">XC60</button><button class="choice" data-drive-car="es90">ES90</button><button class="choice" data-drive-car="ex60">EX60</button><button class="choice" data-drive-car="ex90">EX90</button><button class="choice" data-drive-car="ec40">EC40</button><button class="choice" data-drive-car="concept401">Concept 40.1</button><button class="choice" data-drive-car="v60">V60</button></div><div class="choiceGrid" id="drivePowers"><button class="choice" data-power="single">Single Motor <small>5.3 s</small></button><button class="choice selected" data-power="twin">Twin Motor <small>3.6 s</small></button><button class="choice" data-power="performance">Twin Motor Performance <small>4.0 s</small></button><button class="choice" data-power="b3">B3 Mild Hybrid <small>0.0 s</small></button><button class="choice" data-power="b4">B4 Mild Hybrid <small>0.0 s</small></button><button class="choice" data-power="b5">B5 AWD Mild Hybrid <small>0.0 s</small></button><button class="choice" data-power="t8">T8 AWD Plug-in Hybrid <small>0.0 s</small></button></div><div class="driveRow"><button class="primary" id="throttle">Hold accelerator ◉</button><button class="brake" id="driveBrake">Hold brake<small>B</small></button><button class="secondary" id="driveReset">Reset ↺</button></div><p class="help">Acceleration curves are gameplay simulations; actual trims vary by market.</p></section>
+<section class="panel" id="panel-drive"><div class="panelHead"><div><h2 id="driveModelTitle">EX30 0–100 km/h 加速</h2><p>選車及動力後長按油門開始加速；這是按照規格時間建立的模擬。</p></div><button class="smallButton" id="sound1">◌ 音效關</button></div><div class="choiceGrid" id="driveCars"><button class="choice selected" data-drive-car="ex30">EX30</button><button class="choice" data-drive-car="xc40">XC40</button><button class="choice" data-drive-car="xc60">XC60</button><button class="choice" data-drive-car="es90">ES90</button><button class="choice" data-drive-car="ex60">EX60</button><button class="choice" data-drive-car="ex90">EX90</button><button class="choice" data-drive-car="ec40">EC40</button><button class="choice" data-drive-car="concept401">Concept 40.1</button><button class="choice" data-drive-car="v60">V60</button></div><div class="choiceGrid" id="drivePowers"><button class="choice" data-power="single">單馬達 <small>5.3 秒</small></button><button class="choice selected" data-power="twin">雙馬達 <small>3.6 秒</small></button><button class="choice" data-power="performance">雙馬達 Performance <small>4.0 秒</small></button><button class="choice" data-power="b3">B3 高效輕油電 <small>0.0 秒</small></button><button class="choice" data-power="b4">B4 高效輕油電 <small>0.0 秒</small></button><button class="choice" data-power="b5">B5 AWD 輕油電 <small>0.0 秒</small></button><button class="choice" data-power="t8">T8 AWD 雙能電動 <small>0.0 秒</small></button></div><div class="driveRow"><button class="primary" id="throttle">按住油門 ◉</button><button class="brake" id="driveBrake">按住煞車<small>B</small></button><button class="secondary" id="driveReset">重來 ↺</button></div><p class="help">依車型設定的秒數模擬速度曲線；各市場動力編成可能不同，並非實車測試。</p></section>
 <section class="panel selected" id="panel-highway">
-<div class="panelHead"><div><h2>Endless Highway Dodge</h2><p>No time limit · Collision ends game · Rear overtaking after 4,000 points</p></div><button class="smallButton" id="sound2">◌ Sound Off</button></div>
+<div class="panelHead"><div><h2>無限高速閃避</h2><p>不限時 · 撞擊即結束 · 4,000 分開啟後方超車</p></div><button class="smallButton" id="sound2">◌ 音效關</button></div>
 <div class="assistLine">
- <button type="button" id="blisToggle" class="assistToggle" aria-pressed="false" title="換道時側邊有車，輔助回正">◌ BLIS: Off</button>
- <button type="button" id="aebToggle" class="assistToggle" aria-pressed="false" title="距離前車約一個車身才啟動，暫時煞停但不結束遊戲">◌ AEB: Off</button>
- <button class="assistToggle" id="lkaToggle" type="button" aria-pressed="false" title="LKA 可自行開關；持續向車道邊緣施力超過 2 秒會強制介入（遊戲模擬）">◌ LKA: Off</button>
+ <button type="button" id="blisToggle" class="assistToggle" aria-pressed="false" title="換道時側邊有車，輔助回正">◌ BLIS：關</button>
+ <button type="button" id="aebToggle" class="assistToggle" aria-pressed="false" title="距離前車約一個車身才啟動，暫時煞停但不結束遊戲">◌ 主動煞車：關</button>
+ <button class="assistToggle" id="lkaToggle" type="button" aria-pressed="false" title="LKA 可自行開關；持續向車道邊緣施力超過 2 秒會強制介入（遊戲模擬）">◌ LKA：關</button>
 </div>
 <div class="sessionRow">
- <button class="primary" id="start">▶ Start Game</button>
- <button class="secondary" id="reset">↺ Restart</button>
- <button class="secondary" id="sound3">◌ Sound Off</button>
+ <button class="primary" id="start">▶ 開始遊戲</button>
+ <button class="secondary" id="reset">↺ 重新挑戰</button>
+ <button class="secondary" id="sound3">◌ 音效關</button>
 </div>
-<div class="steer"><div class="drivePad drivePad-steer"><button class="steerBtn" id="left" aria-label="按住向左轉向">←<small>Hold to steer left</small></button><button class="steerBtn" id="right" aria-label="按住向右轉向">→<small>Hold to steer right</small></button></div><div class="drivePad drivePad-pedals"><button class="brake" id="hBrake" aria-label="按住煞車減速"><span class="v9Glyph">◀◀</span><small>Brake</small></button><button class="accelBtn" id="hAccel" aria-label="按住加速，最高 180 公里"><span class="v9Glyph">＋</span><small>Accelerate</small></button></div></div>
-<details class="rules"><summary>Rules &amp; Controls <span>ⓘ</span></summary>
- <div class="callout">+100 safe pass · +50 close dodge · +250 moose dodge · −180 collision.<strong>Hitting any car or moose ends the run.</strong> Every 2,000 points increases difficulty. LKA can be toggled; holding towards the lane edge for over 2 seconds forces a simulated correction. BLIS assists if an adjacent vehicle is detected.<strong>It does not automatically avoid obstacles</strong>AEB is separate and activates when approaching a car-length gap. Stopping does not end the game. AI rear overtaking begins after 4,000 points.</div>
- <p>Hold left/right arrows to steer. On desktop use A/D or arrows, S/down/space to brake. Do not imitate game driving on actual roads.</p>
+<div class="steer"><div class="drivePad drivePad-steer"><button class="steerBtn" id="left" aria-label="按住向左轉向">←<small>按住左轉</small></button><button class="steerBtn" id="right" aria-label="按住向右轉向">→<small>按住右轉</small></button></div><div class="drivePad drivePad-pedals"><button class="brake" id="hBrake" aria-label="按住煞車減速"><span class="v9Glyph">◀◀</span><small>煞車</small></button><button class="accelBtn" id="hAccel" aria-label="按住加速，最高 180 公里"><span class="v9Glyph">＋</span><small>加速</small></button></div></div>
+<details class="rules"><summary>規則與操作說明 <span>ⓘ</span></summary>
+ <div class="callout">+100 安全超車 · +50 近距離閃避 · +250 成功閃避麋鹿 · −180 車輛碰撞。<strong>撞到任何車輛或麋鹿，本局立即停止並進入分類結算。</strong> 每累積 2,000 分提升一級。LKA 模擬可自行開關；若持續朝車道邊緣施力超過 2 秒，系統將強制模擬回正；BLIS 只在變換車道有側後鄰車時模擬回正，<strong>不會自動繞開前方障礙</strong>；AI 危險切入時可短暫避碰轉向，風險解除後立即交還控制（僅遊戲模擬）；主動煞車獨立開關：當與同車道前車距離約一個車身且持續接近時，啟動模擬緊急煞車。煞停不會結束遊戲，玩家仍可轉向，前車離開或車道淨空後可繼續挑戰。4,000 分後有 AI 從後方超車，並依車距尋找安全空隙換道。</div>
+ <p>手機左側控制左右轉向，右側控制煞車與油門，放開後逐步回正。電腦可使用 A / D 或左右方向鍵轉向，S / ↓ / 空白鍵煞車。遊戲內音效可自行開關。請勿在真實道路模仿遊戲操作。</p>
 </details>
 </section>
-<section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>Volvo 9 Vehicles · 360° Showroom</h2><p>Drag to rotate; pinch or scroll to zoom.</p></div><button class="smallButton" id="viewReset">Reset View ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>Electric SUV</small></button><button class="choice" data-car="xc40">XC40<small>City SUV</small></button><button class="choice" data-car="xc60">XC60<small>Mid-size SUV</small></button><button class="choice" data-car="es90">ES90<small>Electric Flagship Sedan</small></button><button class="choice" data-car="ex60">EX60<small>Electric SUV</small></button><button class="choice" data-car="ex90">EX90<small>Flagship Electric SUV</small></button><button class="choice" data-car="ec40">EC40<small>Electric Crossover</small></button><button class="choice" data-car="concept401">Concept 40.1<small>Concept Car</small></button><button class="choice" data-car="v60">V60<small>Premium Wagon</small></button></div><p class="help">Select a car to explore it from every angle.</p>
-<div class="showroomSpecs" id="showroomSpecs"><div class="specHeader"><strong id="showroomSpecTitle">Key Vehicle Specifications</strong><select id="showroomTrimSelect" aria-label="Select trim"><option>Loading</option></select></div><div class="showroomSpecScroll"><table class="showroomSpecTable"><tbody id="showroomSpecRows"></tbody></table></div><p class="showroomSpecNote" id="showroomSpecNote"></p></div></section>
-</div></section><div class="bottom">An independent, unofficial driving simulation. Speed, traffic and assistance effects are for gameplay only; they do not represent real vehicle behavior.<p class="help" style="font-size:11px;margin-top:10px">Moose model:<a href="https://sketchfab.com/3d-models/low-poly-moose-9ba6aeef039f458eb998cbdd672b3952" target="_blank" rel="noopener noreferrer">Low-poly Moose — Zafflex</a> ·  <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> license.</p>Follow traffic laws. Do not imitate high-speed game maneuvers on real roads.</div></main>
+<section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>Volvo 九款車型　360° 賞車</h2><p>拖曳旋轉車輛，使用雙指或滑鼠滾輪縮放，探索車輛外觀。</p></div><button class="smallButton" id="viewReset">重設視角 ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>純電 SUV</small></button><button class="choice" data-car="xc40">XC40<small>都會 SUV</small></button><button class="choice" data-car="xc60">XC60<small>中型 SUV</small></button><button class="choice" data-car="es90">ES90<small>純電旗艦房車</small></button><button class="choice" data-car="ex60">EX60<small>純電 SUV</small></button><button class="choice" data-car="ex90">EX90<small>純電旗艦 SUV</small></button><button class="choice" data-car="ec40">EC40<small>純電跨界休旅</small></button><button class="choice" data-car="concept401">Concept 40.1<small>概念車</small></button><button class="choice" data-car="v60">V60<small>豪華旅行車</small></button></div><p class="help">選擇車型後，即可從不同角度欣賞車輛外觀。</p>
+<div class="showroomSpecs" id="showroomSpecs"><div class="specHeader"><strong id="showroomSpecTitle">車型重要規格</strong><select id="showroomTrimSelect" aria-label="選擇版本"><option>載入中</option></select></div><div class="showroomSpecScroll"><table class="showroomSpecTable"><tbody id="showroomSpecRows"></tbody></table></div><p class="showroomSpecNote" id="showroomSpecNote"></p></div></section>
+</div></section><div class="bottom">本遊戲為獨立非官方互動模擬，所有加速數據、路況、車流及安全輔助效果僅供體驗，不代表實車性能、實際安全系統介入條件或事故結果。<p class="help" style="font-size:11px;margin-top:10px">麋鹿模型來源：<a href="https://sketchfab.com/3d-models/low-poly-moose-9ba6aeef039f458eb998cbdd672b3952" target="_blank" rel="noopener noreferrer">Low-poly Moose — Zafflex</a>，採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> 授權。</p>請遵守交通法規，勿在真實道路模仿高速駕駛或閃避行為。</div></main>
 
 <!-- GitHub Pages edition: original Volvo assets are loaded from ./models/ -->
 <script>
@@ -519,7 +536,7 @@ function drivePowerLabel(){
 const state={blis:true,blisWarn:0,blisReturnLane:null,lastSafeLane:1,assistNotice:0,aeb:false,aebCooldown:0,aebPulse:0,aebSeen:new Set(),aebEmergency:false,aebTargetId:null,aebStopDistance:0,aebHold:false,aebStoppedOnce:false,blisHazardLane:null,blisAiAvoid:null,rearSpawn:9,rearWave:0,rearPassed:0,rearPlan:null,rearSpawnAttempts:0,rearSpawnSuccess:0,rearApproach:null,rearCamera:0,rearCameraSide:0,placed:0,
   lka:false,lkaAnchorLane:1,lkaIdle:0,lkaWarnTimer:0,lkaVibrated:false,lkaAssist:false,lkaNotice:0,
   edgeLkaHold:0,edgeLkaDir:0,edgeLkaLane:1,edgeLkaAssistTimer:0,edgeLkaCooldown:0,edgeLkaActivated:false,
- cameraTarget:0,cameraMix:0,coastUnlocked:false,coastProgress:0,hAccel:false,isTesting:false,endReason:null,mode:'highway',car:'ex30',showCar:'ex30',driveCar:'ex30',paint:'forest',power:'twin',speed:90,time:0,distance:0,throttle:false,brake:false,run:'ready',countdown:0,score:0,dist:0,passed:0,hits:0,best:0,immune:0,traffic:[],wave:1,spawn:2.4,difficulty:1,lastDifficulty:1,moose:null,mooseCountdown:22,emergency:0,elapsed:0,worldDist:0,lateral:0,lv:0,yaw:0,roll:0,left:false,right:false,touchSteer:0,dir:0,signalHold:0,blink:0,orbit:.6,elev:.25,zoom:7.6,sound:false,driveComplete:false,driveStarted:false,driveTime:0,eventTime:0,eventText:'',eventDetails:'',eventType:'',lastScoreMeter:0};
+ cameraTarget:0,cameraMix:0,fpLat:0,fpYaw:0,coastUnlocked:false,coastProgress:0,hAccel:false,isTesting:false,endReason:null,mode:'highway',car:'ex30',showCar:'ex30',driveCar:'ex30',paint:'forest',power:'twin',speed:90,time:0,distance:0,throttle:false,brake:false,run:'ready',countdown:0,score:0,dist:0,passed:0,hits:0,best:0,immune:0,traffic:[],wave:1,spawn:2.4,difficulty:1,lastDifficulty:1,moose:null,mooseCountdown:22,emergency:0,elapsed:0,worldDist:0,lateral:0,lv:0,yaw:0,roll:0,left:false,right:false,touchSteer:0,dir:0,signalHold:0,blink:0,orbit:.6,elev:.25,zoom:7.6,sound:false,driveComplete:false,driveStarted:false,driveTime:0,eventTime:0,eventText:'',eventDetails:'',eventType:'',lastScoreMeter:0};
 try{state.best=Number(localStorage.getItem('VOLVO_V8_BEST')||0)||0}catch(e){}
 const RANK_KEY='VOLVO_DRIVING_V86_TOP3';
 let leaderboard=[];let rankStorageAvailable=true;
@@ -580,7 +597,7 @@ function hideMooseDialog(){const dialog=$('mooseDialog');if(!dialog)return;dialo
 $('mooseClose').onclick=()=>hideMooseDialog();
 $('mooseRetry').onclick=()=>{$('start').click()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('mooseDialog').classList.contains('visible')){e.preventDefault();hideMooseDialog()}});
-function resetHighway(){state.coastUnlocked=false;state.coastProgress=0;hideMooseDialog();closeRanks();state.endReason=null;state.blisReturnLane=null;state.lastSafeLane=1;state.blisHazardLane=null;state.blisAiAvoid=null;state.aebEmergency=false;state.aebTargetId=null;state.aebStopDistance=0;state.aebHold=false;state.aebStoppedOnce=false;state.lkaAnchorLane=1;state.lkaIdle=0;state.lkaWarnTimer=0;state.lkaVibrated=false;state.lkaAssist=false;state.lkaNotice=0;state.edgeLkaHold=0;state.edgeLkaDir=0;state.edgeLkaLane=1;state.edgeLkaAssistTimer=0;state.edgeLkaCooldown=0;state.edgeLkaActivated=false;state.hAccel=false;state.blisWarn=0;state.assistNotice=0;state.aebCooldown=0;state.aebPulse=0;state.aebSeen=new Set();state.rearSpawn=7.5;state.rearWave=0;state.rearPassed=0;state.rearPlan=null;state.rearSpawnAttempts=0;state.rearSpawnSuccess=0;state.rearApproach=null;state.rearCamera=0;state.rearCameraSide=0;state.placed=0;state.run='ready';state.speed=90;state.score=0;state.dist=0;state.elapsed=0;state.worldDist=0;state.passed=0;state.hits=0;state.traffic=[];state.spawn=2.6;state.wave=1;state.difficulty=1;state.lastDifficulty=1;state.lastScoreMeter=0;state.immune=0;state.lateral=0;state.lv=0;state.yaw=0;state.roll=0;state.left=false;state.right=false;state.hAccel=false;state.moose=null;state.mooseCountdown=22;state.emergency=0;state.brake=false;state.dir=0;state.signalHold=0;$('start').textContent=L("▶ 開始遊戲");hideEvent();updateUI()}
+function resetHighway(){state.coastUnlocked=false;state.coastProgress=0;hideMooseDialog();closeRanks();state.endReason=null;state.blisReturnLane=null;state.lastSafeLane=1;state.blisHazardLane=null;state.blisAiAvoid=null;state.aebEmergency=false;state.aebTargetId=null;state.aebStopDistance=0;state.aebHold=false;state.aebStoppedOnce=false;state.lkaAnchorLane=1;state.lkaIdle=0;state.lkaWarnTimer=0;state.lkaVibrated=false;state.lkaAssist=false;state.lkaNotice=0;state.edgeLkaHold=0;state.edgeLkaDir=0;state.edgeLkaLane=1;state.edgeLkaAssistTimer=0;state.edgeLkaCooldown=0;state.edgeLkaActivated=false;state.hAccel=false;state.blisWarn=0;state.assistNotice=0;state.aebCooldown=0;state.aebPulse=0;state.aebSeen=new Set();state.rearSpawn=7.5;state.rearWave=0;state.rearPassed=0;state.rearPlan=null;state.rearSpawnAttempts=0;state.rearSpawnSuccess=0;state.rearApproach=null;state.rearCamera=0;state.rearCameraSide=0;state.placed=0;state.run='ready';state.speed=90;state.score=0;state.dist=0;state.elapsed=0;state.worldDist=0;state.passed=0;state.hits=0;state.traffic=[];state.spawn=2.6;state.wave=1;state.difficulty=1;state.lastDifficulty=1;state.lastScoreMeter=0;state.immune=0;state.lateral=0;state.lv=0;state.yaw=0;state.roll=0;state.fpLat=0;state.fpYaw=0;state.left=false;state.right=false;state.hAccel=false;state.moose=null;state.mooseCountdown=22;state.emergency=0;state.brake=false;state.dir=0;state.signalHold=0;$('start').textContent=L("▶ 開始遊戲");hideEvent();updateUI()}
 function syncAssistButtons(){
  const b=$('blisToggle'),a=$('aebToggle'),l=$('lkaToggle');
  b.setAttribute('aria-pressed',String(state.blis));
@@ -730,17 +747,47 @@ document.querySelectorAll('[data-power]').forEach(b=>b.onclick=()=>{state.power=
 document.querySelectorAll('[data-paint]').forEach(b=>b.onclick=()=>{state.paint=b.dataset.paint;refreshV98Selectors();updateUI()});
 
 // V2.4 adjustable chase view (never resets physics or vehicle selection).
+
+
+// V2.8.0 model-calibrated camera. Positive game X points toward each Volvo's bonnet.
+const V28_CAMERA_PROFILES={"ex30":{"classic":[-9.16,2.92,2.43,15.1,0.93,42.0,55.0],"hood":[0.18,1.72,-0.1,66.0,71.0],"front":[2.55,0.86,73.0,77.0]},"xc40":{"classic":[-9.43,3.08,2.48,15.1,0.99,42.3,55.5],"hood":[0.22,1.86,-0.11,66.5,71.5],"front":[2.51,0.93,73.0,77.0]},"xc60":{"classic":[-9.7,3.12,2.54,15.3,1.03,42.6,55.8],"hood":[0.28,1.88,-0.12,66.5,71.5],"front":[2.65,0.92,73.0,77.0]},"es90":{"classic":[-9.96,2.99,2.5,15.2,0.87,42.1,55.0],"hood":[0.32,1.67,-0.09,65.0,70.0],"front":[2.71,0.81,73.0,77.0]},"ex60":{"classic":[-9.86,3.05,2.55,15.3,0.98,42.4,55.7],"hood":[0.27,1.79,-0.1,66.5,71.5],"front":[2.72,0.91,73.0,77.0]},"ex90":{"classic":[-10.16,3.25,2.63,15.5,1.04,42.9,56.2],"hood":[0.34,1.95,-0.12,67.0,72.0],"front":[2.81,0.98,73.0,77.0]},"ec40":{"classic":[-9.4,3.04,2.49,15.1,0.96,42.3,55.3],"hood":[0.23,1.83,-0.11,66.5,71.5],"front":[2.5,0.89,73.0,77.0]},"concept401":{"classic":[-9.34,2.94,2.45,15.0,0.87,42.2,55.1],"hood":[0.19,1.64,-0.1,65.5,70.5],"front":[2.5,0.83,73.0,77.0]},"v60":{"classic":[-9.78,2.94,2.45,15.3,0.89,42.1,55.0],"hood":[0.31,1.64,-0.09,65.0,70.0],"front":[2.67,0.83,73.0,77.0]}};
+function activeCameraProfile(){return V28_CAMERA_PROFILES[state.car]||V28_CAMERA_PROFILES.ex30}
+function isHoodCam(){return state.mode==='highway'&&state.cameraTarget===2}
+function isFrontCam(){return state.mode==='highway'&&state.cameraTarget===3&&state.car==='ex30'}
+function isFirstPersonCam(){return isHoodCam()||isFrontCam()}
 function v24CameraButton(){
  const b=$('v24CamSwitch');if(!b)return;
- const name=state.cameraTarget?'Center Chase':'Classic Chase';
- b.textContent='◈ CAM · '+name;
- b.title='Camera View';b.setAttribute('aria-label','Camera View'+' · '+name);
+ const label=isFrontCam()?fastLabel('車頭視角','Front view','전면 시점'):
+  isHoodCam()?fastLabel('引擎蓋視角','Hood view','보닛 시점'):
+  state.cameraTarget===1?fastLabel('正後視角','Rear view','후방 시점'):
+  fastLabel('經典視角','Classic view','기본 시점');
+ b.textContent='◈ CAM · '+label;
+ b.title=fastLabel('切換視角','Switch camera','카메라 전환');
+ b.setAttribute('aria-label',b.title+' · '+label);
 }
-function v24SwitchCamera(){if(state.mode==='showroom')return;state.cameraTarget=1-state.cameraTarget;v24CameraButton();}
+function v24SwitchCamera(){
+ if(state.mode==='showroom')return;
+ const order=state.car==='ex30'?[0,1,2,3]:[0,1,2];
+ state.cameraTarget=order[(Math.max(-1,order.indexOf(state.cameraTarget))+1)%order.length];
+ v24CameraButton();
+}
+function syncCameraOverlay(){
+ if(state.cameraTarget===3&&state.car!=='ex30'){state.cameraTarget=0;v24CameraButton()}
+ const hood=isHoodCam(),front=isFrontCam();
+ const hoodOverlay=$('hoodOverlay'),frontOverlay=$('frontOverlay');
+ document.body.classList.toggle('hood-active',hood);
+ document.body.classList.toggle('front-active',front);
+ // No CSS rotation/translation of the scene: all viewpoint dynamics use the 3D view matrix.
+ if(hoodOverlay){hoodOverlay.style.display=hood?'block':'none';hoodOverlay.style.transform='none'}
+ if(frontOverlay){frontOverlay.style.display=front?'block':'none';frontOverlay.style.transform='none'}
+}
 $('v24CamSwitch').onclick=v24SwitchCamera;
+
+
+
 document.addEventListener('keydown',e=>{if(e.code==='KeyC'&&!e.repeat&&!e.target.closest('input,textarea,select')&&state.mode!=='showroom'){e.preventDefault();v24SwitchCamera();}});
-$('v24ZoomIn').setAttribute('aria-label','Zoom In');
-$('v24ZoomOut').setAttribute('aria-label','Zoom Out');
+$('v24ZoomIn').setAttribute('aria-label','放大');
+$('v24ZoomOut').setAttribute('aria-label','縮小');
 $('v24ZoomIn').onclick=()=>{if(state.mode==='showroom')state.zoom=clamp(state.zoom-.6,4.1,13);};
 $('v24ZoomOut').onclick=()=>{if(state.mode==='showroom')state.zoom=clamp(state.zoom+.6,4.1,13);};
 // Immediate marking contact detection; warning is separate from active centering.
@@ -759,7 +806,7 @@ function v24SafetyIcons(){
  lka.classList.toggle('off',!assisting&&!contact&&!state.lka);
  lka.setAttribute('aria-label',assisting?fastLabel('LKA 介入中','LKA steering assist','LKA 조향 보조'):contact?fastLabel('LKA 壓線警示','Lane marking detected','차선 접촉 경고'):state.lka?fastLabel('LKA 已啟用','LKA active','LKA 작동 준비'):fastLabel('LKA 關閉','LKA off','LKA 꺼짐'));
  let warning=state.mode==='highway'&&(state.run==='emergency'||state.aebEmergency||state.moose&&state.moose.x<25||state.run==='running'&&state.traffic.some(t=>t.x>0&&t.x<8&&Math.abs(t.z-state.lateral)<1.35&&state.speed>25));
- warn.classList.toggle('active',!!warning);warn.setAttribute('aria-label','Warning');
+ warn.classList.toggle('active',!!warning);warn.setAttribute('aria-label','注意危險');
 }
 v24CameraButton();
 
@@ -1459,7 +1506,7 @@ function releaseAEBIfSafe(dt){
  textEvent(L("前方空間已恢復"),L("繼續挑戰 · 請留意安全車距"),'',1.75);
 }
 function driveSpeed(t,T){return Math.min(100,100*Math.pow(clamp(t/T,0,1),.88))}
-function advance(dt){state.cameraMix+=(state.cameraTarget-state.cameraMix)*(1-Math.exp(-dt*10));state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000){state.eventTime-=dt;if(state.eventTime<=0)hideEvent()}
+function advance(dt){state.cameraMix+=(Math.min(state.cameraTarget,1)-state.cameraMix)*(1-Math.exp(-dt*10));state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000){state.eventTime-=dt;if(state.eventTime<=0)hideEvent()}
  if(state.mode==='drive'){if(state.throttle&&!state.driveComplete&&!state.driveStarted){state.driveStarted=true;state.driveTime=0}if(state.driveStarted&&!state.driveComplete)state.driveTime+=dt;if(state.brake)state.speed=Math.max(0,state.speed-46*roadGrip()*dt);else if(state.throttle&&!state.driveComplete){const T=accelTarget();const t=T*Math.pow(state.speed/100,1/.88)+dt*(isWetRoad()?0.85:1);state.speed=driveSpeed(t,T);if(state.speed>=99.99){state.driveComplete=true;state.throttle=false;state.speed=100;textEvent(state.driveTime.toFixed(2)+L(" 秒 · 100 km/h"),CARS[state.driveCar].label+L(" 模擬加速達標"),'over',6)}}else if(!state.driveComplete)state.speed=Math.max(0,state.speed-(5+state.speed*.02)*dt);state.distance+=state.speed*dt/3.6;state.worldDist=state.distance}
  else if(state.mode==='highway'){
   if(state.run!=='running')state.rearApproach=null;
@@ -1483,7 +1530,7 @@ function advance(dt){state.cameraMix+=(state.cameraTarget-state.cameraMix)*(1-Ma
     else if(state.hAccel)state.speed=Math.min(180,state.speed+(state.speed<130?32:23)*(isWetRoad()?0.85:1)*dt);
    else state.speed=clamp(state.speed+(169-state.speed)*dt*.15,0,180);
    const ds=state.speed*dt/3.6;state.dist+=ds;state.worldDist+=ds;const meter=Math.floor(state.dist/20);if(meter>state.lastScoreMeter){state.score+=meter-state.lastScoreMeter;state.lastScoreMeter=meter}
-   if(state.score>=5000&&!state.coastUnlocked){state.coastUnlocked=true;textEvent('Coastal Road Unlocked','Sea on the left · City on the right','',3.0);}
+   if(state.score>=5000&&!state.coastUnlocked){state.coastUnlocked=true;textEvent('海岸公路已解鎖','左側海洋 · 右側城市','',3.0);}
     if(state.coastUnlocked)state.coastProgress=Math.min(1,state.coastProgress+dt/12);
     const requestedInput=clamp((state.right?1:0)-(state.left?1:0)+state.touchSteer,-1,1);
    const blisInput=assistedInput(requestedInput,dt);const input=applyLKA(requestedInput,blisInput,dt);
@@ -1496,7 +1543,7 @@ function advance(dt){state.cameraMix+=(state.cameraTarget-state.cameraMix)*(1-Ma
     const target=input*maxLat*(isWetRoad()?0.81:1)*speedGrip;
     state.lv+=(target-state.lv)*(1-Math.exp(-dt*(input?4.25:5.2)*(isWetRoad()?0.82:1)));
     state.lateral=clamp(state.lateral+state.lv*dt,-3.96,3.96);if(Math.abs(state.lateral)>=3.96)state.lv=0;
-   const yawWanted=-Math.atan2(state.lv,Math.max(10,state.speed/3.6))*.9;state.yaw+=(yawWanted-state.yaw)*(1-Math.exp(-dt*6.5));state.roll+=((-input*.026)-state.roll)*(1-Math.exp(-dt*6));state.immune=Math.max(0,state.immune-dt);
+   const yawWanted=-Math.atan2(state.lv,Math.max(10,state.speed/3.6))*.9;state.yaw+=(yawWanted-state.yaw)*(1-Math.exp(-dt*6.5));state.roll+=((-input*.026)-state.roll)*(1-Math.exp(-dt*6));state.fpLat+=(state.lateral-state.fpLat)*(1-Math.exp(-dt*4.0));state.fpYaw+=(state.yaw-state.fpYaw)*(1-Math.exp(-dt*8.0));state.immune=Math.max(0,state.immune-dt);
    updateTrafficAI(dt);
    // Prime the BLIS predictor after the AI has begun its lane change.
    // The correction is applied in the following physics tick.
@@ -1761,7 +1808,10 @@ function renderPrecipitation(ts){
  // Wind gusts change slowly; each near/far particle gets different drag and tilt.
  const gust=Math.sin(t*.41)*.61+Math.sin(t*.17+2.2)*.42+Math.sin(t*.71+.91)*.17;
  const nearCount=w<520?104:w<850?125:158;
- c.save();c.lineCap='round';
+ const cockpitRain=false;
+ c.save();
+ if(cockpitRain)applyCockpitWindshieldClip(c,w,h);
+ c.lineCap='round';
  for(let i=0;i<nearCount;i++){
   const p=RAIN_PARTICLES[i];
   const depth=p.depth;
@@ -1782,8 +1832,12 @@ function renderPrecipitation(ts){
   if(i%11===0){c.fillStyle=night?'rgba(174,208,223,.24)':'rgba(237,252,248,.23)';c.fillRect(sx,sy,1,1.3);}
  }
  c.restore();
- // No circular splash rings; real lens water is non-circular and subtle.
+ // Re-apply the same front-glass mask: previous version lost this clip
+ // after c.restore(), so water beads leaked onto the dashboard/screen.
+ c.save();
+ if(cockpitRain)applyCockpitWindshieldClip(c,w,h);
  drawWindshieldWater(c,w,h,dt,t,night,speed);
+ c.restore();
  c.globalAlpha=1;c.globalCompositeOperation='source-over';
 }
 
@@ -1797,7 +1851,7 @@ function rotationX(a){let m=identity(),c=Math.cos(a),s=Math.sin(a);m[5]=c;m[6]=s
 function multiply(a,b){let o=new Float32Array(16);for(let col=0;col<4;col++)for(let row=0;row<4;row++){let sum=0;for(let i=0;i<4;i++)sum+=a[i*4+row]*b[col*4+i];o[col*4+row]=sum}return o}
 function modelM(x,y,z,sx=1,sy=1,sz=1,ry=0){return multiply(translation(x,y,z),multiply(rotationY(ry),scaling(sx,sy,sz)))}
 function perspective(fov,aspect,n,f){const v=1/Math.tan(fov/2),o=new Float32Array(16);o[0]=v/aspect;o[5]=v;o[10]=(f+n)/(n-f);o[11]=-1;o[14]=2*f*n/(n-f);return o}
-function lookAt(eye,to){let z=norm(subtract(eye,to)),x=norm(cross([0,1,0],z)),y=cross(z,x);return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1])}
+function lookAt(eye,to,up=[0,1,0]){let z=norm(subtract(eye,to)),x=norm(cross(up,z)),y=cross(z,x);return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1])}
 const gl=canvas.getContext('webgl2',{alpha:true,antialias:true,depth:true,powerPreference:'high-performance'});
 if(!gl){return null}
 const vs=`#version 300 es
@@ -2928,24 +2982,54 @@ function drawWorld(ts,spin){wheelSpin=spin;resize();const w=canvas.clientWidth,h
   gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);
  let eye,to,fov;
  if(state.mode==='showroom'){const a=state.orbit;eye=[-Math.cos(a)*state.zoom,2.2+Math.sin(state.elev)*3.1,Math.sin(a)*state.zoom];to=[0,.87,0];fov=w<650?40:35}
- else if(state.mode==='highway'){
-  const v=clamp(state.speed/170,0,1),amp=Math.max(0,v-.43)*.025;
-  // Stable chase camera: BLIS never changes the player's view or steering visibility.
-  eye=[-9.25-v*.45,2.91-v*.12+Math.sin(ts*.018)*amp,2.42+state.lateral*.63+(state.lateral-(2.42+state.lateral*.63))*state.cameraMix];
-   to=[15.1,.93,state.lateral*.26+(state.lateral-state.lateral*.26)*state.cameraMix];
-  fov=(w<650?55:42)+v*6
+ 
+
+
+else if(state.mode==='highway'){
+ const p=activeCameraProfile(),v=clamp(state.speed/180,0,1);
+ const heading=clamp(-(state.fpYaw??state.yaw??0),-.20,.20);
+ if(isHoodCam()){
+  const h=p.hood;
+  // Roof-front / upper-windshield centre; original 3D body remains visible.
+  // A-type very light bob, no full-screen rotation, no fake CSS bonnet.
+  const bob=Math.sin(ts*.017)*(0.0018+v*.0010);
+  eye=[h[0],h[1]+bob,state.lateral];
+  to=[h[0]+27,h[2],state.lateral+heading*27];
+  fov=(w<650?h[4]:h[3])+v*1.5;
+ }else if(isFrontCam()){
+  const n=p.front,bob=Math.sin(ts*.018)*(0.0025+v*.0018);
+  eye=[n[0],n[1]+bob,state.lateral];
+  to=[n[0]+28,n[1],state.lateral+heading*28];
+  fov=(w<650?n[3]:n[2])+v*2.0;
+ }else{
+  const c=p.classic,chaseMix=clamp(state.cameraMix,0,1);
+  const lightBob=Math.sin(ts*.018)*Math.max(0,v-.47)*.018;
+  eye=[c[0]-v*.38,c[1]-v*.10+lightBob,c[2]*(1-chaseMix)+state.lateral*(.63+.37*chaseMix)];
+  to=[c[3],c[4],state.lateral*(.26+.74*chaseMix)];
+  fov=(w<650?c[6]:c[5])+v*5.0;
+ }
  }
  else {const v=clamp(state.speed/100,0,1);eye=[-8.6-v*.75,2.4-v*.12,3.5*(1-state.cameraMix)];to=[2,.86,0];fov=(w<650?53:39)+v*9}
- const vp=multiply(perspective(fov*Math.PI/180,w/Math.max(1,h),.1,450),lookAt(eye,to));gl.uniformMatrix4fv(u.vp,false,vp);gl.uniform3fv(u.eye,eye);
+
+
+
+ const fpView=state.mode==='highway'&&isFirstPersonCam();
+ const cameraUp=[0,1,0];
+ const vp=multiply(perspective(fov*Math.PI/180,w/Math.max(1,h),.1,450),lookAt(eye,to,cameraUp));gl.uniformMatrix4fv(u.vp,false,vp);gl.uniform3fv(u.eye,eye);
  updateRoadLighting(state.worldDist);
  if(state.mode==='showroom'){draw(planeGeo,modelM(0,-.025,0,19,1,19),[.66,.74,.75],.13);for(let i=-5;i<=5;i++)B(i*1.5,-.012,5,.65,.012,.018,[.87,.92,.89]);shadow(0,0,(state.showCar==='xc60'||state.showCar==='es90'||state.showCar==='ex60'||state.showCar==='ex90'||state.showCar==='ec40'||state.showCar==='concept401')?1.15:1);if(!drawDirectModel(state.showCar,0,0))drawCar(state.showCar);return}
  drawRoad(state.worldDist);
   // Lights now illuminate real road, buildings and cars by their world-space
   // surfaces, not by transparent ground quads. AI beams stay on after overtaking.
  if(state.mode==='highway'){
-  shadow(0,state.lateral,(state.car==='xc60'||state.car==='ex60'||state.car==='es90'||state.car==='ex90'||state.car==='ec40'||state.car==='concept401')?1.1:1);
-  if(requiresDirectModel(state.car)){if(!drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:(state.visualSteer||0)},state.yaw,state.roll)){if(trafficModels[state.car]?.ready)drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,steer:state.visualSteer||0},state.yaw,state.roll,trafficModels);}}
-  else drawCar(state.car,0,state.lateral,state.brake||state.run==='emergency'?2.1:(state.immune>0?.15:0),state.yaw,state.roll,state.visualSteer||0);
+  const hood=isHoodCam(),front=isFrontCam();
+  if(!front){
+   if(!hood) shadow(0,state.lateral,(state.car==='xc60'||state.car==='ex60'||state.car==='es90'||state.car==='ex90'||state.car==='ec40'||state.car==='concept401')?1.1:1);
+   // Draw the real source EX30 model in the roof-mounted view so the bonnet
+   // inherits actual GLB contours, material and vehicle pitch/roll.
+   if(requiresDirectModel(state.car)){if(!drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,changing:false,steer:(state.visualSteer||0)},state.yaw,state.roll)){if(trafficModels[state.car]?.ready)drawDirectModel(state.car,0,state.lateral,{speed:state.speed,wheelPhase:wheelSpin,steer:state.visualSteer||0},state.yaw,state.roll,trafficModels);}}
+   else drawCar(state.car,0,state.lateral,state.brake||state.run==='emergency'?2.1:(state.immune>0?.15:0),state.yaw,state.roll,state.visualSteer||0);
+  }
   // Headlight decals have already been drawn on the road behind the car geometry.
   for(const t of state.traffic){if(t.x>140||t.x<-58)continue;shadow(t.x,t.z,t.type==='truck'||t.type==='bus'?1.65:1);drawTrafficAppearance(t);drawAITurnSignals(t)}
   if(state.moose){shadow(state.moose.x,state.moose.z,.42);mooseFigure(state.moose.x,state.moose.z,state.moose.dir,state.moose)}
@@ -2957,8 +3041,9 @@ return {drawWorld};
 window.__VOLVO_AI_TRAFFIC_DIAGNOSTICS__=()=>window.__VOLVO_TRAFFIC_PRELOAD__?.diagnostics();
 window.__AI_MODEL_TEST__={weights:{volvo:45,truck:20,bus:15,sport:20,ordinary:0},choose:aiVisualFromSeed,models:['ex30','xc40','xc60','es90','ex60','ex90','ec40','concept401','v60','truck','bus','sport1','sport2'],fixed:{noGenericAI:true,rearOvertakerModel:true,paint:false,showroomES90EX60:true,driveES90EX60:true,highwayES90EX60:true,nordicMountains:true,xc40WheelArtifactsFixed:true}};
 window.__VOLVO_V18_WEATHER_AUDIT__={directions:"Square lenses at unchanged source-verified marker centres",brakes:"Original red-lens masks unchanged",weather:["clear","rain","fog","rainfog"],combinedWith:["day","night"],mobile:"low-DPR adaptive particle overlay"};
-window.__VOLVO_V24_STATUS__=()=>({version:"2.5.0",camera:state.cameraTarget,coastProgress:state.coastProgress,coastUnlocked:state.coastUnlocked,safetyLKA:state.edgeLkaAssistTimer>0,laneContact:v24LaneMarkContact(),blisCutIn:!!state.blisAiAvoid,models:Object.keys(CARS),noRemoteLeaderboard:true});
-window.__VOLVO_V23_STATUS__=()=>({version:'2.5.0',wiper:false,edgeLkaHold:state.edgeLkaHold,edgeLkaForced:state.edgeLkaAssistTimer>0,models:Object.keys(CARS),sourceSpecs:Object.keys(SHOWROOM_TW_SPECS),optimizedAssets:true,progressiveTrafficLoad:true});
+window.__VOLVO_CAMERA_V28__=()=>({version:"2.8.0",selectedCar:state.car,target:state.cameraTarget,profile:activeCameraProfile(),allProfiles:V28_CAMERA_PROFILES,hood:isHoodCam(),front:isFrontCam(),yaw:state.yaw,fpYaw:state.fpYaw,modelLoaded:!!window.__VOLVO_V914_ASSETS__?.ready(state.car)});
+window.__VOLVO_V24_STATUS__=()=>({version:"2.8.0-nine-model-cameras",camera:state.cameraTarget,coastProgress:state.coastProgress,coastUnlocked:state.coastUnlocked,safetyLKA:state.edgeLkaAssistTimer>0,laneContact:v24LaneMarkContact(),blisCutIn:!!state.blisAiAvoid,models:Object.keys(CARS),noRemoteLeaderboard:true});
+window.__VOLVO_V23_STATUS__=()=>({version:'2.6.5-firstperson-restored',wiper:false,edgeLkaHold:state.edgeLkaHold,edgeLkaForced:state.edgeLkaAssistTimer>0,models:Object.keys(CARS),sourceSpecs:Object.keys(SHOWROOM_TW_SPECS),optimizedAssets:true,progressiveTrafficLoad:true});
 window.__VOLVO_V20_STATUS__=()=>({mode:SCENE_WEATHER.mode,roadGrip:roadGrip(),lensDrops:isWetRoad(),wiper:'removed',glassFlowPxPerSec:waterMotionPxPerSec(state.speed),
     tractionSimulation:isWetRoad(),vehicleSpeedKmh:Math.round(state.speed),
     note:'Arcade-style game physics; not measured Volvo or tire performance'});
@@ -2985,10 +3070,13 @@ if(!graphics){$('fallbackNote').style.display='block';$('fallbackNote').textCont
 function draw2D(){if(!fallback)return;const W=canvas.clientWidth,H=canvas.clientHeight,dpr=Math.min(1.8,devicePixelRatio||1);if(canvas.width!==Math.floor(W*dpr)||canvas.height!==Math.floor(H*dpr)){canvas.width=Math.floor(W*dpr);canvas.height=Math.floor(H*dpr)}const ctx=fallback;ctx.setTransform(dpr,0,0,dpr,0,0);let sky=ctx.createLinearGradient(0,0,0,H);if(SCENE_PHASE1.time==='night'){sky.addColorStop(0,'#081722');sky.addColorStop(.43,'#2a4655');sky.addColorStop(1,'#142e39')}else{sky.addColorStop(0,'#9bbfbd');sky.addColorStop(.43,'#cbd7d3');sky.addColorStop(1,'#45666d')}ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);if(state.mode==='showroom'){ctx.fillStyle='#e2e9e6';ctx.fillRect(0,H*.71,W,H*.29);ctx.textAlign='center';ctx.fillStyle='#173540';ctx.font='800 28px system-ui';ctx.fillText(CARS[state.showCar].label,W/2,H*.47);ctx.font='14px system-ui';ctx.fillText(L("360° 車模需要 WebGL2"),W/2,H*.53);ctx.fillText(L("請使用 Chrome / Edge 的完整瀏覽器"),W/2,H*.58);return}const horizon=H*.30;
  ctx.fillStyle=(SCENE_WEATHER.mode==='rain'||SCENE_WEATHER.mode==='rainfog')?(SCENE_PHASE1.time==='night'?'#102a34':'#203a43'):(SCENE_PHASE1.time==='night'?'#132934':'#2d4750');ctx.beginPath();ctx.moveTo(W*.475,horizon);ctx.lineTo(W*.525,horizon);ctx.lineTo(W*1.15,H);ctx.lineTo(-W*.15,H);ctx.fill();for(const side of [-1,1]){ctx.strokeStyle='#e1eae7';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*(.5+side*.052),horizon);ctx.lineTo(W*(.5+side*.55),H);ctx.stroke()}
  const off=state.worldDist%28;for(let side of [-1,1])for(let i=0;i<12;i++){const ii=i+Math.floor(state.worldDist/26);const d=(i*26-state.worldDist%26+26)%312,depth=clamp(1-d/330,.012,1),t=Math.pow(depth,2.5);const xx=W*.5+side*W*(.09+.60*t),yy=horizon+(H-horizon)*t;const tall=(10+75*t)*(.7+.5*hash(ii*2.4+side));ctx.fillStyle=SCENE_PHASE1.time==='night'?'#203f3a':'#335b4d';ctx.beginPath();ctx.moveTo(xx,yy-tall);ctx.lineTo(xx-tall*.31,yy-tall*.36);ctx.lineTo(xx-tall*.22,yy-tall*.36);ctx.lineTo(xx-tall*.4,yy-tall*.08);ctx.lineTo(xx+tall*.4,yy-tall*.08);ctx.lineTo(xx+tall*.22,yy-tall*.36);ctx.lineTo(xx+tall*.31,yy-tall*.36);ctx.closePath();ctx.fill();ctx.fillStyle=SCENE_PHASE1.time==='night'?'#354f49':'#7f8880';ctx.fillRect(xx-1,yy-tall*.10,2,3+8*t)}for(let lane of [-1,1])for(let i=0;i<13;i++){const d=(i*28-off+28)%364;const f=Math.pow(1-d/365,2.7),y=horizon+f*(H-horizon);ctx.strokeStyle='#d4ded7';ctx.lineWidth=1+5*f;const x=W*.5+lane*W*(.02+.22*f);ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+2+35*f);ctx.stroke()}
+ if(!isFirstPersonCam()){
  const carW=Math.min(W*.49,255),carH=carW*.61,carX=W/2-carW/2+(state.mode==='highway'?state.lateral*W*.10:0),cy=H*.69;ctx.fillStyle='#0a1e2488';ctx.beginPath();ctx.ellipse(carX+carW/2,cy+carH*.8,carW*.38,12,0,0,Math.PI*2);ctx.fill();if(backupCar.complete&&backupCar.naturalWidth)ctx.drawImage(backupCar,carX,cy,carW,carH);else{ctx.fillStyle='#d5e7e9';ctx.fillRect(carX+20,cy,carW-40,carH)}
  if(SCENE_PHASE1.time==='night'){
   ctx.fillStyle=(state.brake||state.aebEmergency)?'#ff5745':'#b92230';ctx.shadowColor='#ff303b';ctx.shadowBlur=11;
   ctx.fillRect(carX+carW*.19,cy+carH*.55,carW*.065,carH*.045);ctx.fillRect(carX+carW*.77,cy+carH*.55,carW*.065,carH*.045);ctx.shadowBlur=0;
+ }
+
  }
  if(state.mode==='highway'){for(const t of state.traffic){if(t.x>100||(t.x<0&&!t.isRearOvertaker))continue;
  if(t.isRearOvertaker&&t.x<0){
@@ -3007,7 +3095,7 @@ let last=performance.now(),lastUi=0,spin=0;function frame(ts){const dt=clamp((ts
   const physicalOmega=state.speed/(3.6*.34);
   const visualOmega=physicalOmega/(1+physicalOmega/30);
   if(state.mode!=='showroom')spin=(spin+visualOmega*dt)%(Math.PI*2);
-     try{if(graphics)graphics.drawWorld(ts,spin);else draw2D();renderPrecipitation(ts)}catch(e){if(!$('fallbackNote').dataset.err){$('fallbackNote').style.display='block';$('fallbackNote').textContent=L("3D 畫面錯誤：")+e.message;$('fallbackNote').dataset.err='1'}}if(ts-lastUi>45){updateUI();lastUi=ts}requestAnimationFrame(frame)}
+     try{if(graphics)graphics.drawWorld(ts,spin);else draw2D();renderPrecipitation(ts);syncCameraOverlay()}catch(e){if(!$('fallbackNote').dataset.err){$('fallbackNote').style.display='block';$('fallbackNote').textContent=L("3D 畫面錯誤：")+e.message;$('fallbackNote').dataset.err='1'}}if(ts-lastUi>45){updateUI();lastUi=ts}requestAnimationFrame(frame)}
 setMode('highway');syncAssistButtons();requestAnimationFrame(frame);
 })();
 
