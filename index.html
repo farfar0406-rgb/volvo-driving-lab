@@ -325,10 +325,83 @@ body.mode-highway .rules{margin-top:2px}
 .v9TopBar .choice{flex:0 0 auto;min-width:64px!important;max-width:none;font-size:10px!important}
 #driveCars,#showCars{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:700px){.v9TopBar{gap:5px;left:6px;right:6px}.v9TopBar .choice{min-width:48px!important;font-size:9px!important;padding:5px 3px!important}.v9Trips{font-size:9px;gap:3px}.v9Trips span{padding:6px 4px}.v9Trips b{font-size:10px}}
+
+/* V2.4: Nordic Aurora UI, responsive two-hand controls and unobtrusive safety HUD. */
+:root{--navy-950:#081b26;--slate-800:#163542;--slate-650:#426878;--mint-300:#bdefe6;--ice-300:#9fd8e4;--amber-400:#e9a64e;--red-500:#f04444;--text-100:#f2f7f7;
+--bg:#081b26;--panel:#102d3a;--panel2:#1b4050;--line:#507787;--ice:#bdefe6;--txt:#f2f7f7;--sub:#adced6;--warning:#e9a64e}
+body{background:radial-gradient(ellipse 85% 35% at 55% -10%,#224b5e 0%,#081b26 74%);color:var(--text-100)}
+.top{align-items:flex-start!important;gap:10px}
+.brandGroup{min-width:0;flex:1 1 auto}
+.brandGroup .mark{color:#f4fbfa;letter-spacing:.14em}
+.brandGroup .langLinks{justify-content:flex-start;margin-top:5px;gap:5px}
+.brandGroup .langSwitch{margin:0;padding:4px 10px;border-radius:999px;border:1px solid #537b87;background:#163744;color:#c7e4e4;font-size:11px;min-height:25px;display:inline-flex;align-items:center;justify-content:center}
+.brandGroup .langSwitch.active{background:#bdefe6;color:#0a2935;border-color:#e5fff7;box-shadow:inset 0 1px 1px #fff7,0 1px 12px #9de8df33}
+.top .name{flex:0 0 auto;text-align:right;padding-top:1px}
+.tabs .tab,.choice,.smallButton,.assistToggle,.sessionRow button{transition:background-color .15s,border-color .15s,box-shadow .15s,transform .15s}
+.tabs .tab.selected,.choice.selected{background:linear-gradient(135deg,#c4f4eb,#9fd8e4)!important;color:#0a303c!important;border-color:#dafbf6!important;box-shadow:inset 0 1px 1px #fff7,0 3px 16px #85d4d028}
+.sceneTimeBar,.sceneWeatherBar{gap:8px;min-height:31px}
+.sceneTimeBar>span:first-child,.sceneWeatherBar>span:first-child{font-size:10px;letter-spacing:.06em;color:#a8c8d0;font-weight:750}
+.sceneTimeBar button,.sceneWeatherBar button{background:linear-gradient(160deg,#214956,#16333f);border:1px solid #638795;box-shadow:inset 0 1px 0 #ffffff18,0 1px 4px #0002;color:#d7eaf0;border-radius:20px;min-height:29px;padding:5px 13px}
+.sceneTimeBar button.selected,.sceneWeatherBar button.selected{color:#0a2a36;border:1px solid #e1faf7!important;box-shadow:inset 0 1px 0 #fff9,0 0 0 1px #c5e8eb50,0 3px 12px #b6ebde2b}
+.sceneTimeBar button[data-scene-time=day].selected,.sceneWeatherBar button[data-weather=clear].selected{background:linear-gradient(120deg,#b8e4ef,#e2f9f1)}
+.sceneTimeBar button[data-scene-time=night].selected,.sceneWeatherBar button[data-weather=rainfog].selected{background:linear-gradient(120deg,#abc2e7,#94c0dd)}
+.sceneWeatherBar button[data-weather=rain].selected{background:linear-gradient(120deg,#9ebbd3,#cde0ed)}
+.sceneWeatherBar button[data-weather=fog].selected{background:linear-gradient(120deg,#becbd2,#e1e8e9)}
+.sceneTimeBar button:focus-visible,.sceneWeatherBar button:focus-visible,.camButton:focus-visible,.showZoom button:focus-visible{outline:2px solid #f8fafb;outline-offset:3px}
+.sceneWeatherBar button:active,.sceneTimeBar button:active{transform:translateY(1px)}
+/* Actual touch event handlers stay bound to the original four element IDs. */
+body.mode-highway .steer{display:flex!important;align-items:stretch;justify-content:space-between;gap:clamp(12px,4.5vw,66px);margin:4px 0}
+.drivePad{display:flex;flex:0 1 45%;min-width:0;gap:6px}
+.drivePad .steerBtn,.drivePad .brake,.drivePad .accelBtn{flex:1 1 0!important;width:0;min-width:0!important;min-height:62px!important;max-height:none!important;touch-action:none;-webkit-touch-callout:none;user-select:none}
+.drivePad-steer .steerBtn{background:linear-gradient(160deg,#254d60,#173746);border:1px solid #628fa2;color:#d4eaf4}
+.drivePad-pedals #hBrake{background:linear-gradient(160deg,#725040,#463b3a);border:1px solid #c09b7d;color:#fff1db}
+.drivePad-pedals #hAccel{background:linear-gradient(160deg,#26766f,#1c4b50);border:1px solid #9bdacf;color:#e8fff7}
+.drivePad button.pressed{filter:brightness(1.29);box-shadow:inset 0 0 0 2px #e8fcf9aa,0 0 14px #78d9cf55;transform:translateY(1px)}
+.camButton{position:absolute;right:10px;top:46px;z-index:12;border:1px solid #91bac6;background:#102b3ce0;color:#e4f6f7;font-size:11px;font-weight:800;padding:7px 9px;border-radius:9px;box-shadow:0 3px 14px #0005;cursor:pointer}
+body.mode-showroom .camButton{display:none}
+.safetyHud{position:absolute;left:10px;top:47px;z-index:11;display:flex;align-items:center;gap:7px;pointer-events:none}
+.safetyIcon{display:grid;place-items:center;width:40px;height:37px;border-radius:10px;background:#0b2533cf;border:1px solid #60848b99;box-shadow:0 3px 14px #0005;transition:opacity .16s,border-color .16s}
+.safetyIcon svg{width:29px;height:29px}
+.safetyIcon.lka.off{opacity:.33}
+.safetyIcon.lka.on{opacity:1;border-color:#bedee1}
+.safetyIcon.lka.assisting{opacity:1;border-color:#e9a64e;box-shadow:0 0 11px #e9a64e55;animation:v24AssistPulse .7s ease-in-out infinite alternate}
+.safetyIcon.lka.assisting .laneWhite{stroke:#e9a64e}
+.safetyIcon.warning{opacity:0;visibility:hidden;border-color:#f04444;transition:opacity .16s,visibility .16s}
+.safetyIcon.warning.active{opacity:1;visibility:visible}
+.assistToggle.aiAvoiding{border-color:#efa94a!important;background:#503a2a!important;color:#ffe3b1!important;box-shadow:0 0 12px #eaa64e66}
+/* V2.4.1: illumination is immediate when tire approaches a lane marking.
+   Orange pulse remains reserved for active steering assistance. */
+.safetyIcon.lka.lane-contact{opacity:1;border-color:#eaa64e;background:#443527e8;box-shadow:0 0 12px #dfa04665}
+.safetyIcon.lka.lane-contact .laneWhite{stroke:#f4b14c}
+.safetyIcon.lka.assisting{background:#483223ec;box-shadow:0 0 18px #ffd37f90}
+
+@keyframes v24AssistPulse{from{filter:brightness(.85)}to{filter:brightness(1.25)}}
+body.mode-showroom .safetyHud,body.mode-drive .safetyHud{display:none}
+.showZoom{position:absolute;right:12px;top:46%;transform:translateY(-50%);z-index:12;display:none;flex-direction:column;gap:8px}
+body.mode-showroom .showZoom{display:flex}
+.showZoom button{display:grid;place-items:center;border:1px solid #aad2d4;background:#173945e8;color:#e9fcf8;border-radius:11px;width:44px;height:44px;font:800 25px/1 system-ui;box-shadow:0 4px 14px #001c29aa;touch-action:manipulation}
+.showZoom button:active{background:#bdefe6;color:#0e3340}
+@media(max-width:700px){
+ .top .name{font-size:10px!important;max-width:43%;overflow:hidden}
+ .brandGroup .mark{font-size:12px!important;white-space:nowrap}
+ .brandGroup .langLinks{gap:3px;margin-top:3px}
+ .brandGroup .langSwitch{font-size:9px;padding:3px 6px;min-height:21px}
+ .sceneTimeBar,.sceneWeatherBar{gap:5px}
+ .sceneTimeBar button,.sceneWeatherBar button{padding:4px 8px;min-height:26px}
+ body.mode-highway .steer{gap:clamp(12px,5vw,30px)}
+ .drivePad{flex:1 1 45%;gap:4px}
+ body.mode-highway .drivePad button{min-height:56px!important;max-height:none!important}
+ .camButton{right:7px;top:41px;font-size:10px;padding:5px 7px}
+ .safetyHud{left:7px;top:40px;gap:4px}
+ .safetyIcon{width:32px;height:31px;border-radius:8px}.safetyIcon svg{width:24px;height:24px}
+ .showZoom{right:7px}.showZoom button{width:38px;height:38px}
+}
+@media(max-width:375px){.brandGroup .mark{font-size:11px!important;letter-spacing:.05em!important}.brandGroup .langSwitch{padding:2px 5px}}
+@media(max-width:700px) and (max-height:560px){body.mode-highway .drivePad button{min-height:51px!important}}
 </style>
 </head><body class="mode-highway"><main class="shell">
-<header class="top"><div><div class="mark">VOLVO <span style="font-weight:300">/</span> DRIVING LAB</div><div class="brandSmall">INTERACTIVE DRIVING GAME</div></div><div class="name"><div class="dealer">內湖新凱汽車</div><div class="advisor">張志遠 Miro Chang</div><div class="langLinks" aria-label="語言切換"><a class="langSwitch active" lang="zh-Hant" aria-current="page" href="index.html">繁中</a><a class="langSwitch" lang="en" href="en.html">EN</a><a class="langSwitch" lang="ko" href="ko.html">한국어</a></div></div></header>
-<div class="heading"><div><h1>Volvo <em>Highway Challenge</em></h1><p>0–100 加速 · 無限高速閃避 · 360° 立體賞車</p></div><div class="version">V2.3.1 · DRIVE · DISCOVER · EXPLORE</div></div>
+<header class="top"><div class="brandGroup"><div class="mark">VOLVO <span style="font-weight:300">/</span> DRIVING LAB</div><div class="brandSmall">INTERACTIVE DRIVING GAME</div><div class="langLinks" aria-label="語言切換"><a class="langSwitch active" lang="zh-Hant" aria-current="page" href="index.html">繁中</a><a class="langSwitch" lang="en" href="en.html">EN</a><a class="langSwitch" lang="ko" href="ko.html">한국어</a></div></div><div class="name"><div class="dealer">內湖新凱汽車</div><div class="advisor">張志遠 Miro Chang</div></div></header>
+<div class="heading"><div><h1>Volvo <em>Highway Challenge</em></h1><p>0–100 加速 · 無限高速閃避 · 360° 立體賞車</p></div><div class="version">V2.5.0 · DRIVE · DISCOVER · EXPLORE</div></div>
 <nav class="tabs"><button class="tab" data-mode="drive">01 · 加速體驗</button><button class="tab selected" data-mode="highway">02 · 無限閃避</button><button class="tab" data-mode="showroom">03 · 3D 賞車</button></nav>
 <div class="sceneTimeBar" role="group" aria-label="駕駛環境"><span>駕駛環境</span><button type="button" data-scene-time="day" class="selected" aria-pressed="true">☀ 日間</button><button type="button" data-scene-time="night" aria-pressed="false">☾ 夜間</button><span class="sceneTimeNote" id="sceneTimeNote">自然日光</span></div>
 <div class="sceneWeatherBar" role="group" aria-label="天候條件"><span id="weatherCaption">天候</span><button type="button" data-weather="clear" class="selected" aria-pressed="true">晴天</button><button type="button" data-weather="rain" aria-pressed="false">雨天</button><button type="button" data-weather="fog" aria-pressed="false">霧天</button><button type="button" data-weather="rainfog" aria-pressed="false">雨霧</button><span id="roadGripNote" class="roadGripNote" aria-live="polite"></span></div>
@@ -353,7 +426,10 @@ body.mode-highway .rules{margin-top:2px}
   <div class="trafficLoadHint">繁中：快速啟動先載入所選車款與 EX30，其他車型遊玩時逐步載入。<span class="trafficLoadLang" style="display:block">EN: Quick start loads your selected car and EX30; other cars load progressively.</span><span style="display:block">한국어: 선택 차량과 EX30을 먼저 불러온 뒤, 나머지 차량은 단계적으로 로드합니다.</span></div>
   <button type="button" id="trafficPreloadRetry" hidden>重新載入 · Retry · 다시 시도</button>
  </div>
-</div><canvas id="view"></canvas><canvas id="weatherCanvas" aria-hidden="true"></canvas><div id="glbLoadStatus" role="status" aria-live="polite" style="display:none;position:absolute;top:65px;left:50%;transform:translateX(-50%);z-index:14;max-width:85%;padding:8px 14px;border-radius:9px;background:#102f3be6;color:#effffe;font-size:12px;font-weight:700;pointer-events:none;text-align:center;box-shadow:0 2px 12px #1238"></div><div class="hud"><div class="hudTop"><div><div class="eyebrow">VOLVO DRIVING LAB</div><div class="hudTitle" id="hudTitle">ENDLESS HIGHWAY</div></div><div class="pill" id="hudChip"><b>EX30</b>高速閃避挑戰</div></div><div class="signals" id="signals"><span id="signalL">◀</span><span id="signalR">▶</span></div><div class="rearRadar" id="rearRadar" role="status" aria-live="off" aria-label="Rear overtaking alerts"><div class="rearRadarSide left" id="rearWarnL"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextL">左側盲點來車</span></div><div class="rearRadarSide right" id="rearWarnR"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextR">右側盲點來車</span></div></div><div class="brakeNote" id="brakeNote">BRAKE · 減速</div><div class="hudBottom" id="hudBottom"><div><div class="speed" id="speed">090</div><div class="units">km/h · 遊戲模擬</div></div><div class="counter"><small id="countTitle">SCORE / 分數</small><strong id="countValue">0</strong></div></div></div><div id="event" class="event"></div><div id="fallbackNote" class="fallbackNote"></div>
+</div><canvas id="view"></canvas><canvas id="weatherCanvas" aria-hidden="true"></canvas><div class="safetyHud" id="v24SafetyHud" aria-label="Driving assistance indicators">
+ <span class="safetyIcon lka off" id="v24LkaIcon" role="img" aria-label="LKA disabled"><svg viewBox="0 0 50 44" aria-hidden="true"><path class="laneWhite" d="M17 4L6 39M33 4L44 39" stroke="#f7f9fc" stroke-width="5" stroke-linecap="square" fill="none"/><path d="M25 4V13M25 19V27M25 33V39" stroke="#f7f9fc" stroke-width="3.1" fill="none"/></svg></span>
+ <span class="safetyIcon warning" id="v24WarningIcon" role="img" aria-label="Danger warning"><svg viewBox="0 0 50 44" aria-hidden="true"><path d="M25 4L47 40H3Z" fill="none" stroke="#fa353b" stroke-width="5" stroke-linejoin="round"/><path d="M25 16V27" stroke="#fa353b" stroke-width="5" stroke-linecap="round"/><circle cx="25" cy="34" r="2.7" fill="#fa353b"/></svg></span>
+</div><button class="camButton" id="v24CamSwitch" type="button" aria-label="切換視角">◈ CAM</button><div class="showZoom" id="v24ShowZoom" role="group" aria-label="賞車縮放"><button type="button" id="v24ZoomIn" aria-label="放大">+</button><button type="button" id="v24ZoomOut" aria-label="縮小">−</button></div><div id="glbLoadStatus" role="status" aria-live="polite" style="display:none;position:absolute;top:65px;left:50%;transform:translateX(-50%);z-index:14;max-width:85%;padding:8px 14px;border-radius:9px;background:#102f3be6;color:#effffe;font-size:12px;font-weight:700;pointer-events:none;text-align:center;box-shadow:0 2px 12px #1238"></div><div class="hud"><div class="hudTop"><div><div class="eyebrow">VOLVO DRIVING LAB</div><div class="hudTitle" id="hudTitle">ENDLESS HIGHWAY</div></div><div class="pill" id="hudChip"><b>EX30</b>高速閃避挑戰</div></div><div class="signals" id="signals"><span id="signalL">◀</span><span id="signalR">▶</span></div><div class="rearRadar" id="rearRadar" role="status" aria-live="off" aria-label="Rear overtaking alerts"><div class="rearRadarSide left" id="rearWarnL"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextL">左側盲點來車</span></div><div class="rearRadarSide right" id="rearWarnR"><svg viewBox="0 0 110 104" aria-hidden="true" focusable="false"><path d="M15 88 C21 63 28 45 48 33 C62 24 80 19 95 15" /></svg><span id="rearTextR">右側盲點來車</span></div></div><div class="brakeNote" id="brakeNote">BRAKE · 減速</div><div class="hudBottom" id="hudBottom"><div><div class="speed" id="speed">090</div><div class="units">km/h · 遊戲模擬</div></div><div class="counter"><small id="countTitle">SCORE / 分數</small><strong id="countValue">0</strong></div></div></div><div id="event" class="event"></div><div id="fallbackNote" class="fallbackNote"></div>
 <div id="mooseDialog" class="mooseDialog" role="dialog" aria-modal="true" aria-labelledby="mooseTitle" aria-describedby="mooseMessage" aria-hidden="true">
  <div class="mooseCard">
   <span class="mooseEyebrow">VOLVO · FOR LIFE</span>
@@ -389,15 +465,10 @@ body.mode-highway .rules{margin-top:2px}
  <button class="secondary" id="reset">↺ 重新挑戰</button>
  <button class="secondary" id="sound3">◌ 音效關</button>
 </div>
-<div class="steer">
- <button class="steerBtn" id="left" aria-label="按住向左轉向">←<small>按住左轉</small></button>
- <button class="brake" id="hBrake" aria-label="按住煞車減速"><span class="v9Glyph">◀◀</span><small>煞車</small></button>
- <button class="accelBtn" id="hAccel" aria-label="按住加速，最高 180 公里"><span class="v9Glyph">＋</span><small>加速</small></button>
-      <button class="steerBtn" id="right" aria-label="按住向右轉向">→<small>按住右轉</small></button>
-</div>
+<div class="steer"><div class="drivePad drivePad-steer"><button class="steerBtn" id="left" aria-label="按住向左轉向">←<small>按住左轉</small></button><button class="steerBtn" id="right" aria-label="按住向右轉向">→<small>按住右轉</small></button></div><div class="drivePad drivePad-pedals"><button class="brake" id="hBrake" aria-label="按住煞車減速"><span class="v9Glyph">◀◀</span><small>煞車</small></button><button class="accelBtn" id="hAccel" aria-label="按住加速，最高 180 公里"><span class="v9Glyph">＋</span><small>加速</small></button></div></div>
 <details class="rules"><summary>規則與操作說明 <span>ⓘ</span></summary>
- <div class="callout">+100 安全超車 · +50 近距離閃避 · +250 成功閃避麋鹿 · −180 車輛碰撞。<strong>撞到任何車輛或麋鹿，本局立即停止並進入分類結算。</strong> 每累積 2,000 分提升一級。LKA 模擬可自行開關；若持續朝車道邊緣施力超過 2 秒，系統將強制模擬回正；BLIS 只在變換車道有側後鄰車時模擬回正，<strong>不會自動繞開前方障礙</strong>；主動煞車獨立開關：當與同車道前車距離約一個車身且持續接近時，啟動模擬緊急煞車。煞停不會結束遊戲，玩家仍可轉向，前車離開或車道淨空後可繼續挑戰。4,000 分後有 AI 從後方超車，並依車距尋找安全空隙換道。</div>
- <p>手機按住左右箭頭轉向，放開後逐步回正；中央按鍵可煞車與加速。電腦可使用 A / D 或左右方向鍵轉向，S / ↓ / 空白鍵煞車。遊戲內音效可自行開關。請勿在真實道路模仿遊戲操作。</p>
+ <div class="callout">+100 安全超車 · +50 近距離閃避 · +250 成功閃避麋鹿 · −180 車輛碰撞。<strong>撞到任何車輛或麋鹿，本局立即停止並進入分類結算。</strong> 每累積 2,000 分提升一級。LKA 模擬可自行開關；若持續朝車道邊緣施力超過 2 秒，系統將強制模擬回正；BLIS 只在變換車道有側後鄰車時模擬回正，<strong>不會自動繞開前方障礙</strong>；AI 危險切入時可短暫避碰轉向，風險解除後立即交還控制（僅遊戲模擬）；主動煞車獨立開關：當與同車道前車距離約一個車身且持續接近時，啟動模擬緊急煞車。煞停不會結束遊戲，玩家仍可轉向，前車離開或車道淨空後可繼續挑戰。4,000 分後有 AI 從後方超車，並依車距尋找安全空隙換道。</div>
+ <p>手機左側控制左右轉向，右側控制煞車與油門，放開後逐步回正。電腦可使用 A / D 或左右方向鍵轉向，S / ↓ / 空白鍵煞車。遊戲內音效可自行開關。請勿在真實道路模仿遊戲操作。</p>
 </details>
 </section>
 <section class="panel" id="panel-showroom"><div class="panelHead"><div><h2>Volvo 九款車型　360° 賞車</h2><p>拖曳旋轉車輛，使用雙指或滑鼠滾輪縮放，探索車輛外觀。</p></div><button class="smallButton" id="viewReset">重設視角 ↺</button></div><div class="choiceGrid" id="showCars"><button class="choice selected" data-car="ex30">EX30<small>純電 SUV</small></button><button class="choice" data-car="xc40">XC40<small>都會 SUV</small></button><button class="choice" data-car="xc60">XC60<small>中型 SUV</small></button><button class="choice" data-car="es90">ES90<small>純電旗艦房車</small></button><button class="choice" data-car="ex60">EX60<small>純電 SUV</small></button><button class="choice" data-car="ex90">EX90<small>純電旗艦 SUV</small></button><button class="choice" data-car="ec40">EC40<small>純電跨界休旅</small></button><button class="choice" data-car="concept401">Concept 40.1<small>概念車</small></button><button class="choice" data-car="v60">V60<small>豪華旅行車</small></button></div><p class="help">選擇車型後，即可從不同角度欣賞車輛外觀。</p>
@@ -445,10 +516,10 @@ function drivePowerLabel(){
   return state.power==='single'?L('單馬達'):state.power==='performance'?L('雙馬達 Performance'):L('雙馬達');
 }
 
-const state={blis:true,blisWarn:0,blisReturnLane:null,lastSafeLane:1,assistNotice:0,aeb:false,aebCooldown:0,aebPulse:0,aebSeen:new Set(),aebEmergency:false,aebTargetId:null,aebStopDistance:0,aebHold:false,aebStoppedOnce:false,blisHazardLane:null,rearSpawn:9,rearWave:0,rearPassed:0,rearPlan:null,rearSpawnAttempts:0,rearSpawnSuccess:0,rearApproach:null,rearCamera:0,rearCameraSide:0,placed:0,
+const state={blis:true,blisWarn:0,blisReturnLane:null,lastSafeLane:1,assistNotice:0,aeb:false,aebCooldown:0,aebPulse:0,aebSeen:new Set(),aebEmergency:false,aebTargetId:null,aebStopDistance:0,aebHold:false,aebStoppedOnce:false,blisHazardLane:null,blisAiAvoid:null,rearSpawn:9,rearWave:0,rearPassed:0,rearPlan:null,rearSpawnAttempts:0,rearSpawnSuccess:0,rearApproach:null,rearCamera:0,rearCameraSide:0,placed:0,
   lka:false,lkaAnchorLane:1,lkaIdle:0,lkaWarnTimer:0,lkaVibrated:false,lkaAssist:false,lkaNotice:0,
   edgeLkaHold:0,edgeLkaDir:0,edgeLkaLane:1,edgeLkaAssistTimer:0,edgeLkaCooldown:0,edgeLkaActivated:false,
- hAccel:false,isTesting:false,endReason:null,mode:'highway',car:'ex30',showCar:'ex30',driveCar:'ex30',paint:'forest',power:'twin',speed:90,time:0,distance:0,throttle:false,brake:false,run:'ready',countdown:0,score:0,dist:0,passed:0,hits:0,best:0,immune:0,traffic:[],wave:1,spawn:2.4,difficulty:1,lastDifficulty:1,moose:null,mooseCountdown:22,emergency:0,elapsed:0,worldDist:0,lateral:0,lv:0,yaw:0,roll:0,left:false,right:false,touchSteer:0,dir:0,signalHold:0,blink:0,orbit:.6,elev:.25,zoom:7.6,sound:false,driveComplete:false,driveStarted:false,driveTime:0,eventTime:0,eventText:'',eventDetails:'',eventType:'',lastScoreMeter:0};
+ cameraTarget:0,cameraMix:0,coastUnlocked:false,coastProgress:0,hAccel:false,isTesting:false,endReason:null,mode:'highway',car:'ex30',showCar:'ex30',driveCar:'ex30',paint:'forest',power:'twin',speed:90,time:0,distance:0,throttle:false,brake:false,run:'ready',countdown:0,score:0,dist:0,passed:0,hits:0,best:0,immune:0,traffic:[],wave:1,spawn:2.4,difficulty:1,lastDifficulty:1,moose:null,mooseCountdown:22,emergency:0,elapsed:0,worldDist:0,lateral:0,lv:0,yaw:0,roll:0,left:false,right:false,touchSteer:0,dir:0,signalHold:0,blink:0,orbit:.6,elev:.25,zoom:7.6,sound:false,driveComplete:false,driveStarted:false,driveTime:0,eventTime:0,eventText:'',eventDetails:'',eventType:'',lastScoreMeter:0};
 try{state.best=Number(localStorage.getItem('VOLVO_V8_BEST')||0)||0}catch(e){}
 const RANK_KEY='VOLVO_DRIVING_V86_TOP3';
 let leaderboard=[];let rankStorageAvailable=true;
@@ -509,7 +580,7 @@ function hideMooseDialog(){const dialog=$('mooseDialog');if(!dialog)return;dialo
 $('mooseClose').onclick=()=>hideMooseDialog();
 $('mooseRetry').onclick=()=>{$('start').click()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('mooseDialog').classList.contains('visible')){e.preventDefault();hideMooseDialog()}});
-function resetHighway(){hideMooseDialog();closeRanks();state.endReason=null;state.blisReturnLane=null;state.lastSafeLane=1;state.blisHazardLane=null;state.aebEmergency=false;state.aebTargetId=null;state.aebStopDistance=0;state.aebHold=false;state.aebStoppedOnce=false;state.lkaAnchorLane=1;state.lkaIdle=0;state.lkaWarnTimer=0;state.lkaVibrated=false;state.lkaAssist=false;state.lkaNotice=0;state.edgeLkaHold=0;state.edgeLkaDir=0;state.edgeLkaLane=1;state.edgeLkaAssistTimer=0;state.edgeLkaCooldown=0;state.edgeLkaActivated=false;state.hAccel=false;state.blisWarn=0;state.assistNotice=0;state.aebCooldown=0;state.aebPulse=0;state.aebSeen=new Set();state.rearSpawn=7.5;state.rearWave=0;state.rearPassed=0;state.rearPlan=null;state.rearSpawnAttempts=0;state.rearSpawnSuccess=0;state.rearApproach=null;state.rearCamera=0;state.rearCameraSide=0;state.placed=0;state.run='ready';state.speed=90;state.score=0;state.dist=0;state.elapsed=0;state.worldDist=0;state.passed=0;state.hits=0;state.traffic=[];state.spawn=2.6;state.wave=1;state.difficulty=1;state.lastDifficulty=1;state.lastScoreMeter=0;state.immune=0;state.lateral=0;state.lv=0;state.yaw=0;state.roll=0;state.left=false;state.right=false;state.hAccel=false;state.moose=null;state.mooseCountdown=22;state.emergency=0;state.brake=false;state.dir=0;state.signalHold=0;$('start').textContent=L("▶ 開始遊戲");hideEvent();updateUI()}
+function resetHighway(){state.coastUnlocked=false;state.coastProgress=0;hideMooseDialog();closeRanks();state.endReason=null;state.blisReturnLane=null;state.lastSafeLane=1;state.blisHazardLane=null;state.blisAiAvoid=null;state.aebEmergency=false;state.aebTargetId=null;state.aebStopDistance=0;state.aebHold=false;state.aebStoppedOnce=false;state.lkaAnchorLane=1;state.lkaIdle=0;state.lkaWarnTimer=0;state.lkaVibrated=false;state.lkaAssist=false;state.lkaNotice=0;state.edgeLkaHold=0;state.edgeLkaDir=0;state.edgeLkaLane=1;state.edgeLkaAssistTimer=0;state.edgeLkaCooldown=0;state.edgeLkaActivated=false;state.hAccel=false;state.blisWarn=0;state.assistNotice=0;state.aebCooldown=0;state.aebPulse=0;state.aebSeen=new Set();state.rearSpawn=7.5;state.rearWave=0;state.rearPassed=0;state.rearPlan=null;state.rearSpawnAttempts=0;state.rearSpawnSuccess=0;state.rearApproach=null;state.rearCamera=0;state.rearCameraSide=0;state.placed=0;state.run='ready';state.speed=90;state.score=0;state.dist=0;state.elapsed=0;state.worldDist=0;state.passed=0;state.hits=0;state.traffic=[];state.spawn=2.6;state.wave=1;state.difficulty=1;state.lastDifficulty=1;state.lastScoreMeter=0;state.immune=0;state.lateral=0;state.lv=0;state.yaw=0;state.roll=0;state.left=false;state.right=false;state.hAccel=false;state.moose=null;state.mooseCountdown=22;state.emergency=0;state.brake=false;state.dir=0;state.signalHold=0;$('start').textContent=L("▶ 開始遊戲");hideEvent();updateUI()}
 function syncAssistButtons(){
  const b=$('blisToggle'),a=$('aebToggle'),l=$('lkaToggle');
  b.setAttribute('aria-pressed',String(state.blis));
@@ -518,7 +589,7 @@ function syncAssistButtons(){
  a.textContent=state.aeb?L("◉ AEB：開"):L("◌ AEB：關");l.setAttribute('aria-pressed',String(state.lka));l.textContent=state.lka?L("◉ LKA：開"):L("◌ LKA：關");
 }
 $('blisToggle').onclick=()=>{
- state.blis=!state.blis;state.blisReturnLane=null;state.blisHazardLane=null;
+ state.blis=!state.blis;state.blisReturnLane=null;state.blisHazardLane=null;state.blisAiAvoid=null;
  syncAssistButtons();
  textEvent(state.blis?L("BLIS 模擬已開啟"):L("BLIS 模擬已關閉"),state.blis?L("換道有鄰車時輔助回到原車道"):L("不再主動協助轉向"),'',1.6);
 };
@@ -657,6 +728,41 @@ function refreshV98Selectors(){
 document.querySelectorAll('[data-drive-car]').forEach(b=>b.onclick=()=>{state.driveCar=b.dataset.driveCar;refreshV98Selectors();resetDrive();prepareDirectSelection(state.driveCar);updateUI()});
 document.querySelectorAll('[data-power]').forEach(b=>b.onclick=()=>{state.power=b.dataset.power;refreshV98Selectors();resetDrive();updateUI()});
 document.querySelectorAll('[data-paint]').forEach(b=>b.onclick=()=>{state.paint=b.dataset.paint;refreshV98Selectors();updateUI()});
+
+// V2.4 adjustable chase view (never resets physics or vehicle selection).
+function v24CameraButton(){
+ const b=$('v24CamSwitch');if(!b)return;
+ const name=state.cameraTarget?'正後視角':'經典視角';
+ b.textContent='◈ CAM · '+name;
+ b.title='切換視角';b.setAttribute('aria-label','切換視角'+' · '+name);
+}
+function v24SwitchCamera(){if(state.mode==='showroom')return;state.cameraTarget=1-state.cameraTarget;v24CameraButton();}
+$('v24CamSwitch').onclick=v24SwitchCamera;
+document.addEventListener('keydown',e=>{if(e.code==='KeyC'&&!e.repeat&&!e.target.closest('input,textarea,select')&&state.mode!=='showroom'){e.preventDefault();v24SwitchCamera();}});
+$('v24ZoomIn').setAttribute('aria-label','放大');
+$('v24ZoomOut').setAttribute('aria-label','縮小');
+$('v24ZoomIn').onclick=()=>{if(state.mode==='showroom')state.zoom=clamp(state.zoom-.6,4.1,13);};
+$('v24ZoomOut').onclick=()=>{if(state.mode==='showroom')state.zoom=clamp(state.zoom+.6,4.1,13);};
+// Immediate marking contact detection; warning is separate from active centering.
+function v24LaneMarkContact(){
+ if(state.mode!=='highway'||state.run!=='running'||state.speed<12)return false;
+ const z=Math.abs(state.lateral);
+ return Math.abs(z-1.89)<.90 || z>3.79;
+}
+function v24SafetyIcons(){
+ const lka=$('v24LkaIcon'),warn=$('v24WarningIcon');if(!lka||!warn)return;
+ const assisting=state.mode==='highway'&&state.run==='running'&&(state.lkaAssist||state.edgeLkaAssistTimer>0);
+ const contact=v24LaneMarkContact();
+ lka.classList.toggle('assisting',assisting);
+ lka.classList.toggle('lane-contact',contact&&!assisting);
+ lka.classList.toggle('on',!assisting&&!contact&&state.lka);
+ lka.classList.toggle('off',!assisting&&!contact&&!state.lka);
+ lka.setAttribute('aria-label',assisting?fastLabel('LKA 介入中','LKA steering assist','LKA 조향 보조'):contact?fastLabel('LKA 壓線警示','Lane marking detected','차선 접촉 경고'):state.lka?fastLabel('LKA 已啟用','LKA active','LKA 작동 준비'):fastLabel('LKA 關閉','LKA off','LKA 꺼짐'));
+ let warning=state.mode==='highway'&&(state.run==='emergency'||state.aebEmergency||state.moose&&state.moose.x<25||state.run==='running'&&state.traffic.some(t=>t.x>0&&t.x<8&&Math.abs(t.z-state.lateral)<1.35&&state.speed>25));
+ warn.classList.toggle('active',!!warning);warn.setAttribute('aria-label','注意危險');
+}
+v24CameraButton();
+
 refreshV98Selectors();function press(id,on){$(id).classList.toggle('pressed',on)}
 function setDir(dir,on){if(state.mode!=='highway')return;if(dir<0){state.left=on;press('left',on)}else{state.right=on;press('right',on)}if(on)audioOn()}
 function setBrake(on){state.brake=on;press('hBrake',on);press('driveBrake',on)}
@@ -699,7 +805,7 @@ function audioOn(){if(!state.sound)return;try{
   engineOsc.connect(engineFilter).connect(engineGain).connect(masterGain);engineOsc.start();
  }
  if(audioCtx.state==='suspended')audioCtx.resume();
- prepareUserWarning();
+ prepareUserWarning();v24InitWaves();
   if(masterGain){const t=audioCtx.currentTime;masterGain.gain.cancelScheduledValues(t);masterGain.gain.setTargetAtTime(.82,t,.06)}
 }catch(e){console.warn('Audio unavailable:',e)}}
 // V8.16: user-supplied MP3 replaces the previous synthesized BLIS and AEB warning tones.
@@ -776,6 +882,28 @@ function trafficWhoosh(){if(!state.sound||!audioCtx||audioCtx.state!=='running')
   f.type='lowpass';f.frequency.value=270;g.gain.setValueAtTime(.0001,a);g.gain.exponentialRampToValueAtTime(.005,a+.035);g.gain.exponentialRampToValueAtTime(.0001,a+.22);
   o.connect(f).connect(g).connect(masterGain);o.start(a);o.stop(a+.23);
 }catch(e){}}
+
+// V2.4 synthesized soft coastal waves: no external audio, no autoplay.
+let v24WaveGain=null,v24WaveSource=null;
+function v24InitWaves(){
+ if(!audioCtx||v24WaveGain)return;
+ try{
+  const n=Math.max(8192,Math.floor(audioCtx.sampleRate*1.75)),buffer=audioCtx.createBuffer(1,n,audioCtx.sampleRate),a=buffer.getChannelData(0);
+  let old=0;for(let i=0;i<n;i++){old=.94*old+.06*(Math.random()*2-1);a[i]=old;}
+  const src=audioCtx.createBufferSource(),filter=audioCtx.createBiquadFilter(),g=audioCtx.createGain();
+  src.buffer=buffer;src.loop=true;filter.type='lowpass';filter.frequency.value=510;
+  g.gain.value=0;src.connect(filter).connect(g).connect(masterGain);src.start();
+  v24WaveSource=src;v24WaveGain=g;
+ }catch(e){console.warn('Coastal audio disabled',e);v24WaveGain=null}
+}
+function v24UpdateWaves(){
+ if(!audioCtx||!v24WaveGain)return;
+ const active=state.mode==='highway'&&state.run==='running'&&state.sound&&state.coastProgress>0;
+ const swell=.70+.30*Math.sin(audioCtx.currentTime*.75);
+ const target=active?.0035*swell*state.coastProgress:0;
+ try{v24WaveGain.gain.setTargetAtTime(target,audioCtx.currentTime,.16)}catch(e){}
+}
+
 function toggleSound(){
  state.sound=!state.sound;
  for(const id of ['sound1','sound2','sound3'])$(id).textContent=state.sound?L("◉ 音效開"):L("◌ 音效關");
@@ -918,7 +1046,9 @@ function updateTrafficAI(dt){
      const front=tr.isRearOvertaker?36:24+tr.speed*.065;
      const rear=tr.isRearOvertaker?28:18+tr.speed*.04;
      if(safeForLane(tr,candidate,front,rear)){
-      tr.targetLane=candidate;
+       // Avoid starting a new lane-change right beside the player's car.
+       if(Math.abs((candidate-1)*LANE_WIDTH-state.lateral)<2.25&&tr.x>-15&&tr.x<26)continue;
+       tr.targetLane=candidate;
       tr.changing=true;
       tr.changeFromZ=tr.z;
       tr.changeElapsed=0;
@@ -1075,6 +1205,101 @@ function impact(){
  try{navigator.vibrate?.([75,35,75])}catch(e){}
  finish();
 }
+
+// V2.4.1 BLIS side-swipe assistance (arcade simulation only).
+// The source of danger is an AI vehicle *already changing lanes* into the
+// player's projected corridor. No input is injected for ordinary passing AI.
+// Calculate future overlap at several short horizons instead of relying on
+// the AI's declared target lane alone, to avoid false positives at long range.
+function predictedLaneChangeZ(tr, seconds){
+ const toward=(tr.targetLane-1)*LANE_WIDTH;
+ const lead=Math.max(0,tr.changeLead||0);
+ const elapsed=Math.max(0,(tr.changeElapsed||0)+Math.max(0,seconds-lead));
+ const ratio=clamp(elapsed/Math.max(.2,tr.changeDuration||2.45),0,1);
+ const smooth=ratio*ratio*ratio*(10+ratio*(-15+6*ratio));
+ return (tr.changeFromZ??tr.z)+(toward-(tr.changeFromZ??tr.z))*smooth;
+}
+function impendingAiCutIn(tr){
+ if(!tr.changing||tr.targetLane===tr.lane){
+  // Continue only a previously active cut-in assist until the actual overlap
+  // disappears; do not create a new avoid event for ordinary same-lane AI.
+  const current=state.blisAiAvoid;
+  if(!current||current.id!==tr.id)return null;
+  const xNext=tr.x+(tr.speed-state.speed)*.4/3.6;
+  if(Math.abs(xNext)>((tr.length||4.5)*.5+4.2)||Math.abs(tr.z-state.lateral)>2.08)return null;
+  return {vehicle:tr,origin:current.origin,destination:tr.z,seconds:.4};
+ }
+ const origin=tr.changeFromZ??(tr.lane-1)*LANE_WIDTH;
+ const destination=(tr.targetLane-1)*LANE_WIDTH;
+ // Ignore AI leaving the player's lane: the hazard is an incoming cut-in.
+ if(Math.abs(origin-state.lateral)<1.75||Math.abs(destination-state.lateral)>2.30)return null;
+ const playerLength=AEB_CAR_LENGTH[state.car]||4.5;
+ const longitudinal=(playerLength+(tr.length||4.5))*.5+1.50;
+ for(const secs of [.12,.3,.55,.80,1.05,1.35]){
+   const futureX=tr.x+(tr.speed-state.speed)*secs/3.6;
+   const futureZ=predictedLaneChangeZ(tr,secs);
+   if(Math.abs(futureX)<longitudinal+1.3 && Math.abs(futureZ-(state.lateral+state.lv*secs*.20))<2.05){
+    return {vehicle:tr,origin,destination,seconds:secs};
+   }
+ }
+ return null;
+}
+function escapeCorridorClear(avoided,desiredZ){
+ if(Math.abs(desiredZ)>3.80)return false;
+ return !state.traffic.some(t=>{
+  if(t===avoided)return false;
+  // Only nearby vehicles can block a one-metre side-swerve.
+  const nextX=t.x+(t.speed-state.speed)*.45/3.6;
+  const nextZ=t.changing?predictedLaneChangeZ(t,.45):t.z;
+  return Math.abs(nextX)<((t.length||4.5)*.5+4.0)&&Math.abs(nextZ-desiredZ)<1.85;
+ });
+}
+function cancelUnsafeAiMerge(tr){
+ // The AI itself abandons the cut-in if there is no clear offset for the player.
+ // Returning to its original lane uses the existing smooth lane-change physics.
+ if(!tr.changing||tr.targetLane===tr.lane)return;
+ tr.targetLane=tr.lane;
+ tr.changeFromZ=tr.z;
+ tr.changeElapsed=0;
+ tr.changeLead=0;
+ tr.changeDuration=1.3;
+ tr.signalDir=Math.sign((tr.lane-1)*LANE_WIDTH-tr.z);
+}
+function aiCutInBlisInput(raw,dt){
+ if(!state.blis||state.mode!=='highway'||state.run!=='running'){
+  state.blisAiAvoid=null;return null;
+ }
+ let hazard=null;
+ for(const tr of state.traffic){
+  const h=impendingAiCutIn(tr);
+  if(h && (!hazard||h.seconds<hazard.seconds))hazard=h;
+ }
+ if(!hazard){state.blisAiAvoid=null;return null;}
+ const away=hazard.origin>state.lateral?-1:1;
+ // A bounded <2m offset is needed to clear an AI vehicle's collision envelope.
+ const anchor=state.blisAiAvoid?.id===hazard.vehicle.id?state.blisAiAvoid.anchor:state.lateral;
+ const desiredZ=clamp(anchor+away*1.88,-3.80,3.80);
+ if((desiredZ-anchor)*away<1.72||!escapeCorridorClear(hazard.vehicle,desiredZ)){
+  cancelUnsafeAiMerge(hazard.vehicle);state.blisAiAvoid=null;return null;
+ }
+ if(!state.blisAiAvoid||state.blisAiAvoid.id!==hazard.vehicle.id){
+  state.blisAiAvoid={id:hazard.vehicle.id,anchor,target:desiredZ,origin:hazard.origin};
+  state.blisReturnLane=null;state.blisHazardLane=null;
+  safetyChime('blis');
+  if(state.assistNotice<=0){
+   textEvent(fastLabel('BLIS · AI 切入預警','BLIS · AI cut-in','BLIS · AI 차선 진입'),
+    fastLabel('短暫避碰轉向 · 風險解除立即交還控制','Brief evasive steering · release when clear','짧은 회피 조향 · 위험 해소 시 제어 복귀'),'alert',1.2);
+   state.assistNotice=1.4;
+  }
+ }
+ state.blisWarn=.40;
+ const target=state.blisAiAvoid.target;
+ const correction=clamp((target-state.lateral)*1.45-state.lv*.46,-.87,.87);
+ // If the driver is already steering away from the hazard, do not fight them.
+ if(raw*away>.20)return raw;
+ return correction;
+}
+
 // BLIS GAME RULE ONLY: intercept an unsafe requested lane change and restore the last lane.
 // No autonomous front-obstacle steering and no intervention without an unsafe lane-change request.
 // BLIS (game only): steer back solely while the adjacent lane is occupied.
@@ -1083,7 +1308,8 @@ function impact(){
 function assistedInput(raw,dt){
  state.blisWarn=Math.max(0,state.blisWarn-dt);
  state.assistNotice=Math.max(0,state.assistNotice-dt);
- if(!state.blis){state.blisReturnLane=null;state.blisHazardLane=null;return raw}
+ if(!state.blis){state.blisReturnLane=null;state.blisHazardLane=null;state.blisAiAvoid=null;return raw}
+ const aiAvoid=aiCutInBlisInput(raw,dt);if(aiAvoid!==null)return aiAvoid;
  const laneZ=i=>(i-1)*LANE_WIDTH;
  const hazardousLane=(candidate)=>{
   if(candidate<0||candidate>2)return false;
@@ -1171,7 +1397,7 @@ function forceEdgeLKA(requested,dt){
 function resetLKA(){state.lkaIdle=0;state.lkaWarnTimer=0;state.lkaVibrated=false;state.lkaAssist=false;state.lkaNotice=0}
 function applyLKA(requested,blisInput,dt){
   const forced=forceEdgeLKA(requested,dt);if(forced!==null)return forced;
- if(!state.lka||state.run!=='running'||state.blisReturnLane!==null){resetLKA();return blisInput}
+ if(!state.lka||state.run!=='running'||state.blisReturnLane!==null||state.blisAiAvoid!==null){resetLKA();return blisInput}
  const userBusy=Math.abs(requested)>.16;
  if(userBusy){const here=Math.max(0,Math.min(2,Math.round(state.lateral/LANE_WIDTH)+1));if(Math.abs(state.lateral-(here-1)*LANE_WIDTH)<.55)state.lkaAnchorLane=here;resetLKA();return blisInput}
  state.lkaIdle+=dt;
@@ -1233,7 +1459,7 @@ function releaseAEBIfSafe(dt){
  textEvent(L("前方空間已恢復"),L("繼續挑戰 · 請留意安全車距"),'',1.75);
 }
 function driveSpeed(t,T){return Math.min(100,100*Math.pow(clamp(t/T,0,1),.88))}
-function advance(dt){state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000){state.eventTime-=dt;if(state.eventTime<=0)hideEvent()}
+function advance(dt){state.cameraMix+=(state.cameraTarget-state.cameraMix)*(1-Math.exp(-dt*10));state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000){state.eventTime-=dt;if(state.eventTime<=0)hideEvent()}
  if(state.mode==='drive'){if(state.throttle&&!state.driveComplete&&!state.driveStarted){state.driveStarted=true;state.driveTime=0}if(state.driveStarted&&!state.driveComplete)state.driveTime+=dt;if(state.brake)state.speed=Math.max(0,state.speed-46*roadGrip()*dt);else if(state.throttle&&!state.driveComplete){const T=accelTarget();const t=T*Math.pow(state.speed/100,1/.88)+dt*(isWetRoad()?0.85:1);state.speed=driveSpeed(t,T);if(state.speed>=99.99){state.driveComplete=true;state.throttle=false;state.speed=100;textEvent(state.driveTime.toFixed(2)+L(" 秒 · 100 km/h"),CARS[state.driveCar].label+L(" 模擬加速達標"),'over',6)}}else if(!state.driveComplete)state.speed=Math.max(0,state.speed-(5+state.speed*.02)*dt);state.distance+=state.speed*dt/3.6;state.worldDist=state.distance}
  else if(state.mode==='highway'){
   if(state.run!=='running')state.rearApproach=null;
@@ -1257,7 +1483,9 @@ function advance(dt){state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000)
     else if(state.hAccel)state.speed=Math.min(180,state.speed+(state.speed<130?32:23)*(isWetRoad()?0.85:1)*dt);
    else state.speed=clamp(state.speed+(169-state.speed)*dt*.15,0,180);
    const ds=state.speed*dt/3.6;state.dist+=ds;state.worldDist+=ds;const meter=Math.floor(state.dist/20);if(meter>state.lastScoreMeter){state.score+=meter-state.lastScoreMeter;state.lastScoreMeter=meter}
-   const requestedInput=clamp((state.right?1:0)-(state.left?1:0)+state.touchSteer,-1,1);
+   if(state.score>=5000&&!state.coastUnlocked){state.coastUnlocked=true;textEvent('海岸公路已解鎖','左側海洋 · 右側城市','',3.0);}
+    if(state.coastUnlocked)state.coastProgress=Math.min(1,state.coastProgress+dt/12);
+    const requestedInput=clamp((state.right?1:0)-(state.left?1:0)+state.touchSteer,-1,1);
    const blisInput=assistedInput(requestedInput,dt);const input=applyLKA(requestedInput,blisInput,dt);
    state.visualSteer=(state.visualSteer||0)+(input*.35-(state.visualSteer||0))*(1-Math.exp(-dt*9));
    const maxLat=4.8*Math.sqrt(Math.max(35,state.speed)/125);
@@ -1270,6 +1498,9 @@ function advance(dt){state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000)
     state.lateral=clamp(state.lateral+state.lv*dt,-3.96,3.96);if(Math.abs(state.lateral)>=3.96)state.lv=0;
    const yawWanted=-Math.atan2(state.lv,Math.max(10,state.speed/3.6))*.9;state.yaw+=(yawWanted-state.yaw)*(1-Math.exp(-dt*6.5));state.roll+=((-input*.026)-state.roll)*(1-Math.exp(-dt*6));state.immune=Math.max(0,state.immune-dt);
    updateTrafficAI(dt);
+   // Prime the BLIS predictor after the AI has begun its lane change.
+   // The correction is applied in the following physics tick.
+   if(state.blis&&!state.aebEmergency)aiCutInBlisInput(requestedInput,dt);
    // Release the protected passing lane only after the overtaker is clearly ahead
    // (or has left the simulated road). This lets other AI use the lane again.
    if(state.rearPlan?.passing && !state.traffic.some(t=>t.isRearOvertaker&&!t.passedPlayer)){
@@ -1351,9 +1582,10 @@ function advance(dt){state.blink+=dt;if(state.eventTime>0&&state.eventTime<9000)
     if(phase!==turnClickPhase){turnSound(phase===0);turnClickPhase=phase}
   }else turnClickPhase=-1;
  }
+ v24UpdateWaves();
 }
 function updateUI(){
- syncPlayerLoadingState();
+ syncPlayerLoadingState();v24SafetyIcons();$('blisToggle').classList.toggle('aiAvoiding',state.blis&&!!state.blisAiAvoid);
  $('v9LkaNotice').classList.toggle('active',state.mode==='highway'&&state.run==='running'&&((state.lka&&state.lkaWarnTimer>0)||state.edgeLkaHold>.05||state.edgeLkaAssistTimer>0));$('v9LkaNotice').classList.toggle('assisting',state.lkaAssist||state.edgeLkaAssistTimer>0);$('v9LkaTime').textContent=state.edgeLkaAssistTimer>0?L("強制回正"):state.edgeLkaHold>0?Math.max(0,2-state.edgeLkaHold).toFixed(1)+' s':state.lkaAssist?L("輔助回正"):Math.max(0,2-state.lkaWarnTimer).toFixed(1)+' s';
   $('rearWarnL').classList.toggle('active',state.blis&&!!state.rearApproach&&state.rearApproach.side==='left');
  $('rearWarnR').classList.toggle('active',state.blis&&!!state.rearApproach&&state.rearApproach.side==='right');
@@ -2588,6 +2820,7 @@ function drawRoad(dist){
  const dashOffset=dist%14,postOffset=dist%11;
  // roadway fixed in world coordinates, moving dashed lines and roadside objects by actual travelled distance
 const wetRoad=SCENE_WEATHER.mode==='rain'||SCENE_WEATHER.mode==='rainfog';
+ const coast=state.mode==='highway'?(state.coastProgress||0):0;
   draw(planeGeo,modelM(50,-.095,0,260,1,160),SCENE_PHASE1.time==='night'?[.18,.25,.26]:wetRoad?[.40,.55,.58]:[.49,.64,.63],.02);
   draw(planeGeo,modelM(50,-.035,0,260,1,5.72),wetRoad?(SCENE_PHASE1.time==='night'?[.085,.125,.170]:[.105,.166,.187]):(SCENE_PHASE1.time==='night'?[.115,.175,.215]:[.115,.205,.235]),wetRoad?.25:.1);
  // road shoulders and painted borders
@@ -2598,6 +2831,63 @@ const wetRoad=SCENE_WEATHER.mode==='rain'||SCENE_WEATHER.mode==='rainfog';
  }
  // single consistent central road marking system (no artificial floating speed streaks)
  for(const z of [-1.89,1.89])for(let x=-42;x<155;x+=14){B(x-dashOffset+7,-.017,z,4.5,.008,.075,[.84,.88,.82])}
+
+ // Light-weight coastal scenery: player's left is negative world Z; city is positive Z.
+ // A transparent water plane allows the original terrain to fade over 12 seconds.
+ if(coast>.001){
+  const dark=SCENE_PHASE1.time==='night', fog=(SCENE_WEATHER.mode==='fog'||SCENE_WEATHER.mode==='rainfog');
+  const sea=dark?[.044,.117,.183]:fog?[.25,.43,.48]:[.075,.35,.49];
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);
+  draw(planeGeo,modelM(50,-.085,-44,260,1,67),sea,.06,[0,0,0],coast);
+   // Right side MUST remain solid land: cover the older blue-green terrain.
+   const rightLand=dark?[.108,.154,.133]:fog?[.30,.37,.33]:wetRoad?[.23,.35,.30]:[.31,.43,.35];
+   draw(planeGeo,modelM(50,-.083,43.8,260,1,73),rightLand,.025,[0,0,0],coast);
+  gl.depthMask(true);gl.disable(gl.BLEND);
+  // Wave crests stay entirely beyond the shoulder and never touch road or AI.
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);
+  const waveColor=dark?[.22,.37,.44]:[.41,.73,.77];
+  for(let i=0;i<8;i++){
+   const x=-40+i*26-((dist*.13)%26),z=-13.8-(i%3)*3.5;
+   const h=.022+.012*Math.sin(dist*.045+i*1.9);
+   draw(planeGeo,modelM(x,-.074,z,12,1,.085+h),waveColor,0,[0,0,0],.35*coast);
+  }
+   gl.depthMask(true);gl.disable(gl.BLEND);
+   // Left shoreline / right urban verge have different textures and colors.
+   for(let i=0;i<11;i++){
+    const xx=i*18-30-(dist%18);
+    B(xx,.012,-7.75,11,.13,.66,dark?[.20,.23,.24]:[.47,.47,.43],.04);
+    const cz=12.5+(i%3)*1.7;
+    B(xx,.03,cz,10,.07,1.05,dark?[.16,.20,.19]:[.43,.45,.39],.08);
+   }
+   // Distant right-hand city, never duplicate water on its landward side.
+  const cityPal=dark?[[.15,.22,.30],[.21,.27,.34],[.12,.19,.28]]:[[.50,.58,.60],[.59,.64,.65],[.44,.54,.58]];
+  for(let i=-2;i<8;i++){
+    const x=i*28-(dist%28),seed=i+Math.floor(dist/28);
+    if(x<-40||x>125)continue;
+    const z=23+12*pseudo(seed*.71),height=(7+15*pseudo(seed*.81+3))*coast;
+    if(height<.06)continue;
+    const width=7+3*pseudo(seed*.38),depth=5+4*pseudo(seed*.43);
+    const col=cityPal[Math.abs(seed)%cityPal.length];
+    B(x,height/2-.08,z,width,height,depth,col,.09);
+    B(x,height+.05,z,width+.4,.16,depth+.4,dark?[.11,.16,.22]:[.31,.38,.40],.12);
+    if(coast>.34&&x<70){
+      const front=z-depth*.5-.026,win=dark?[.93,.72,.42]:[.32,.47,.52];
+      const floors=Math.min(3,Math.floor(height/4));
+      for(let f=1;f<=floors;f++){
+        for(let k of [-1,1]) B(x+k*width*.24,f*height/(floors+1),front,.95,.85,.06,win,.25,dark?[.30,.18,.07]:[0,0,0]);
+      }
+    }
+  }
+   // Urban frontage on solid right-hand ground, with setbacks from the road.
+   for(let j=0;j<8;j++){
+    const x=j*24-27-(dist%24),height=(3.3+4.8*pseudo(j+Math.floor(dist/24)+8))*coast;
+    if(x<-35||x>135)continue;
+    const z=15.4+3.2*pseudo(j*2.21+Math.floor(dist/24));
+    const wall=dark?[.23,.27,.28]:[.62,.65,.59];
+    B(x,height*.5-.06,z,8.5,height,6.3,wall,.07);
+    B(x,height-.045,z,9,.16,6.7,dark?[.13,.18,.20]:[.28,.33,.31],.03);
+   }
+ }
  // Nordic forest: shared conifer geometry, birch silhouettes and restrained roadside details.
  const treeSpacing=27;
  for(let i=-3;i<10;i++){
@@ -2608,6 +2898,7 @@ const wetRoad=SCENE_WEATHER.mode==='rain'||SCENE_WEATHER.mode==='rainfog';
    if(x<-47||x>146)continue;
    const z=side*(9.5+11*pseudo(k*2.91));
    const size=.86+.62*pseudo(k*5.29),far=x>65;
+   if(coast>0&&pseudo(k*17.13)<coast*(side<0?.99:.94))continue;
    if(pseudo(k*.93)>.26)drawNordicSpruce(x,z,size,[.12+.035*pseudo(k*1.15),.245+.06*pseudo(k*1.4),.217+.05*pseudo(k*1.8)],far);
    else drawNordicBirch(x,z,size,[.24+.045*pseudo(k),.36+.055*pseudo(k*1.5),.30+.025*pseudo(k*1.11)],far);
    if(x<60&&pseudo(k*6.4)>.77){
@@ -2620,7 +2911,7 @@ const wetRoad=SCENE_WEATHER.mode==='rain'||SCENE_WEATHER.mode==='rainfog';
  // A few small timber/stone houses at a safe distance from the carriageway.
  for(let i=-2;i<7;i++){
   const xx=i*80-(dist%80),seed=i+Math.floor(dist/80);
-  if(pseudo(seed*1.7)>.61){
+  if(pseudo(seed*1.7)>.61 && (coast<=.01||pseudo(seed*3.14)>coast)){
    const side=pseudo(seed*2.3)>.5?1:-1;
    drawNordicBuilding(xx,side*(42+13*pseudo(seed)),seed,xx);
   }
@@ -2640,11 +2931,11 @@ function drawWorld(ts,spin){wheelSpin=spin;resize();const w=canvas.clientWidth,h
  else if(state.mode==='highway'){
   const v=clamp(state.speed/170,0,1),amp=Math.max(0,v-.43)*.025;
   // Stable chase camera: BLIS never changes the player's view or steering visibility.
-  eye=[-9.25-v*.45,2.91-v*.12+Math.sin(ts*.018)*amp,2.42+state.lateral*.63];
-  to=[15.1,.93,state.lateral*.26];
+  eye=[-9.25-v*.45,2.91-v*.12+Math.sin(ts*.018)*amp,2.42+state.lateral*.63+(state.lateral-(2.42+state.lateral*.63))*state.cameraMix];
+   to=[15.1,.93,state.lateral*.26+(state.lateral-state.lateral*.26)*state.cameraMix];
   fov=(w<650?55:42)+v*6
  }
- else {const v=clamp(state.speed/100,0,1);eye=[-8.6-v*.75,2.4-v*.12,3.5];to=[2,.86,0];fov=(w<650?53:39)+v*9}
+ else {const v=clamp(state.speed/100,0,1);eye=[-8.6-v*.75,2.4-v*.12,3.5*(1-state.cameraMix)];to=[2,.86,0];fov=(w<650?53:39)+v*9}
  const vp=multiply(perspective(fov*Math.PI/180,w/Math.max(1,h),.1,450),lookAt(eye,to));gl.uniformMatrix4fv(u.vp,false,vp);gl.uniform3fv(u.eye,eye);
  updateRoadLighting(state.worldDist);
  if(state.mode==='showroom'){draw(planeGeo,modelM(0,-.025,0,19,1,19),[.66,.74,.75],.13);for(let i=-5;i<=5;i++)B(i*1.5,-.012,5,.65,.012,.018,[.87,.92,.89]);shadow(0,0,(state.showCar==='xc60'||state.showCar==='es90'||state.showCar==='ex60'||state.showCar==='ex90'||state.showCar==='ec40'||state.showCar==='concept401')?1.15:1);if(!drawDirectModel(state.showCar,0,0))drawCar(state.showCar);return}
@@ -2666,7 +2957,8 @@ return {drawWorld};
 window.__VOLVO_AI_TRAFFIC_DIAGNOSTICS__=()=>window.__VOLVO_TRAFFIC_PRELOAD__?.diagnostics();
 window.__AI_MODEL_TEST__={weights:{volvo:45,truck:20,bus:15,sport:20,ordinary:0},choose:aiVisualFromSeed,models:['ex30','xc40','xc60','es90','ex60','ex90','ec40','concept401','v60','truck','bus','sport1','sport2'],fixed:{noGenericAI:true,rearOvertakerModel:true,paint:false,showroomES90EX60:true,driveES90EX60:true,highwayES90EX60:true,nordicMountains:true,xc40WheelArtifactsFixed:true}};
 window.__VOLVO_V18_WEATHER_AUDIT__={directions:"Square lenses at unchanged source-verified marker centres",brakes:"Original red-lens masks unchanged",weather:["clear","rain","fog","rainfog"],combinedWith:["day","night"],mobile:"low-DPR adaptive particle overlay"};
-window.__VOLVO_V23_STATUS__=()=>({version:'2.3.1',wiper:false,edgeLkaHold:state.edgeLkaHold,edgeLkaForced:state.edgeLkaAssistTimer>0,models:Object.keys(CARS),sourceSpecs:Object.keys(SHOWROOM_TW_SPECS),optimizedAssets:true,progressiveTrafficLoad:true});
+window.__VOLVO_V24_STATUS__=()=>({version:"2.5.0",camera:state.cameraTarget,coastProgress:state.coastProgress,coastUnlocked:state.coastUnlocked,safetyLKA:state.edgeLkaAssistTimer>0,laneContact:v24LaneMarkContact(),blisCutIn:!!state.blisAiAvoid,models:Object.keys(CARS),noRemoteLeaderboard:true});
+window.__VOLVO_V23_STATUS__=()=>({version:'2.5.0',wiper:false,edgeLkaHold:state.edgeLkaHold,edgeLkaForced:state.edgeLkaAssistTimer>0,models:Object.keys(CARS),sourceSpecs:Object.keys(SHOWROOM_TW_SPECS),optimizedAssets:true,progressiveTrafficLoad:true});
 window.__VOLVO_V20_STATUS__=()=>({mode:SCENE_WEATHER.mode,roadGrip:roadGrip(),lensDrops:isWetRoad(),wiper:'removed',glassFlowPxPerSec:waterMotionPxPerSec(state.speed),
     tractionSimulation:isWetRoad(),vehicleSpeedKmh:Math.round(state.speed),
     note:'Arcade-style game physics; not measured Volvo or tire performance'});
